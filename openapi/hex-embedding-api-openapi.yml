@@ -1,0 +1,156 @@
+openapi: 3.0.3
+info:
+  title: Hex Cells Embedding API
+  version: 1.0.0
+  description: API specification for the Hex External API
+  license:
+    name: UNLICENSED
+  contact: {}
+servers:
+- url: https://app.hex.tech/api
+security:
+- bearerAuth: []
+tags:
+- name: Embedding
+paths:
+  /v1/embedding/createPresignedUrl/{projectId}:
+    post:
+      operationId: CreatePresignedUrl
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmbeddingResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '422':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+      description: Create an embedded url for a project
+      parameters:
+      - in: path
+        name: projectId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmbeddingRequest'
+      tags:
+      - Embedding
+components:
+  schemas:
+    EmbeddingRequest:
+      properties:
+        hexUserAttributes:
+          properties: {}
+          additionalProperties:
+            type: string
+          type: object
+          description: A map of attributes meant to populate hex_user_attributes in the app for the running user. This must be a string to string map. For more complexity, you can do json serialization
+          example:
+            orgId: my-org-id
+            groupId: my-group-id
+        scope:
+          items:
+            type: string
+          type: array
+          description: 'Optionally include additional permissions for a user to do in an embedded app. Valid scopes include:
+
+
+            EXPORT_PDF: allow users to download the app as a pdf
+
+            EXPORT_CSV: allow users to download CSVs from tables'
+        inputParameters:
+          properties: {}
+          additionalProperties: {}
+          type: object
+          description: Optionall sets default values for input states. The keys are the names of the inputs and the values are the default values for those inputs.
+        expiresIn:
+          type: number
+          format: double
+          description: 'Optionally specify the expiration time of the embedding url in milliseconds.
+
+            This represents the maximum allowed time between receiving the API response with the single-use signed URL, and requesting the signed URL for the iframe.
+
+            Default is 15 seconds. Maximum value is 300 seconds (5 minutes).'
+          default: '15000'
+        displayOptions:
+          properties:
+            theme:
+              type: string
+              enum:
+              - light
+              - dark
+            showEmbeddedRunButton:
+              type: boolean
+              description: The showEmbeddedRunButton parameter will ensure the run button always shows up in the embedded app navbar
+            noEmbedHeaderPadding:
+              type: boolean
+              description: The noEmbedHeaderPadding parameter removes the top padding added to apps with no tabs.
+            noEmbedBasePadding:
+              type: boolean
+              description: The noEmbedBasePadding parameter removes the padding around the embedded app container
+            noEmbedOutline:
+              type: boolean
+              description: The noEmbedOutline parameter removes the border around the embedded app
+            noEmbedFooter:
+              type: boolean
+              description: The noEmbedFooter parameter removes the Hex-branded footer at the bottom of the embedded app
+          additionalProperties: {}
+          type: object
+          description: Optionally customize the display of the embedded app
+        testMode:
+          type: boolean
+          description: Run the embed API call in test mode. Does not run the app and will not count towards rate limits or embedding usage counts.
+      type: object
+      additionalProperties: {}
+    EmbeddingResponse:
+      properties:
+        url:
+          type: string
+      required:
+      - url
+      type: object
+      additionalProperties: false
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
+    ProjectId:
+      type: string
+      format: uuid
+      description: Unique ID for a Hex project. This can be found in the Variables side bar of the Logic View of a project, or by visiting the Project, and copying the UUID after `hex` in the URL.
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

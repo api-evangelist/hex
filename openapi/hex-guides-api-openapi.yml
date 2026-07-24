@@ -1,0 +1,589 @@
+openapi: 3.0.3
+info:
+  title: Hex Cells Guides API
+  version: 1.0.0
+  description: API specification for the Hex External API
+  license:
+    name: UNLICENSED
+  contact: {}
+servers:
+- url: https://app.hex.tech/api
+security:
+- bearerAuth: []
+tags:
+- name: Guides
+paths:
+  /v1/guides/draft:
+    put:
+      operationId: UpsertGuideDraft
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpsertGuideDraftResponsePayload'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+      description: 'Update or create guide drafts by filePath.
+
+
+        Accepts a dictionary mapping file paths to their contents.
+
+        For each file:
+
+        - If the guide doesn''t exist, it will be created.
+
+        - If the guide exists but has no draft, a new draft will be created.
+
+        - If the guide exists with a draft, the draft contents will be updated.'
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertGuideDraftRequestBody'
+      tags:
+      - Guides
+  /v1/guides/publish:
+    post:
+      operationId: PublishGuideDrafts
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublishGuidesResponsePayload'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+      description: Publish all currently drafted guides.
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishGuidesRequestBody'
+      tags:
+      - Guides
+  /v1/guides/draft/{orgGuideFileId}:
+    delete:
+      operationId: DeleteGuideDraft
+      responses:
+        '204':
+          description: ''
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+      parameters:
+      - in: path
+        name: orgGuideFileId
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrgGuideFileId'
+      tags:
+      - Guides
+  /v1/guides/draft/list:
+    get:
+      operationId: ListDraftGuides
+      summary: ListDraftGuides
+      description: "List draft guides\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      parameters:
+      - in: query
+        name: limit
+        schema:
+          type: number
+          minimum: 1
+          maximum: 100
+          default: 100
+      - in: query
+        name: after
+        schema:
+          type: string
+          nullable: true
+          default: null
+      - in: query
+        name: before
+        schema:
+          type: string
+          nullable: true
+          default: null
+      - in: query
+        name: externalSource
+        schema:
+          type: string
+          nullable: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  values:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        filePath:
+                          type: string
+                      required:
+                      - id
+                      - filePath
+                  pagination:
+                    type: object
+                    properties:
+                      before:
+                        type: string
+                        nullable: true
+                        default: null
+                      after:
+                        type: string
+                        nullable: true
+                        default: null
+                    required:
+                    - before
+                    - after
+                required:
+                - values
+                - pagination
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Guides
+components:
+  schemas:
+    GithubExternalSourceLocatorWithMetadataInput:
+      allOf:
+      - $ref: '#/components/schemas/GithubExternalSourceLocatorInput'
+      - properties:
+          branch:
+            type: string
+            description: 'The git branch for the uploaded version of the guide file
+
+              e.g. `main`'
+          commitHash:
+            type: string
+            description: The git commit hash for the uploaded version of the guide file
+        required:
+        - branch
+        - commitHash
+        type: object
+    ExternalSourceInput:
+      anyOf:
+      - $ref: '#/components/schemas/UnknownExternalSourceInput'
+      - $ref: '#/components/schemas/GithubExternalSourceInput'
+      description: 'A unique identifier for a file that is sourced from an external source.
+
+        This is used to track the where the guide file was authored from and where we expect updates to come from.'
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+    UpsertGuideDraftResponsePayload:
+      properties:
+        files:
+          items:
+            $ref: '#/components/schemas/GuideFileApiResource'
+          type: array
+        warnings:
+          items:
+            properties:
+              message:
+                type: string
+              filePath:
+                type: string
+            required:
+            - message
+            - filePath
+            type: object
+          type: array
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+      required:
+      - files
+      - warnings
+      - traceId
+      type: object
+      additionalProperties: false
+    UnknownExternalSourceLocatorInput:
+      properties:
+        id:
+          type: string
+          description: An optional identifier that can be used to distinguish between different unspecified external sources.
+        source:
+          type: string
+          enum:
+          - unknown
+          nullable: false
+      required:
+      - source
+      type: object
+    GithubExternalSourceInput:
+      allOf:
+      - $ref: '#/components/schemas/GithubExternalSourceLocatorWithMetadataInput'
+      - properties:
+          path:
+            type: string
+            description: 'The path to the guide file within the github repository
+
+              e.g. `guides/guide.md`'
+        required:
+        - path
+        type: object
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
+    OrgGuideFileId:
+      type: string
+      format: uuid
+      description: Unique ID for a guide file. This can be found by going into the menu of a guide file in the guide files side bar.
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    UpsertGuideDraftRequestBody:
+      properties:
+        forceWrite:
+          type: boolean
+          description: 'If true, will overwrite an existing guide that is synced from a different source if there is a guide of the same name
+
+            e.g. guide1.md is authored in Hex, request.files includes guide1.md -> this will overwrite the guide that was authored in Hex
+
+
+            default: false'
+        files:
+          items:
+            properties:
+              externalSource:
+                $ref: '#/components/schemas/ExternalSourceInput'
+                description: The external source identifier for the guide file. This is used to track the where the guide file was authored from and where we expect updates to come from.
+              contents:
+                type: string
+                description: The contents of the guide file. Maximum length is 100000 characters.
+                maxLength: 100000
+              filePath:
+                type: string
+                description: 'The file path of the guide file.
+
+                  example: "guide.md"'
+            additionalProperties: {}
+            required:
+            - contents
+            - filePath
+            type: object
+          type: array
+          description: A mapping from filePath -> contents
+      required:
+      - files
+      type: object
+      additionalProperties: false
+    PublishGuidesRequestBody:
+      properties:
+        orgGuideFileIds:
+          items:
+            $ref: '#/components/schemas/OrgGuideFileId'
+          type: array
+          description: The IDs of the guides to publish if publishAllGuides is false.
+        publishAllDraftGuides:
+          type: boolean
+          description: Publish all draft guides (ignores the orgGuideFileIds field if true)
+      type: object
+      additionalProperties: false
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+    GuideFileApiResource:
+      properties:
+        id:
+          $ref: '#/components/schemas/OrgGuideFileId'
+          description: The unique ID of the guide file.
+        filePath:
+          type: string
+          description: 'The file path of the guide file.
+
+            example: "guide.md"'
+      required:
+      - id
+      - filePath
+      type: object
+      additionalProperties: false
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+    GithubExternalSourceLocatorInput:
+      properties:
+        repo:
+          type: string
+          description: The name of the github repository.
+        owner:
+          type: string
+          description: The owner of the github repository.
+        base:
+          type: string
+          description: The base URL of the github instance. This is usually `https://github.com` (default) unless uploaded from a self-hosted github instance.
+        source:
+          type: string
+          enum:
+          - github
+          nullable: false
+      required:
+      - repo
+      - owner
+      - source
+      type: object
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+    UnknownExternalSourceInput:
+      $ref: '#/components/schemas/UnknownExternalSourceLocatorInput'
+    PublishGuidesResponsePayload:
+      properties:
+        message:
+          type: string
+        publishedGuides:
+          items:
+            $ref: '#/components/schemas/GuideFileApiResource'
+          type: array
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+      required:
+      - message
+      - publishedGuides
+      - traceId
+      type: object
+      additionalProperties: false
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

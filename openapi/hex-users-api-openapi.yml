@@ -1,0 +1,505 @@
+openapi: 3.0.3
+info:
+  title: Hex Cells Users API
+  version: 1.0.0
+  description: API specification for the Hex External API
+  license:
+    name: UNLICENSED
+  contact: {}
+servers:
+- url: https://app.hex.tech/api
+security:
+- bearerAuth: []
+tags:
+- name: Users
+paths:
+  /v1/users/me:
+    get:
+      operationId: Me
+      summary: Me
+      description: "Returns information about the current logged in user.\nUser metadata will be omitted when authenticating with a workspace token.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                      nullable: true
+                    email:
+                      type: string
+                    role:
+                      type: string
+                      enum:
+                      - ADMIN
+                      - MANAGER
+                      - EDITOR
+                      - EXPLORER
+                      - MEMBER
+                      - GUEST
+                      - EMBEDDED_USER
+                      - ANONYMOUS
+                    lastLoginDate:
+                      type: string
+                      nullable: true
+                    org:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                      required:
+                      - id
+                    token:
+                      type: object
+                      nullable: true
+                      properties:
+                        exp:
+                          type: number
+                          nullable: true
+                      required:
+                      - exp
+                  required:
+                  - id
+                  - name
+                  - email
+                  - role
+                  - lastLoginDate
+                  - org
+                - type: object
+                  properties:
+                    org:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                      required:
+                      - id
+                    token:
+                      type: object
+                      nullable: true
+                      properties:
+                        exp:
+                          type: number
+                          nullable: true
+                      required:
+                      - exp
+                  required:
+                  - org
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Users
+  /v1/users:
+    get:
+      operationId: ListUsers
+      summary: ListUsers
+      description: "List all users in the workspace\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      parameters:
+      - in: query
+        name: after
+        schema:
+          type: string
+          nullable: true
+          default: null
+      - in: query
+        name: before
+        schema:
+          type: string
+          nullable: true
+          default: null
+      - in: query
+        name: limit
+        schema:
+          type: number
+          minimum: 1
+          maximum: 500
+          default: 25
+      - in: query
+        name: sortBy
+        schema:
+          type: string
+          enum:
+          - NAME
+          - EMAIL
+          default: NAME
+      - in: query
+        name: sortDirection
+        schema:
+          type: string
+          enum:
+          - ASC
+          - DESC
+          default: ASC
+      - in: query
+        name: groupId
+        schema:
+          type: string
+          nullable: true
+      - in: query
+        name: userIds
+        description: Comma-separated list of user IDs
+        schema:
+          type: string
+          nullable: true
+          description: Comma-separated list of user IDs
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  values:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                          nullable: true
+                        email:
+                          type: string
+                        role:
+                          type: string
+                          enum:
+                          - ADMIN
+                          - MANAGER
+                          - EDITOR
+                          - EXPLORER
+                          - MEMBER
+                          - GUEST
+                          - EMBEDDED_USER
+                          - ANONYMOUS
+                        lastLoginDate:
+                          type: string
+                          nullable: true
+                      required:
+                      - id
+                      - name
+                      - email
+                      - role
+                      - lastLoginDate
+                  pagination:
+                    type: object
+                    properties:
+                      before:
+                        type: string
+                        nullable: true
+                        default: null
+                      after:
+                        type: string
+                        nullable: true
+                        default: null
+                    required:
+                    - before
+                    - after
+                required:
+                - values
+                - pagination
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Users
+  /v1/users/{userId}/deactivate:
+    post:
+      operationId: DeactivateUser
+      summary: DeactivateUser
+      description: "Deactivate a user\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      parameters:
+      - in: path
+        name: userId
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                        nullable: true
+                      email:
+                        type: string
+                      role:
+                        type: string
+                        enum:
+                        - ADMIN
+                        - MANAGER
+                        - EDITOR
+                        - EXPLORER
+                        - MEMBER
+                        - GUEST
+                        - EMBEDDED_USER
+                        - ANONYMOUS
+                      lastLoginDate:
+                        type: string
+                        nullable: true
+                    required:
+                    - id
+                    - name
+                    - email
+                    - role
+                    - lastLoginDate
+                required:
+                - user
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Users
+components:
+  schemas:
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

@@ -1,0 +1,346 @@
+openapi: 3.0.3
+info:
+  title: Hex Cells Collections API
+  version: 1.0.0
+  description: API specification for the Hex External API
+  license:
+    name: UNLICENSED
+  contact: {}
+servers:
+- url: https://app.hex.tech/api
+security:
+- bearerAuth: []
+tags:
+- name: Collections
+paths:
+  /v1/collections/{collectionId}:
+    get:
+      operationId: GetCollection
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionApiResource'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/CollectionId'
+      tags:
+      - Collections
+    patch:
+      operationId: EditCollection
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionApiResource'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+      parameters:
+      - in: path
+        name: collectionId
+        required: true
+        schema:
+          $ref: '#/components/schemas/CollectionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                sharing:
+                  properties:
+                    upsert:
+                      $ref: '#/components/schemas/CollectionApiResourceSharing'
+                  type: object
+                description:
+                  type: string
+                name:
+                  $ref: '#/components/schemas/Name'
+              type: object
+      tags:
+      - Collections
+  /v1/collections:
+    get:
+      operationId: ListCollections
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCollectionsResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+      parameters:
+      - in: query
+        name: after
+        required: false
+        schema:
+          default: null
+      - in: query
+        name: before
+        required: false
+        schema:
+          default: null
+      - in: query
+        name: limit
+        required: false
+        schema:
+          $ref: '#/components/schemas/PageSize'
+      - in: query
+        name: sortBy
+        required: false
+        schema:
+          $ref: '#/components/schemas/ListCollectionsSortByEnum'
+      tags:
+      - Collections
+    post:
+      operationId: CreateCollection
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionApiResource'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                sharing:
+                  $ref: '#/components/schemas/CollectionApiResourceSharing'
+                description:
+                  type: string
+                name:
+                  type: string
+              required:
+              - name
+              type: object
+      tags:
+      - Collections
+components:
+  schemas:
+    PaginationApiResource:
+      properties:
+        after:
+          allOf:
+          - $ref: '#/components/schemas/ApiPaginationCursor'
+          nullable: true
+        before:
+          allOf:
+          - $ref: '#/components/schemas/ApiPaginationCursor'
+          nullable: true
+      required:
+      - after
+      - before
+      type: object
+      additionalProperties: false
+    ListCollectionsSortByEnum:
+      $ref: '#/components/schemas/EnumValues_typeofListCollectionsSortByEnum_'
+    ListCollectionsResponse:
+      properties:
+        values:
+          items:
+            $ref: '#/components/schemas/CollectionApiResource'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/PaginationApiResource'
+      required:
+      - values
+      - pagination
+      type: object
+      additionalProperties: false
+    CollectionApiResource:
+      properties:
+        id:
+          $ref: '#/components/schemas/CollectionId'
+        name:
+          $ref: '#/components/schemas/Name'
+        description:
+          type: string
+        creator:
+          properties:
+            email:
+              type: string
+            id:
+              $ref: '#/components/schemas/UserId'
+          required:
+          - email
+          - id
+          type: object
+        sharing:
+          $ref: '#/components/schemas/CollectionApiResourceSharing'
+      required:
+      - id
+      - name
+      - sharing
+      type: object
+      additionalProperties: false
+    CollectionApiResourceSharing:
+      properties:
+        users:
+          items:
+            properties:
+              access:
+                $ref: '#/components/schemas/CollectionAccess'
+              id:
+                $ref: '#/components/schemas/UserId'
+            required:
+            - access
+            - id
+            type: object
+          type: array
+        groups:
+          items:
+            properties:
+              access:
+                $ref: '#/components/schemas/CollectionAccess'
+              id:
+                $ref: '#/components/schemas/GroupId'
+            required:
+            - access
+            - id
+            type: object
+          type: array
+        workspace:
+          properties:
+            members:
+              $ref: '#/components/schemas/CollectionAccess'
+          type: object
+      type: object
+      additionalProperties: false
+    ApiPaginationCursor:
+      type: string
+      description: 'A cursor string used with `before` and `after` parameters to paginate through a list
+
+        of items on the API.'
+    EnumValues_typeofListCollectionsSortByEnum_:
+      type: string
+      enum:
+      - NAME
+      nullable: false
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
+    GroupId:
+      type: string
+      format: uuid
+      description: Unique ID for a group. This can be found from the groups page (in Settings).
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    CollectionAccess:
+      $ref: '#/components/schemas/EnumValues_typeofCollectionAccess_'
+    Name:
+      type: string
+      minLength: 1
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+    PageSize:
+      type: integer
+      format: int32
+      default: '25'
+      description: Number of results to fetch per page for paginated requests
+      minimum: 1
+      maximum: 100
+    UserId:
+      type: string
+      format: uuid
+      description: Unique ID for a user. This can be found from the users page (in Settings).
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    CollectionId:
+      type: string
+      format: uuid
+      description: Unique ID for a collection.
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    EnumValues_typeofCollectionAccess_:
+      type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

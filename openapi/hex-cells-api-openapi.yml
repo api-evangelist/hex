@@ -1,0 +1,1181 @@
+openapi: 3.0.3
+info:
+  title: Hex Cells API
+  version: 1.0.0
+  description: API specification for the Hex External API
+  license:
+    name: UNLICENSED
+  contact: {}
+servers:
+- url: https://app.hex.tech/api
+security:
+- bearerAuth: []
+tags:
+- name: Cells
+paths:
+  /v1/cells/{cellId}/image:
+    get:
+      operationId: GetChartImageFromLogic
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChartImageResponsePayload'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '422':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '500':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+      description: 'Get the rendered PNG image of a chart cell from the current notebook session by cellId.
+
+        The "cellId" path parameter should be the cell''s ID (scoped to a
+
+        specific version), as opposed to its staticId (which remains stable across versions).
+
+
+        Returns a JSON object containing the base64-encoded PNG image of the chart cell
+
+        as it currently appears in the Logic view, along with the cell ID and MIME type.
+
+        The cell must have been executed and must not be in an error state.
+
+        Only chart-type cells are supported.
+
+
+        The optional `width` and `height` query params set the output image size in pixels.
+
+        Both must be provided to apply, and must be between 100 and 2000.
+
+        The optional `includeTitle` query param includes the chart title in the image when true.
+
+
+        Rate limit: 20 requests per minute.'
+      parameters:
+      - in: path
+        name: cellId
+        required: true
+        schema:
+          $ref: '#/components/schemas/CellId'
+      - in: query
+        name: width
+        required: false
+        schema:
+          $ref: '#/components/schemas/ChartImageDimension'
+      - in: query
+        name: height
+        required: false
+        schema:
+          $ref: '#/components/schemas/ChartImageDimension'
+      - in: query
+        name: includeTitle
+        required: false
+        schema:
+          type: boolean
+      tags:
+      - Cells
+  /v1/cells/{cellId}:
+    get:
+      operationId: GetCell
+      summary: GetCell
+      description: "Get a single cell by ID\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      parameters:
+      - in: path
+        name: cellId
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  staticId:
+                    type: string
+                  cellType:
+                    type: string
+                    enum:
+                    - CODE
+                    - MARKDOWN
+                    - DISPLAY_TABLE
+                    - INPUT
+                    - SQL
+                    - VEGA_CHART
+                    - CELL_GROUP
+                    - METRIC
+                    - TEXT
+                    - MAP
+                    - WRITEBACK
+                    - DBT_METRIC
+                    - PIVOT
+                    - FILTER
+                    - COMPONENT_IMPORT
+                    - CHART
+                    - BLOCK
+                    - EXPLORE
+                    - COLLAPSIBLE
+                  label:
+                    type: string
+                    nullable: true
+                  dataConnectionId:
+                    type: string
+                    nullable: true
+                  contents:
+                    type: object
+                    properties:
+                      codeCell:
+                        type: object
+                        nullable: true
+                        properties:
+                          source:
+                            type: string
+                        required:
+                        - source
+                      sqlCell:
+                        type: object
+                        nullable: true
+                        properties:
+                          source:
+                            type: string
+                          outputDataframe:
+                            type: string
+                            description: The name of the dataframe that the result will be stored into
+                        required:
+                        - source
+                        - outputDataframe
+                      markdownCell:
+                        type: object
+                        nullable: true
+                        properties:
+                          source:
+                            type: string
+                        required:
+                        - source
+                    required:
+                    - codeCell
+                    - sqlCell
+                    - markdownCell
+                  projectId:
+                    type: string
+                required:
+                - id
+                - staticId
+                - cellType
+                - label
+                - dataConnectionId
+                - contents
+                - projectId
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Cells
+    patch:
+      operationId: UpdateCell
+      summary: UpdateCell
+      description: "Update a cell's source and/or data connection. For SQL cells, can update the SQL source, output dataframe, and data connection. For code and markdown cells, can update the source. Returns the updated cell.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      parameters:
+      - in: path
+        name: cellId
+        schema:
+          type: string
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dataConnectionId:
+                  type: string
+                  nullable: true
+                  description: Data connection to attach to a SQL cell. Pass null to detach the existing data connection.
+                contents:
+                  type: object
+                  properties:
+                    codeCell:
+                      type: object
+                      properties:
+                        source:
+                          type: string
+                      required:
+                      - source
+                    sqlCell:
+                      type: object
+                      properties:
+                        source:
+                          type: string
+                        outputDataframe:
+                          type: string
+                          description: The name of the dataframe that the SQL result will be stored into.
+                      required:
+                      - source
+                    markdownCell:
+                      type: object
+                      properties:
+                        source:
+                          type: string
+                      required:
+                      - source
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  staticId:
+                    type: string
+                  cellType:
+                    type: string
+                    enum:
+                    - CODE
+                    - MARKDOWN
+                    - DISPLAY_TABLE
+                    - INPUT
+                    - SQL
+                    - VEGA_CHART
+                    - CELL_GROUP
+                    - METRIC
+                    - TEXT
+                    - MAP
+                    - WRITEBACK
+                    - DBT_METRIC
+                    - PIVOT
+                    - FILTER
+                    - COMPONENT_IMPORT
+                    - CHART
+                    - BLOCK
+                    - EXPLORE
+                    - COLLAPSIBLE
+                  label:
+                    type: string
+                    nullable: true
+                  dataConnectionId:
+                    type: string
+                    nullable: true
+                  contents:
+                    type: object
+                    properties:
+                      codeCell:
+                        type: object
+                        nullable: true
+                        properties:
+                          source:
+                            type: string
+                        required:
+                        - source
+                      sqlCell:
+                        type: object
+                        nullable: true
+                        properties:
+                          source:
+                            type: string
+                          outputDataframe:
+                            type: string
+                            description: The name of the dataframe that the result will be stored into
+                        required:
+                        - source
+                        - outputDataframe
+                      markdownCell:
+                        type: object
+                        nullable: true
+                        properties:
+                          source:
+                            type: string
+                        required:
+                        - source
+                    required:
+                    - codeCell
+                    - sqlCell
+                    - markdownCell
+                  projectId:
+                    type: string
+                required:
+                - id
+                - staticId
+                - cellType
+                - label
+                - dataConnectionId
+                - contents
+                - projectId
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Cells
+    delete:
+      operationId: DeleteCell
+      summary: DeleteCell
+      description: "Delete a cell from the draft version of a project by ID\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      parameters:
+      - in: path
+        name: cellId
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cellId:
+                    type: string
+                required:
+                - cellId
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Cells
+  /v1/cells/{cellId}/output:
+    get:
+      operationId: GetCellOutput
+      summary: GetCellOutput
+      description: "**Unstable**: This endpoint is unstable API. Hex may make breaking changes to this endpoint without notice.\n\nGet the latest output preview for a SQL cell in the active draft notebook session.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      parameters:
+      - in: path
+        name: cellId
+        description: The SQL cell ID or static cell ID to read output for.
+        schema:
+          type: string
+          description: The SQL cell ID or static cell ID to read output for.
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projectId:
+                    type: string
+                  runId:
+                    type: string
+                  cell:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      staticId:
+                        type: string
+                      cellType:
+                        type: string
+                        enum:
+                        - CODE
+                        - MARKDOWN
+                        - DISPLAY_TABLE
+                        - INPUT
+                        - SQL
+                        - VEGA_CHART
+                        - CELL_GROUP
+                        - METRIC
+                        - TEXT
+                        - MAP
+                        - WRITEBACK
+                        - DBT_METRIC
+                        - PIVOT
+                        - FILTER
+                        - COMPONENT_IMPORT
+                        - CHART
+                        - BLOCK
+                        - EXPLORE
+                        - COLLAPSIBLE
+                    required:
+                    - id
+                    - staticId
+                    - cellType
+                  result:
+                    oneOf:
+                    - type: object
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - table
+                        rowLimit:
+                          type: number
+                        rowsReturned:
+                          type: number
+                        totalRows:
+                          type: number
+                          nullable: true
+                        totalRowsKind:
+                          type: string
+                          enum:
+                          - EXACT
+                          - LOWER_BOUND
+                          - UNKNOWN
+                        truncated:
+                          type: boolean
+                        columns:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                              type:
+                                type: string
+                            required:
+                            - name
+                            - type
+                        rows:
+                          type: array
+                          items:
+                            type: object
+                            additionalProperties:
+                              type: string
+                              nullable: true
+                      required:
+                      - type
+                      - rowLimit
+                      - rowsReturned
+                      - totalRows
+                      - totalRowsKind
+                      - truncated
+                      - columns
+                      - rows
+                    - type: object
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - cell_run_error
+                        message:
+                          type: string
+                        traceback:
+                          type: string
+                          nullable: true
+                      required:
+                      - type
+                      - message
+                      - traceback
+                required:
+                - projectId
+                - runId
+                - cell
+                - result
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Cells
+  /v1/cells:
+    post:
+      operationId: CreateCell
+      summary: CreateCell
+      description: "Create a new cell in the draft version of a project\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projectId:
+                  type: string
+                  description: The project to create the cell in.
+                cellType:
+                  type: string
+                  enum:
+                  - CODE
+                  - SQL
+                  - MARKDOWN
+                  description: The type of cell to create. Determines which `contents` variant is required.
+                label:
+                  type: string
+                  description: Optional label for the cell.
+                contents:
+                  anyOf:
+                  - type: object
+                    properties:
+                      codeCell:
+                        type: object
+                        properties:
+                          source:
+                            type: string
+                        required:
+                        - source
+                    required:
+                    - codeCell
+                  - type: object
+                    properties:
+                      sqlCell:
+                        type: object
+                        properties:
+                          source:
+                            type: string
+                          dataConnectionId:
+                            type: string
+                            description: Optional data connection ID for SQL cells. Mutually exclusive with isDataframeSql.
+                          isDataframeSql:
+                            type: boolean
+                            description: Set to true to create a dataframe SQL cell that queries the outputs of other SQL cells in the project instead of a data connection. Mutually exclusive with dataConnectionId.
+                          outputDataframe:
+                            type: string
+                            description: Optional custom dataframe name for the query result. If omitted, one will be auto-generated.
+                        required:
+                        - source
+                    required:
+                    - sqlCell
+                  - type: object
+                    properties:
+                      markdownCell:
+                        type: object
+                        properties:
+                          source:
+                            type: string
+                        required:
+                        - source
+                    required:
+                    - markdownCell
+                  description: 'Cell contents. Provide exactly the variant matching `cellType`: `codeCell` for CODE, `sqlCell` for SQL, `markdownCell` for MARKDOWN.'
+                location:
+                  type: object
+                  properties:
+                    insertAfterCellId:
+                      type: string
+                      description: Insert the new cell after this cell ID. The cell must belong to the target project.
+                    parentCellId:
+                      type: string
+                      description: Insert the new cell as a child of a section (parent) cell. Use with childPosition to control placement within the section.
+                    childPosition:
+                      type: string
+                      enum:
+                      - FIRST
+                      - LAST
+                      description: Where to place the cell within the parent section. Defaults to LAST.
+                  description: Controls where the new cell is placed. If omitted, the cell is appended to the end of the project.
+              required:
+              - projectId
+              - cellType
+              - contents
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  staticId:
+                    type: string
+                  cellType:
+                    type: string
+                    enum:
+                    - CODE
+                    - MARKDOWN
+                    - DISPLAY_TABLE
+                    - INPUT
+                    - SQL
+                    - VEGA_CHART
+                    - CELL_GROUP
+                    - METRIC
+                    - TEXT
+                    - MAP
+                    - WRITEBACK
+                    - DBT_METRIC
+                    - PIVOT
+                    - FILTER
+                    - COMPONENT_IMPORT
+                    - CHART
+                    - BLOCK
+                    - EXPLORE
+                    - COLLAPSIBLE
+                  label:
+                    type: string
+                    nullable: true
+                  dataConnectionId:
+                    type: string
+                    nullable: true
+                  contents:
+                    type: object
+                    properties:
+                      codeCell:
+                        type: object
+                        nullable: true
+                        properties:
+                          source:
+                            type: string
+                        required:
+                        - source
+                      sqlCell:
+                        type: object
+                        nullable: true
+                        properties:
+                          source:
+                            type: string
+                          outputDataframe:
+                            type: string
+                            description: The name of the dataframe that the result will be stored into
+                        required:
+                        - source
+                        - outputDataframe
+                      markdownCell:
+                        type: object
+                        nullable: true
+                        properties:
+                          source:
+                            type: string
+                        required:
+                        - source
+                    required:
+                    - codeCell
+                    - sqlCell
+                    - markdownCell
+                  projectId:
+                    type: string
+                required:
+                - id
+                - staticId
+                - cellType
+                - label
+                - dataConnectionId
+                - contents
+                - projectId
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Cells
+    get:
+      operationId: ListCells
+      summary: ListCells
+      description: "List cells from the draft version of a project. Returns code, SQL, and markdown cell contents.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      parameters:
+      - in: query
+        name: projectId
+        description: The project to list cells from
+        schema:
+          type: string
+          description: The project to list cells from
+        required: true
+      - in: query
+        name: after
+        schema:
+          type: string
+          nullable: true
+          default: null
+      - in: query
+        name: before
+        schema:
+          type: string
+          nullable: true
+          default: null
+      - in: query
+        name: limit
+        schema:
+          type: number
+          minimum: 1
+          maximum: 100
+          default: 25
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  values:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        staticId:
+                          type: string
+                        cellType:
+                          type: string
+                          enum:
+                          - CODE
+                          - MARKDOWN
+                          - DISPLAY_TABLE
+                          - INPUT
+                          - SQL
+                          - VEGA_CHART
+                          - CELL_GROUP
+                          - METRIC
+                          - TEXT
+                          - MAP
+                          - WRITEBACK
+                          - DBT_METRIC
+                          - PIVOT
+                          - FILTER
+                          - COMPONENT_IMPORT
+                          - CHART
+                          - BLOCK
+                          - EXPLORE
+                          - COLLAPSIBLE
+                        label:
+                          type: string
+                          nullable: true
+                        dataConnectionId:
+                          type: string
+                          nullable: true
+                        contents:
+                          type: object
+                          properties:
+                            codeCell:
+                              type: object
+                              nullable: true
+                              properties:
+                                source:
+                                  type: string
+                              required:
+                              - source
+                            sqlCell:
+                              type: object
+                              nullable: true
+                              properties:
+                                source:
+                                  type: string
+                                outputDataframe:
+                                  type: string
+                                  description: The name of the dataframe that the result will be stored into
+                              required:
+                              - source
+                              - outputDataframe
+                            markdownCell:
+                              type: object
+                              nullable: true
+                              properties:
+                                source:
+                                  type: string
+                              required:
+                              - source
+                          required:
+                          - codeCell
+                          - sqlCell
+                          - markdownCell
+                        projectId:
+                          type: string
+                      required:
+                      - id
+                      - staticId
+                      - cellType
+                      - label
+                      - dataConnectionId
+                      - contents
+                      - projectId
+                  pagination:
+                    type: object
+                    properties:
+                      before:
+                        type: string
+                        nullable: true
+                        default: null
+                      after:
+                        type: string
+                        nullable: true
+                        default: null
+                    required:
+                    - before
+                    - after
+                required:
+                - values
+                - pagination
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Cells
+components:
+  schemas:
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+    ChartImageResponsePayload:
+      properties:
+        cellId:
+          $ref: '#/components/schemas/CellId'
+        imageBase64:
+          type: string
+        mimeType:
+          type: string
+      required:
+      - cellId
+      - imageBase64
+      - mimeType
+      type: object
+      additionalProperties: false
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    ChartImageDimension:
+      type: integer
+      format: int32
+      description: Chart image total dimension (width or height) in pixels.
+      minimum: 100
+      maximum: 2000
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+    CellId:
+      type: string
+      format: uuid
+      description: Unique ID for a cell. This can be found by going into the menu of a cell in the notebook.
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

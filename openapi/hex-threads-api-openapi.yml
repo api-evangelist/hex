@@ -1,0 +1,982 @@
+openapi: 3.0.3
+info:
+  title: Hex Cells Threads API
+  version: 1.0.0
+  description: API specification for the Hex External API
+  license:
+    name: UNLICENSED
+  contact: {}
+servers:
+- url: https://app.hex.tech/api
+security:
+- bearerAuth: []
+tags:
+- name: Threads
+paths:
+  /v1/threads:
+    post:
+      operationId: CreateThread
+      summary: CreateThread
+      description: "Start an agent thread with a prompt. The Hex agent will analyze data and respond to the prompt. The thread runs asynchronously — poll its status or visit the returned URL to view progress.\n\nAvailability of this endpoint varies by organization. Contact Hex support to request access.\n\nThis endpoint is subject to the following rate limits:\n- `hex-send-thread-message`: Rate limits for sending messages to threads\n  - Max requests per minute may vary\n  - Max requests per hour may vary"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prompt:
+                  type: string
+                  minLength: 1
+                attachments:
+                  type: object
+                  properties:
+                    dataConnectionId:
+                      type: string
+                      nullable: true
+                      description: Data connection referenced by the prompt
+                    tableIds:
+                      type: array
+                      items:
+                        type: string
+                      description: Tables referenced by the prompt
+                    semanticDatasetIds:
+                      type: array
+                      items:
+                        type: string
+                      description: Semantic datasets referenced by the prompt
+                    semanticViewIds:
+                      type: array
+                      items:
+                        type: string
+                      description: Semantic views referenced by the prompt
+                    projectIds:
+                      type: array
+                      items:
+                        type: string
+                      description: Projects referenced by the prompt
+                  description: Entities referenced by the prompt
+                previewId:
+                  type: string
+                  nullable: true
+                projectId:
+                  type: string
+                  nullable: true
+                  description: Run the thread against an existing project. Mutually exclusive with `newProject`
+                newProject:
+                  type: boolean
+                  nullable: true
+                  description: Create a new project for the thread to work on. Mutually exclusive with `projectId`
+                muted:
+                  type: boolean
+                  nullable: true
+                  description: If true, the thread will not be shown in any aggregated UI surfaces and will not contribute to user-facing statistics. The thread is still individually viewable. Only applies for non-project-backed threads (ignored when `projectId` or `newProject` is set). This is distinct from a `sensitive` thread.
+              required:
+              - prompt
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  threadId:
+                    type: string
+                  url:
+                    type: string
+                  createdAt:
+                    type: string
+                  projectId:
+                    type: string
+                    nullable: true
+                required:
+                - threadId
+                - url
+                - createdAt
+                - projectId
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Threads
+    get:
+      operationId: ListThreads
+      summary: ListThreads
+      description: "List agent threads in the workspace, sorted by most recently created first. Requires Manager org role or higher. Workspace admins receive every non-private thread; managers receive threads they created plus Threads-type threads on projects they have access to. Threads marked private are returned with their title redacted.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      parameters:
+      - in: query
+        name: after
+        schema:
+          type: string
+          nullable: true
+          default: null
+      - in: query
+        name: before
+        schema:
+          type: string
+          nullable: true
+          default: null
+      - in: query
+        name: limit
+        schema:
+          type: number
+          minimum: 1
+          maximum: 100
+          default: 25
+      - in: query
+        name: source
+        schema:
+          type: string
+          nullable: true
+          enum:
+          - HEX
+          - SLACK
+          - MCP
+          - PUBLIC_API
+          - null
+      - in: query
+        name: userId
+        schema:
+          type: string
+          nullable: true
+      - in: query
+        name: type
+        schema:
+          type: string
+          nullable: true
+          enum:
+          - THREADS
+          - NOTEBOOK
+          - MODELING
+          - null
+      - in: query
+        name: numDays
+        schema:
+          type: integer
+          nullable: true
+          minimum: 0
+          exclusiveMinimum: true
+      - in: query
+        name: hasFeedback
+        schema:
+          type: boolean
+          nullable: true
+      - in: query
+        name: roles
+        description: Comma-separated list of user org roles to filter by (ADMIN, MANAGER, EDITOR, EXPLORER, MEMBER, GUEST)
+        schema:
+          type: string
+          nullable: true
+          description: Comma-separated list of user org roles to filter by (ADMIN, MANAGER, EDITOR, EXPLORER, MEMBER, GUEST)
+      - in: query
+        name: warnings
+        description: Comma-separated list of warning types to filter by (DATA_LIMITATION, USER_DOUBT, MISSING_CONTEXT, OTHER)
+        schema:
+          type: string
+          nullable: true
+          description: Comma-separated list of warning types to filter by (DATA_LIMITATION, USER_DOUBT, MISSING_CONTEXT, OTHER)
+      - in: query
+        name: topicIds
+        description: Comma-separated list of topic IDs to filter by
+        schema:
+          type: string
+          nullable: true
+          description: Comma-separated list of topic IDs to filter by
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  threads:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                          nullable: true
+                          description: Title of the thread, when available. Null for private threads
+                        creditsUsed:
+                          type: number
+                          nullable: true
+                          description: The total credits used by the thread
+                        topics:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                type: string
+                            required:
+                            - id
+                            - name
+                        warnings:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              type:
+                                type: string
+                              summary:
+                                type: string
+                            required:
+                            - id
+                            - type
+                            - summary
+                        feedback:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              userFeedback:
+                                type: string
+                              type:
+                                type: string
+                                enum:
+                                - THUMBS
+                                - FLAG
+                              selectedReason:
+                                type: string
+                                nullable: true
+                              userLiked:
+                                type: boolean
+                            required:
+                            - id
+                            - userFeedback
+                            - type
+                            - userLiked
+                        warningsGeneratedAt:
+                          type: string
+                          nullable: true
+                        threadSummary:
+                          type: string
+                          nullable: true
+                        threadIntent:
+                          type: string
+                          nullable: true
+                        model:
+                          type: string
+                        userId:
+                          type: string
+                          nullable: true
+                        type:
+                          type: string
+                          description: User-facing label for the type of agent thread
+                        source:
+                          type: string
+                          description: The source of where the thread was created
+                        createdAt:
+                          type: string
+                        sensitive:
+                          type: boolean
+                          description: Whether the thread has been marked as sensitive. When true, the thread's contents (such as title) are hidden from callers other than the thread author
+                        id:
+                          type: string
+                        orgId:
+                          type: string
+                        url:
+                          type: string
+                      required:
+                      - userId
+                      - type
+                      - source
+                      - createdAt
+                      - sensitive
+                      - id
+                      - orgId
+                      - url
+                  pagination:
+                    type: object
+                    properties:
+                      before:
+                        type: string
+                        nullable: true
+                        default: null
+                      after:
+                        type: string
+                        nullable: true
+                        default: null
+                    required:
+                    - before
+                    - after
+                required:
+                - threads
+                - pagination
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Threads
+  /v1/threads/{id}:
+    get:
+      operationId: GetThread
+      summary: GetThread
+      description: "Get the response of an agent thread. Returns the current status (RUNNING, IDLE, or ERROR) and the agent's response content when available.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    nullable: true
+                    description: Title of the thread, when available. Null for private threads
+                  creditsUsed:
+                    type: number
+                    nullable: true
+                    description: The total credits used by the thread
+                  topics:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                      required:
+                      - id
+                      - name
+                  warnings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                        summary:
+                          type: string
+                      required:
+                      - id
+                      - type
+                      - summary
+                  feedback:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        userFeedback:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - THUMBS
+                          - FLAG
+                        selectedReason:
+                          type: string
+                          nullable: true
+                        userLiked:
+                          type: boolean
+                      required:
+                      - id
+                      - userFeedback
+                      - type
+                      - userLiked
+                  warningsGeneratedAt:
+                    type: string
+                    nullable: true
+                  threadSummary:
+                    type: string
+                    nullable: true
+                  threadIntent:
+                    type: string
+                    nullable: true
+                  model:
+                    type: string
+                  userId:
+                    type: string
+                    nullable: true
+                  type:
+                    type: string
+                    description: User-facing label for the type of agent thread
+                  source:
+                    type: string
+                    description: The source of where the thread was created
+                  createdAt:
+                    type: string
+                  sensitive:
+                    type: boolean
+                    description: Whether the thread has been marked as sensitive. When true, the thread's contents (such as title) are hidden from callers other than the thread author
+                  threadId:
+                    type: string
+                  status:
+                    type: string
+                    enum:
+                    - IDLE
+                    - RUNNING
+                    - ERROR
+                  url:
+                    type: string
+                  error:
+                    type: object
+                    nullable: true
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - NO_CONTEXT
+                        - BAD_DATA
+                        - AGENT_ERROR
+                        - AGENT_OVERLOADED
+                        - GENERIC_ERROR
+                        - POSSIBLE_PROMPT_INJECTION
+                        - OVER_LIMIT
+                        - NO_DATA
+                        - INVALID_RESPONSE
+                        - HALLUCINATED_SCHEMA_ELEMENT
+                        - NON_EXPRESSIBLE
+                        - INVALID_JOIN
+                        - EXPLORE_TIMED_OUT
+                        - EXPLORE_ERRORED
+                        - EXPLORE_TABLE_SWAPPED
+                        - UNSUPPORTED_QUERY_ELEMENTS
+                        - EXPLORE_NO_DATA
+                        - CHART_ROW_LIMIT_EXCEEDED
+                        - BYOK_AUTHENTICATION
+                        - AGENT_COMPRESSION_ERROR
+                        - TOKEN_COUNTING_FAILURE
+                        - REQUEST_CANCELLED
+                        - INVALID_MESSAGE_HISTORY
+                        - INVALID_REQUEST
+                        - DATA_CONNECTION_NOT_AUTHORIZED
+                        - JOIN_VALIDATION_TIMEOUT
+                      message:
+                        type: string
+                    required:
+                    - type
+                    - message
+                  response:
+                    type: array
+                    nullable: true
+                    items:
+                      oneOf:
+                      - type: object
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - text
+                          text:
+                            type: string
+                        required:
+                        - type
+                        - text
+                      - type: object
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - cell
+                          id:
+                            type: string
+                          staticId:
+                            type: string
+                          label:
+                            type: string
+                            nullable: true
+                        required:
+                        - type
+                        - id
+                        - staticId
+                        - label
+                      - type: object
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - project
+                          id:
+                            type: string
+                          title:
+                            type: string
+                            nullable: true
+                        required:
+                        - type
+                        - id
+                        - title
+                      - type: object
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - task
+                          title:
+                            type: string
+                        required:
+                        - type
+                        - title
+                required:
+                - title
+                - creditsUsed
+                - topics
+                - warnings
+                - feedback
+                - model
+                - userId
+                - type
+                - source
+                - createdAt
+                - sensitive
+                - threadId
+                - status
+                - url
+                - response
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Threads
+  /v1/threads/{threadId}/messages:
+    get:
+      operationId: GetThreadMessages
+      summary: GetThreadMessages
+      description: "List the messages in an agent thread, rendered as a single flat list of text blocks. Within a page messages are chronological (oldest first); each text block is prefixed with the authoring role, and thinking and error blocks are tagged. Tool-call, tool-result, and mention blocks are omitted, and inline references are left as raw tags. By default the most recent page is returned (matching the MCP get_thread tool); pass the `before` cursor to fetch older messages and `after` to fetch newer ones. Supports cursor pagination with a maximum page size of 50.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      parameters:
+      - in: path
+        name: threadId
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: after
+        schema:
+          type: string
+          nullable: true
+          default: null
+      - in: query
+        name: before
+        schema:
+          type: string
+          nullable: true
+          default: null
+      - in: query
+        name: limit
+        schema:
+          type: number
+          minimum: 1
+          maximum: 50
+          default: 25
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - text
+                        text:
+                          type: string
+                      required:
+                      - type
+                      - text
+                      description: A rendered text block from the thread
+                    description: The thread's messages rendered as a single flat, ordered list of content blocks
+                  pagination:
+                    type: object
+                    properties:
+                      before:
+                        type: string
+                        nullable: true
+                        default: null
+                      after:
+                        type: string
+                        nullable: true
+                        default: null
+                    required:
+                    - before
+                    - after
+                required:
+                - content
+                - pagination
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Threads
+  /v1/threads/{id}/followup:
+    post:
+      operationId: ContinueThread
+      summary: ContinueThread
+      description: "Continue an existing agent thread with a follow-up prompt. This endpoint does not support queuing: the thread must be idle before a follow-up can be sent.\n\nAvailability of this endpoint varies by organization. Contact Hex support to request access.\n\nThis endpoint is subject to the following rate limits:\n- `hex-send-thread-message`: Rate limits for sending messages to threads\n  - Max requests per minute may vary\n  - Max requests per hour may vary"
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prompt:
+                  type: string
+                  minLength: 1
+                attachments:
+                  type: object
+                  properties:
+                    dataConnectionId:
+                      type: string
+                      nullable: true
+                      description: Data connection referenced by the prompt
+                    tableIds:
+                      type: array
+                      items:
+                        type: string
+                      description: Tables referenced by the prompt
+                    semanticDatasetIds:
+                      type: array
+                      items:
+                        type: string
+                      description: Semantic datasets referenced by the prompt
+                    semanticViewIds:
+                      type: array
+                      items:
+                        type: string
+                      description: Semantic views referenced by the prompt
+                    projectIds:
+                      type: array
+                      items:
+                        type: string
+                      description: Projects referenced by the prompt
+                  description: Entities referenced by the prompt
+              required:
+              - prompt
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  threadId:
+                    type: string
+                  url:
+                    type: string
+                required:
+                - threadId
+                - url
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Threads
+components:
+  schemas:
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
