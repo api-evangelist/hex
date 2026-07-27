@@ -1,7 +1,17 @@
 aid: hex
 name: Hex
-description: Hex is a company surfaced as a portfolio company of a16z and added to the API Evangelist
-  network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Hex is an AI-powered analytics platform that combines agentic notebooks,
+  interactive data apps, and conversational self-serve analytics so teams can go
+  from ad-hoc exploration to published, governed data apps. The Hex External API
+  (bearer-token authenticated, base https://app.hex.tech/api/v1) lets you
+  programmatically run and schedule projects, manage projects, collections,
+  groups, cells, and data connections, ingest semantic models, drive AI agent
+  Threads (create, continue, read messages), export projects, and administer
+  workspace users. Hex also ships a first-party CLI, a hosted remote MCP server,
+  Airflow and Dagster integrations, and published Claude Agent Skills. Surfaced
+  as an a16z portfolio company and enriched with its real public developer
+  surface.
 url: https://raw.githubusercontent.com/api-evangelist/hex/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -9,14 +19,327 @@ x-backed-by:
 - a16z
 x-tier: stub
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://cdn.sanity.io/images/e92memrj/production/57eeccd836f0d6188862a55186ab48521fe1034b-1200x630.png
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
-apis: []
+- Analytics
+- Data Science
+- Notebooks
+- Business Intelligence
+- Data Apps
+- AI
+- Agents
+- Semantic Layer
+- Developer Tools
+apis:
+- aid: hex:hex-cells-api
+  name: Hex Cells API
+  description: The Cells API from Hex — 4 operation(s) for cells.
+  humanURL: https://learn.hex.tech/docs/api-integrations/api/overview
+  baseURL: https://app.hex.tech/api/v1
+  tags:
+  - Cells
+  properties:
+  - type: OpenAPI
+    url: openapi/hex-cells-api-openapi.yml
+  - type: Authentication
+    url: authentication/hex-authentication.yml
+  - type: ErrorCatalog
+    url: errors/hex-problem-types.yml
+  - type: Conventions
+    url: conventions/hex-conventions.yml
+  - type: DataModel
+    url: data-model/hex-data-model.yml
+  - type: Conformance
+    url: conformance/hex-conformance.yml
+- aid: hex:hex-collections-api
+  name: Hex Collections API
+  description: The Collections API from Hex — 2 operation(s) for collections.
+  humanURL: https://learn.hex.tech/docs/api-integrations/api/overview
+  baseURL: https://app.hex.tech/api/v1
+  tags:
+  - Collections
+  properties:
+  - type: OpenAPI
+    url: openapi/hex-collections-api-openapi.yml
+  - type: Authentication
+    url: authentication/hex-authentication.yml
+  - type: ErrorCatalog
+    url: errors/hex-problem-types.yml
+  - type: Conventions
+    url: conventions/hex-conventions.yml
+  - type: DataModel
+    url: data-model/hex-data-model.yml
+  - type: Conformance
+    url: conformance/hex-conformance.yml
+- aid: hex:hex-context-api
+  name: Hex Context API
+  description: The Context API from Hex — 1 operation(s) for context.
+  humanURL: https://learn.hex.tech/docs/api-integrations/api/overview
+  baseURL: https://app.hex.tech/api/v1
+  tags:
+  - Context
+  properties:
+  - type: OpenAPI
+    url: openapi/hex-context-api-openapi.yml
+  - type: Authentication
+    url: authentication/hex-authentication.yml
+  - type: ErrorCatalog
+    url: errors/hex-problem-types.yml
+  - type: Conventions
+    url: conventions/hex-conventions.yml
+  - type: DataModel
+    url: data-model/hex-data-model.yml
+  - type: Conformance
+    url: conformance/hex-conformance.yml
+- aid: hex:hex-data-connections-api
+  name: Hex Data Connections API
+  description: The Data Connections API from Hex — 3 operation(s) for data connections.
+  humanURL: https://learn.hex.tech/docs/api-integrations/api/overview
+  baseURL: https://app.hex.tech/api/v1
+  tags:
+  - Data Connections
+  properties:
+  - type: OpenAPI
+    url: openapi/hex-data-connections-api-openapi.yml
+  - type: Authentication
+    url: authentication/hex-authentication.yml
+  - type: ErrorCatalog
+    url: errors/hex-problem-types.yml
+  - type: Conventions
+    url: conventions/hex-conventions.yml
+  - type: DataModel
+    url: data-model/hex-data-model.yml
+  - type: Conformance
+    url: conformance/hex-conformance.yml
+- aid: hex:hex-embedding-api
+  name: Hex Embedding API
+  description: The Embedding API from Hex — 1 operation(s) for embedding.
+  humanURL: https://learn.hex.tech/docs/api-integrations/api/overview
+  baseURL: https://app.hex.tech/api/v1
+  tags:
+  - Embedding
+  properties:
+  - type: OpenAPI
+    url: openapi/hex-embedding-api-openapi.yml
+  - type: Authentication
+    url: authentication/hex-authentication.yml
+  - type: ErrorCatalog
+    url: errors/hex-problem-types.yml
+  - type: Conventions
+    url: conventions/hex-conventions.yml
+  - type: DataModel
+    url: data-model/hex-data-model.yml
+  - type: Conformance
+    url: conformance/hex-conformance.yml
+- aid: hex:hex-groups-api
+  name: Hex Groups API
+  description: The Groups API from Hex — 2 operation(s) for groups.
+  humanURL: https://learn.hex.tech/docs/api-integrations/api/overview
+  baseURL: https://app.hex.tech/api/v1
+  tags:
+  - Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/hex-groups-api-openapi.yml
+  - type: Authentication
+    url: authentication/hex-authentication.yml
+  - type: ErrorCatalog
+    url: errors/hex-problem-types.yml
+  - type: Conventions
+    url: conventions/hex-conventions.yml
+  - type: DataModel
+    url: data-model/hex-data-model.yml
+  - type: Conformance
+    url: conformance/hex-conformance.yml
+- aid: hex:hex-guides-api
+  name: Hex Guides API
+  description: The Guides API from Hex — 4 operation(s) for guides.
+  humanURL: https://learn.hex.tech/docs/api-integrations/api/overview
+  baseURL: https://app.hex.tech/api/v1
+  tags:
+  - Guides
+  properties:
+  - type: OpenAPI
+    url: openapi/hex-guides-api-openapi.yml
+  - type: Authentication
+    url: authentication/hex-authentication.yml
+  - type: ErrorCatalog
+    url: errors/hex-problem-types.yml
+  - type: Conventions
+    url: conventions/hex-conventions.yml
+  - type: DataModel
+    url: data-model/hex-data-model.yml
+  - type: Conformance
+    url: conformance/hex-conformance.yml
+- aid: hex:hex-projects-api
+  name: Hex Projects API
+  description: The Projects API from Hex — 11 operation(s) for projects.
+  humanURL: https://learn.hex.tech/docs/api-integrations/api/overview
+  baseURL: https://app.hex.tech/api/v1
+  tags:
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/hex-projects-api-openapi.yml
+  - type: Authentication
+    url: authentication/hex-authentication.yml
+  - type: ErrorCatalog
+    url: errors/hex-problem-types.yml
+  - type: Conventions
+    url: conventions/hex-conventions.yml
+  - type: DataModel
+    url: data-model/hex-data-model.yml
+  - type: Conformance
+    url: conformance/hex-conformance.yml
+- aid: hex:hex-semantic-projects-models-api
+  name: Hex Semantic (projects|models) API
+  description: >-
+    The Semantic (projects|models) API from Hex — 2 operation(s) for semantic (projects|models).
+  humanURL: https://learn.hex.tech/docs/api-integrations/api/overview
+  baseURL: https://app.hex.tech/api/v1
+  tags:
+  - Semantic (projects|models)
+  properties:
+  - type: OpenAPI
+    url: openapi/hex-semantic-projects-models-api-openapi.yml
+  - type: Authentication
+    url: authentication/hex-authentication.yml
+  - type: ErrorCatalog
+    url: errors/hex-problem-types.yml
+  - type: Conventions
+    url: conventions/hex-conventions.yml
+  - type: DataModel
+    url: data-model/hex-data-model.yml
+  - type: Conformance
+    url: conformance/hex-conformance.yml
+- aid: hex:hex-threads-api
+  name: Hex Threads API
+  description: The Threads API from Hex — 4 operation(s) for threads.
+  humanURL: https://learn.hex.tech/docs/api-integrations/api/overview
+  baseURL: https://app.hex.tech/api/v1
+  tags:
+  - Threads
+  properties:
+  - type: OpenAPI
+    url: openapi/hex-threads-api-openapi.yml
+  - type: Authentication
+    url: authentication/hex-authentication.yml
+  - type: ErrorCatalog
+    url: errors/hex-problem-types.yml
+  - type: Conventions
+    url: conventions/hex-conventions.yml
+  - type: DataModel
+    url: data-model/hex-data-model.yml
+  - type: Conformance
+    url: conformance/hex-conformance.yml
+- aid: hex:hex-users-api
+  name: Hex Users API
+  description: The Users API from Hex — 3 operation(s) for users.
+  humanURL: https://learn.hex.tech/docs/api-integrations/api/overview
+  baseURL: https://app.hex.tech/api/v1
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/hex-users-api-openapi.yml
+  - type: Authentication
+    url: authentication/hex-authentication.yml
+  - type: ErrorCatalog
+    url: errors/hex-problem-types.yml
+  - type: Conventions
+    url: conventions/hex-conventions.yml
+  - type: DataModel
+    url: data-model/hex-data-model.yml
+  - type: Conformance
+    url: conformance/hex-conformance.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+common:
+- type: AgenticAccess
+  url: agentic-access/hex-agentic-access.yml
+- type: DeveloperPortal
+  url: https://learn.hex.tech/docs
+- type: Documentation
+  url: https://learn.hex.tech/docs
+- type: APIReference
+  url: https://learn.hex.tech/docs/api-integrations/api/reference
+- type: GettingStarted
+  url: https://learn.hex.tech/docs/getting-started
+- type: Blog
+  url: https://hex.tech/blog/
+- type: Pricing
+  url: https://hex.tech/pricing/
+- type: SignUp
+  url: https://app.hex.tech/signup
+- type: TermsOfService
+  url: https://learn.hex.tech/docs/legal/terms-and-conditions
+- type: PrivacyPolicy
+  url: https://learn.hex.tech/docs/trust/privacy-policy
+- type: GitHubOrganization
+  url: https://github.com/hex-inc
+- type: StatusPage
+  url: https://status.hex.tech/
+- type: ChangeLog
+  url: https://learn.hex.tech/changelog
+- type: Packages
+  url: packages/hex-packages.yml
+- type: SDKs
+  url: packages/hex-packages.yml
+- type: CLI
+  url: cli/hex-cli.yml
+- type: MCPServer
+  url: mcp/hex-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: WellKnown
+  url: well-known/hex-well-known.yml
+- type: SecurityTxt
+  url: well-known/hex-security.txt
+- type: Authentication
+  url: authentication/hex-authentication.yml
+- type: Conventions
+  url: conventions/hex-conventions.yml
+- type: ChangeLog
+  url: changelog/hex-changelog.yml
+- type: Lifecycle
+  url: lifecycle/hex-lifecycle.yml
+- type: Conformance
+  url: conformance/hex-conformance.yml
+- type: Compliance
+  url: security/hex-trust-center.yml
+- type: TrustCenter
+  url: security/hex-trust-center.yml
+- type: Security
+  url: security/hex-vulnerability-disclosure.yml
+- type: VulnerabilityDisclosure
+  url: security/hex-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/hex-domain-security.yml
+- type: DataModel
+  url: data-model/hex-data-model.yml
+- type: ErrorCatalog
+  url: errors/hex-problem-types.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

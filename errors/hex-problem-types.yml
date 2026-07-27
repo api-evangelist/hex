@@ -1,0 +1,47 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/hex-openapi-original.json
+# Hex returns a JSON error envelope (NOT RFC 9457 problem+json). Every 4xx/5xx
+# response body is a TsoaErrorResponsePayload: { reason (required), details, traceId }.
+format: json
+envelope:
+  media_type: application/json
+  schema: TsoaErrorResponsePayload
+  fields:
+  - name: reason
+    required: true
+    description: Human-readable reason for the failure.
+  - name: details
+    required: false
+    description: Additional detail about the failure.
+  - name: traceId
+    required: false
+    description: Unique request identifier Hex Support can use to debug the issue.
+problems:
+- status: 400
+  title: Bad request
+  description: The request was malformed or failed validation.
+- status: 401
+  title: Unauthorized
+  description: Authorization not provided or the bearer token is invalid/expired.
+- status: 403
+  title: Forbidden
+  description: The token's user lacks permission for the requested resource or action.
+- status: 404
+  title: Not found
+  description: The referenced project, run, cell, collection, group, or connection does not exist.
+- status: 415
+  title: Unsupported media type
+  description: The request body content type is not accepted (e.g. semantic project ingest).
+- status: 422
+  title: Unprocessable entity
+  description: Valid syntax but the request cannot be processed (e.g. running an unpublished project, invalid run parameters).
+- status: 500
+  title: Internal server error
+  description: An unexpected error occurred on the Hex side.
+- status: 502
+  title: Bad gateway
+  description: An upstream dependency failed while processing the request (e.g. semantic model ingest).
+- status: 503
+  title: Service unavailable
+  description: Kernel concurrency limit reached (max 25 concurrent running kernels); retry after running kernels free up.

@@ -1,0 +1,86 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/hex-openapi-original.json
+note: >-
+  Entity-relationship graph derived from the Hex OpenAPI path structure and
+  resource schemas (ProjectApiResource, SharingResource, etc.) and id path
+  parameters (projectId, runId, cellId, collectionId, groupId, dataConnectionId,
+  threadId, userId, semanticProjectId).
+entities:
+- name: Project
+  id: projectId
+  description: A Hex project/notebook (the core unit of work; may be published as a data app).
+  schema: ProjectApiResource
+- name: Run
+  id: runId
+  description: An execution of a project, created via RunProject and tracked by status.
+  schema: ProjectRunStatus
+- name: Cell
+  id: cellId
+  description: A logic/output cell within a project notebook.
+- name: Collection
+  id: collectionId
+  description: A grouping of projects with shared access controls.
+  schema: CollectionApiResource
+- name: Group
+  id: groupId
+  description: A workspace group of users used for sharing/permissions.
+  schema: GroupApiResource
+- name: DataConnection
+  id: dataConnectionId
+  description: A configured connection to an external data warehouse/source.
+  schema: DataConnectionApiResource
+- name: SemanticProject
+  id: semanticProjectId
+  description: A semantic model/project ingested to ground the AI agents.
+- name: Thread
+  id: threadId
+  description: An AI agent conversation thread with follow-up messages.
+- name: User
+  id: userId
+  description: A workspace member.
+- name: Guide
+  id: orgGuideFileId
+  description: A context/guide file (draft then published) used by Hex agents.
+relationships:
+- from: Project
+  type: has_many
+  to: Run
+  via: projectId
+- from: Project
+  type: has_one
+  to: Sharing
+  via: sharing
+  note: Sharing spans users, collections, groups, workspace, and public web.
+- from: Project
+  type: belongs_to
+  to: User
+  via: owner
+- from: Project
+  type: belongs_to
+  to: User
+  via: creator
+- from: Project
+  type: has_many
+  to: Schedule
+  via: schedules
+- from: Run
+  type: belongs_to
+  to: Project
+  via: projectId
+- from: Cell
+  type: belongs_to
+  to: Project
+  via: projectId
+- from: Collection
+  type: has_many
+  to: Project
+  via: sharing.collections
+- from: Group
+  type: has_many
+  to: User
+  via: groupId
+- from: Thread
+  type: has_many
+  to: Message
+  via: threadId

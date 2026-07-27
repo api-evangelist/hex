@@ -1,0 +1,41 @@
+generated: '2026-07-19'
+method: searched
+source: https://learn.hex.tech/docs/api-integrations/cli
+name: Hex CLI
+binary: hex
+platforms:
+- macOS
+- Linux
+- Windows (via WSL)
+install:
+- method: homebrew
+  command: brew install hex-inc/hex-cli/hex
+- method: script
+  command: curl -fsSL https://hex.tech/install.sh | bash
+verify: hex --version
+repo: https://github.com/hex-inc/hex-cli
+commands:
+- name: app
+  summary: Manage and run Hex apps
+- name: auth
+  summary: Manage authentication with Hex
+- name: cell
+  summary: Manage project cells
+- name: collection
+  summary: Manage project collections
+- name: config
+  summary: Manage CLI configuration
+- name: connection
+  summary: Manage data connections
+- name: group
+  summary: Manage workspace groups
+- name: project
+  summary: Manage and run Hex projects
+- name: run
+  summary: Manage running Hex projects and apps
+- name: suggestion
+  summary: Manage context suggestions
+- name: thread
+  summary: Manage Hex agent threads
+- name: user
+  summary: Manage workspace users

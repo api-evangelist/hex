@@ -1,0 +1,46 @@
+generated: '2026-07-19'
+method: searched
+source: https://learn.hex.tech/changelog
+scheme: dated
+note: >-
+  Hex publishes a single dated product changelog covering the platform and the API
+  together (there is no API-only changelog). Recent window captured below.
+entries:
+- date: '2026-07-14'
+  title: More control over credits, thread metadata, and role requests
+  type: additions
+  highlights:
+  - Spend limits for auto top-ups and per-user credit allocations
+  - CLI access to Context Studio data
+  - Enterprise role request controls
+- date: '2026-07-08'
+  title: Two new models and more controls over generative apps
+  type: additions
+  highlights:
+  - Kimi K2.7 and Claude Fable 5 model support
+  - Admin-set workspace defaults and design.md branding file
+  - YAML import/export for generative apps; parallel chart rendering
+- date: '2026-06-25'
+  title: Hex in Figma, IAM role support for AWS, and schema refresh history
+  type: additions
+  highlights:
+  - Figma connector integration
+  - IAM role authentication for Athena/Redshift/RDS
+  - Admin schema refresh monitoring dashboard
+- date: '2026-06-16'
+  title: Agent Tasks introduction
+  type: additions
+  highlights:
+  - Scheduled agent prompts with Slack/email delivery for recurring insights
+- date: '2026-06-11'
+  title: Agent web search, model picker, and Fable 5 support
+  type: additions
+  highlights:
+  - Web search capability powered by Parallel
+  - Model selection UI; Fable 5 availability
+- date: '2026-06-02'
+  title: Hex now in Codex
+  type: additions
+  highlights:
+  - Codex plugin enabling analysis invocation and Thread integration
+  - CLI-based programmatic control

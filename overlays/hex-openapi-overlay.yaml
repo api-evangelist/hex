@@ -1,0 +1,23 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Hex External API
+  version: 1.0.0
+extends: openapi/hex-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-19'
+    x-api-base: https://app.hex.tech/api/v1
+    x-authentication: authentication/hex-authentication.yml
+    x-conventions: conventions/hex-conventions.yml
+    x-errors: errors/hex-problem-types.yml
+    x-rate-limit: 60 requests/minute per user; max 25 concurrent kernels
+    x-pagination: cursor (pagination.after)
+    x-idempotency-supported: false
+    x-mcp-server: https://app.hex.tech/mcp
+    x-status-page: https://status.hex.tech/
+    x-trust-center: https://trust.hex.tech/
+- target: $.info.contact
+  update:
+    name: Hex Support
+    url: https://learn.hex.tech/docs/api-integrations/api/overview

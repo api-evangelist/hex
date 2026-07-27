@@ -1,0 +1,23 @@
+generated: '2026-07-19'
+method: searched
+status: published
+source: https://learn.hex.tech/docs/api-integrations/mcp-server
+server:
+  name: hex
+  transport: http
+  url: https://app.hex.tech/mcp
+  auth: oauth
+  note: >-
+    Hosted remote MCP server (Streamable HTTP + OAuth). For single-tenant / regional
+    deployments replace app.hex.tech with your workspace domain (e.g. eu.hex.tech).
+    Available on Team and Enterprise plans; requires Explorer workspace role or higher.
+    Works with Claude Desktop, Cursor, ChatGPT, Codex, Glean, and Figma.
+tools:
+- name: search_projects
+  description: Find projects in your Hex workspace.
+- name: create_thread
+  description: Start a new Thread conversation with the Hex agent.
+- name: get_thread
+  description: Retrieve messages and results from a Thread.
+- name: continue_thread
+  description: Add follow-up questions to an existing Thread.

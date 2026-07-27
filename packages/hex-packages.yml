@@ -1,0 +1,31 @@
+generated: '2026-07-19'
+method: searched
+source: https://github.com/hex-inc + PyPI + Homebrew tap hex-inc/hex-cli
+# First-party Hex libraries and integration providers. The Hex CLI binary is
+# distributed via a Homebrew tap and an install.sh script (not npm/PyPI); the
+# unrelated npm "hex-cli" and PyPI "hex-api"/"hextech" packages are third-party
+# and are deliberately excluded.
+packages:
+- language: shell
+  registry: homebrew
+  name: hex-inc/hex-cli/hex
+  url: https://github.com/hex-inc/homebrew-hex-cli
+  install: brew install hex-inc/hex-cli/hex
+  official: true
+  note: First-party Hex CLI (command `hex`); also installable via `curl -fsSL https://hex.tech/install.sh | bash`.
+- language: python
+  registry: pypi
+  name: airflow-provider-hex
+  url: https://pypi.org/project/airflow-provider-hex/
+  install: pip install airflow-provider-hex
+  official: true
+  source: https://github.com/hex-inc/airflow-provider-hex
+  note: Official Apache Airflow provider (hooks + operators) for triggering Hex project runs.
+- language: python
+  registry: pypi
+  name: dagster-hex
+  url: https://pypi.org/project/dagster-hex/
+  install: pip install dagster-hex
+  official: true
+  source: https://github.com/hex-inc/dagster-hex
+  note: Dagster integration for Hex (repo archived; still published on PyPI).

@@ -1,0 +1,21 @@
+{
+  "repo": "hex",
+  "feeds": [
+    {
+      "source": "https://learn.hex.tech/changelog/rss.xml",
+      "feed_url": "https://learn.hex.tech/changelog/rss.xml",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
+      "source": "https://learn.hex.tech/docs/getting-started",
+      "feed_url": "https://learn.hex.tech/changelog/rss.xml",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 20,
+  "fetched": "2026-07-25T15:00:33Z"
+}

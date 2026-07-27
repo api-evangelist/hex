@@ -1,0 +1,29 @@
+# Hex
+
+> Hex is an AI-powered analytics platform combining agentic notebooks, interactive data apps, and conversational self-serve analytics. The Hex External API (bearer-token, base https://app.hex.tech/api/v1) runs and schedules projects, manages projects/collections/groups/cells/data-connections, ingests semantic models, drives AI agent Threads, and administers users. Rate limit: 60 requests/minute per user; max 25 concurrent kernels. Cursor pagination via pagination.after. No idempotency-key contract.
+
+## APIs
+- [Hex External API — Overview](https://learn.hex.tech/docs/api-integrations/api/overview): Getting started, auth, rate limits, pagination.
+- [API Reference](https://learn.hex.tech/docs/api-integrations/api/reference): Full endpoint reference.
+
+## Specs
+- [OpenAPI 3.0.3 (raw)](https://static.hex.site/openapi.json): 52 operations, 157 schemas.
+
+## Docs
+- [Documentation home](https://learn.hex.tech/docs)
+- [Getting started](https://learn.hex.tech/docs/getting-started)
+- [CLI](https://learn.hex.tech/docs/api-integrations/cli): `brew install hex-inc/hex-cli/hex` — command `hex`.
+- [MCP server](https://learn.hex.tech/docs/api-integrations/mcp-server): hosted remote server https://app.hex.tech/mcp (OAuth, Streamable HTTP).
+- [Changelog](https://learn.hex.tech/changelog)
+- [Status](https://status.hex.tech/)
+- [Trust center](https://trust.hex.tech/): SOC 2 Type II, HIPAA, PCI, GDPR/CCPA, EU/Swiss/UK-US DPF.
+
+## Integrations
+- [Airflow provider](https://github.com/hex-inc/airflow-provider-hex): `pip install airflow-provider-hex`.
+- [Dagster integration](https://github.com/hex-inc/dagster-hex): `pip install dagster-hex`.
+- [Claude Agent Skills for Hex](https://github.com/hex-inc/hex-skills).
+
+## Optional
+- [Pricing](https://hex.tech/pricing/): Community (free), Professional, Team, Enterprise.
+- [GitHub org](https://github.com/hex-inc)
+- [Blog](https://hex.tech/blog/)

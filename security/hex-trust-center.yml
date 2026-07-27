@@ -1,0 +1,28 @@
+generated: '2026-07-19'
+method: searched
+probe: true
+source: https://trust.hex.tech/
+url: https://trust.hex.tech/
+# Verified against the live trust center badges (2026-07-19). Only currently-held
+# attestations are listed; ISO 27001 / ISO 27701 are shown as "coming soon" and
+# are therefore NOT recorded as held.
+certifications:
+- SOC 2 Type II
+- HIPAA
+- PCI
+- GDPR
+- CCPA
+- EU-US Data Privacy Framework
+- Swiss-US Data Privacy Framework
+- UK-US Data Privacy Framework
+coming_soon:
+- ISO 27001
+- ISO 27701
+evidence:
+- source: https://trust.hex.tech/
+  keywords:
+  - soc 2 type ii
+  - hipaa
+  - pci
+  - gdpr
+  - trust center

@@ -1,0 +1,37 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/hex-openapi-original.json + https://trust.hex.tech/
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: Provider publishes an OpenAPI 3.0.3 document at https://static.hex.site/openapi.json
+- id: http-bearer-auth
+  conforms: true
+  evidence: securitySchemes.bearerAuth is type http scheme bearer, applied globally
+- id: oauth2
+  conforms: true
+  evidence: Hosted MCP server (https://app.hex.tech/mcp) authenticates via OAuth 2.0
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Error bodies use a custom application/json envelope (TsoaErrorResponsePayload), not application/problem+json
+- id: cursor-pagination
+  conforms: true
+  evidence: List endpoints return a pagination.after cursor
+- id: idempotency
+  conforms: false
+  evidence: No Idempotency-Key parameter in the spec and no documented idempotency contract
+- id: soc2-type2
+  conforms: true
+  evidence: SOC 2 Type II attested on https://trust.hex.tech/
+- id: hipaa
+  conforms: true
+  evidence: HIPAA attested on https://trust.hex.tech/
+- id: pci
+  conforms: true
+  evidence: PCI attested on https://trust.hex.tech/
+- id: gdpr
+  conforms: true
+  evidence: GDPR/CCPA and EU/Swiss/UK-US Data Privacy Frameworks attested on https://trust.hex.tech/
+- id: iso-27001
+  conforms: false
+  evidence: Listed as "coming soon" on https://trust.hex.tech/ (not yet held)

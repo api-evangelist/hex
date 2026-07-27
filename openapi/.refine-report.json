@@ -1,0 +1,34 @@
+{
+  "provider": "hex",
+  "sources": [
+    "hex-cells-api-openapi.yml",
+    "hex-collections-api-openapi.yml",
+    "hex-context-api-openapi.yml",
+    "hex-data-connections-api-openapi.yml",
+    "hex-embedding-api-openapi.yml",
+    "hex-groups-api-openapi.yml",
+    "hex-guides-api-openapi.yml",
+    "hex-projects-api-openapi.yml",
+    "hex-semantic-projects-models-api-openapi.yml",
+    "hex-threads-api-openapi.yml",
+    "hex-users-api-openapi.yml"
+  ],
+  "outputs": [
+    "hex-cells-api-openapi.yml",
+    "hex-collections-api-openapi.yml",
+    "hex-context-api-openapi.yml",
+    "hex-data-connections-api-openapi.yml",
+    "hex-embedding-api-openapi.yml",
+    "hex-groups-api-openapi.yml",
+    "hex-guides-api-openapi.yml",
+    "hex-projects-api-openapi.yml",
+    "hex-semantic-projects-models-api-openapi.yml",
+    "hex-threads-api-openapi.yml",
+    "hex-users-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

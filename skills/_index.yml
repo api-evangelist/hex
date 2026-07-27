@@ -1,0 +1,24 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/hex-openapi-original.json
+note: >-
+  Operating skills grounded in real Hex operationIds. Hex also publishes its own
+  Claude Agent Skills at https://github.com/hex-inc/hex-skills (e.g.
+  hex-context-best-practices) focused on the Hex AI agents rather than the REST API.
+provider_published:
+  repo: https://github.com/hex-inc/hex-skills
+  skills:
+  - hex-context-best-practices
+skills:
+- file: hex-run-project.md
+  name: Run a Hex project and collect results
+  api: openapi/hex-openapi-original.json
+  operations: [ListProjects, GetProject, RunProject, GetRunStatus, GetProjectRuns, CancelRun]
+- file: hex-ask-agent-thread.md
+  name: Ask the Hex agent via a Thread
+  api: openapi/hex-openapi-original.json
+  operations: [CreateThread, ContinueThread, GetThread, GetThreadMessages, ListThreads]
+- file: hex-manage-project-sharing.md
+  name: Manage Hex project sharing
+  api: openapi/hex-openapi-original.json
+  operations: [GetProject, EditProjectSharingUsers, EditProjectSharingGroups, EditProjectSharingCollections, EditProjectSharingOrgAndPublic, ListGroups, ListCollections]

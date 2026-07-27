@@ -1,0 +1,18 @@
+generated: '2026-07-19'
+method: searched
+source: live probes of hex.tech + app.hex.tech well-known paths
+host: https://hex.tech
+documents:
+- path: /.well-known/security.txt
+  status: 200
+  file: hex-security.txt
+- path: /.well-known/api-catalog
+  status: 404
+- path: /.well-known/openid-configuration
+  status: 404
+  note: app.hex.tech returns the SPA HTML shell (200) rather than an OIDC document; treated as not published.
+- path: /.well-known/oauth-authorization-server
+  status: 404
+  note: app.hex.tech returns the SPA HTML shell (200) rather than an RFC 8414 document; treated as not published.
+- path: /.well-known/ai-plugin.json
+  status: 404

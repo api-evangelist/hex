@@ -1,0 +1,15 @@
+generated: '2026-07-19'
+method: searched
+source: https://learn.hex.tech/docs/api-integrations/api/overview
+versioning:
+  scheme: uri-path
+  current: v1
+  base: https://app.hex.tech/api/v1
+  docs: https://learn.hex.tech/docs/api-integrations/api/overview
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No formal API deprecation/sunset (RFC 8594) policy is published; changes are announced via the changelog.
+changelog: https://learn.hex.tech/changelog
+status_page: https://status.hex.tech/
+deprecated_operations: []

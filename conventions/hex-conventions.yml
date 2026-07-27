@@ -1,0 +1,55 @@
+generated: '2026-07-19'
+method: searched
+source: https://learn.hex.tech/docs/api-integrations/api/overview
+authentication:
+  style: bearer
+  header: Authorization
+  token_types:
+  - prefix: hxtp_
+    kind: personal access token
+    note: Reflects the individual user's permissions; requires an expiration date.
+  - prefix: hxtw_
+    kind: workspace token
+    note: Admin-managed; may be set to never expire; supports granular scope configuration.
+  see: authentication/hex-authentication.yml
+idempotency:
+  supported: false
+  note: >-
+    Hex does not document an idempotency-key mechanism, and the OpenAPI declares no
+    Idempotency-Key parameter. Run creation (POST /projects/{projectId}/runs) is not
+    idempotent; callers should track returned runId values to avoid duplicate runs.
+pagination:
+  style: cursor
+  request_param: after
+  page_size_param: limit
+  response_field: pagination.after
+  note: >-
+    List endpoints return a pagination object; pass its `after` cursor on the next
+    request and continue until `after` is null/absent.
+rate_limiting:
+  limit: 60
+  window: per minute
+  scope: per user
+  response_headers: Responses include remaining-request and reset metadata.
+  concurrency: >-
+    Maximum 25 concurrent running kernels across UI and API-triggered runs; exceeding
+    this returns HTTP 503 on POST /projects/{projectId}/runs.
+  see: null
+versioning:
+  scheme: uri-path
+  current: v1
+  base: https://app.hex.tech/api/v1
+  see: lifecycle/hex-lifecycle.yml
+request_tracing:
+  field: traceId
+  note: >-
+    Every error payload carries a `traceId` (TsoaErrorResponsePayload.traceId) that
+    Hex Support can use to debug a request.
+error_envelope:
+  media_type: application/json
+  schema: TsoaErrorResponsePayload
+  fields:
+  - reason (required)
+  - details
+  - traceId
+  see: errors/hex-problem-types.yml
