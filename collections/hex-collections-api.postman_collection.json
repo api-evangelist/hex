@@ -1,0 +1,1130 @@
+{
+  "item": [
+    {
+      "id": "5de6866f-de6b-4608-a856-814abefefa20",
+      "name": "Collections",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "26ab2952-2110-45ad-847f-3440e0790090",
+          "name": "Get Collection",
+          "request": {
+            "name": "Get Collection",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "collections",
+                ":collectionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "collectionId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6e8496e3-e47d-45f6-804a-6d6caba5f1fb",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "collectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"string\",\n  \"sharing\": {\n    \"users\": [\n      {\n        \"access\": \"string\",\n        \"id\": \"8c821d14-DEC8-3b5F-FaB5-A9EAfA1a2a7D\"\n      },\n      {\n        \"access\": \"string\",\n        \"id\": \"c3ABACfe-0D6B-89Db-4B18-4EaFfBEddA6F\"\n      }\n    ],\n    \"groups\": [\n      {\n        \"access\": \"string\",\n        \"id\": \"74cde8bB-ce5d-619c-1cea-EE856f867aFB\"\n      },\n      {\n        \"access\": \"string\",\n        \"id\": \"dDb20A37-6EDd-aC1a-cc21-8f01BC1e3acA\"\n      }\n    ],\n    \"workspace\": {\n      \"members\": \"string\"\n    }\n  },\n  \"description\": \"string\",\n  \"creator\": {\n    \"email\": \"string\",\n    \"id\": \"C0647f2A-7DAa-25CB-70Af-EA85370Df1Fe\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5993fbe3-8539-4aad-8a4b-68376721a718",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "collectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f62e5fb1-85ba-49bf-bc40-e9c2a89b7c2e",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "collectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d2e6b94b-2c6c-4d4a-a734-f7e38b07cea1",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "collectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f19c9c03-3ed3-4c6e-a983-a17aa07dee9f",
+          "name": "Edit Collection",
+          "request": {
+            "name": "Edit Collection",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "collections",
+                ":collectionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "collectionId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sharing\": {\n    \"upsert\": {\n      \"users\": [\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        },\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        }\n      ],\n      \"groups\": [\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        },\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        }\n      ],\n      \"workspace\": {\n        \"members\": \"<string>\"\n      }\n    }\n  },\n  \"description\": \"<string>\",\n  \"name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "401447c3-377a-4807-a831-2c51eabd7df5",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "collectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sharing\": {\n    \"upsert\": {\n      \"users\": [\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        },\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        }\n      ],\n      \"groups\": [\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        },\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        }\n      ],\n      \"workspace\": {\n        \"members\": \"<string>\"\n      }\n    }\n  },\n  \"description\": \"<string>\",\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"sharing\": {\n    \"users\": [\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      },\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      }\n    ],\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      },\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      }\n    ],\n    \"workspace\": {\n      \"members\": \"<string>\"\n    }\n  },\n  \"description\": \"string\",\n  \"creator\": {\n    \"email\": \"string\",\n    \"id\": \"<uuid>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ece46194-8ee3-45e3-9afb-bd5865689686",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "collectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sharing\": {\n    \"upsert\": {\n      \"users\": [\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        },\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        }\n      ],\n      \"groups\": [\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        },\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        }\n      ],\n      \"workspace\": {\n        \"members\": \"<string>\"\n      }\n    }\n  },\n  \"description\": \"<string>\",\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bceb2a7b-dbfc-4060-8d99-1aff1963cb28",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "collectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sharing\": {\n    \"upsert\": {\n      \"users\": [\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        },\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        }\n      ],\n      \"groups\": [\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        },\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        }\n      ],\n      \"workspace\": {\n        \"members\": \"<string>\"\n      }\n    }\n  },\n  \"description\": \"<string>\",\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ca93956e-cc91-40c9-82d3-46166df1c19c",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections",
+                    ":collectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "collectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sharing\": {\n    \"upsert\": {\n      \"users\": [\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        },\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        }\n      ],\n      \"groups\": [\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        },\n        {\n          \"access\": \"<string>\",\n          \"id\": \"<uuid>\"\n        }\n      ],\n      \"workspace\": {\n        \"members\": \"<string>\"\n      }\n    }\n  },\n  \"description\": \"<string>\",\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "daf871c4-6840-45b8-8f7a-dcb37ee1c900",
+          "name": "List Collections",
+          "request": {
+            "name": "List Collections",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "collections"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "key": "before",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortBy",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8cb04511-c8b8-46ed-bc0e-7828952eff35",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": ""
+                    },
+                    {
+                      "key": "before",
+                      "value": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"values\": [\n    {\n      \"id\": \"<uuid>\",\n      \"name\": \"<string>\",\n      \"sharing\": {\n        \"users\": [\n          {\n            \"access\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": \"<uuid>\"\n          },\n          {\n            \"access\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": \"<uuid>\"\n          }\n        ],\n        \"groups\": [\n          {\n            \"access\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": \"<uuid>\"\n          },\n          {\n            \"access\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": \"<uuid>\"\n          }\n        ],\n        \"workspace\": {\n          \"members\": \"<string>\"\n        }\n      },\n      \"description\": \"string\",\n      \"creator\": {\n        \"email\": \"string\",\n        \"id\": \"<uuid>\"\n      }\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"name\": \"<string>\",\n      \"sharing\": {\n        \"users\": [\n          {\n            \"access\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": \"<uuid>\"\n          },\n          {\n            \"access\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": \"<uuid>\"\n          }\n        ],\n        \"groups\": [\n          {\n            \"access\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": \"<uuid>\"\n          },\n          {\n            \"access\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": \"<uuid>\"\n          }\n        ],\n        \"workspace\": {\n          \"members\": \"<string>\"\n        }\n      },\n      \"description\": \"string\",\n      \"creator\": {\n        \"email\": \"string\",\n        \"id\": \"<uuid>\"\n      }\n    }\n  ],\n  \"pagination\": {\n    \"after\": \"string\",\n    \"before\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c3d639ef-88c1-4bf6-8d3c-b661fb9ffce7",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": ""
+                    },
+                    {
+                      "key": "before",
+                      "value": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b620641f-e195-4442-891d-938b0dd3b743",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": ""
+                    },
+                    {
+                      "key": "before",
+                      "value": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a0d883ca-cabe-4dc6-95e0-abd0f0940bf7",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": ""
+                    },
+                    {
+                      "key": "before",
+                      "value": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4b584caa-6099-49d6-b221-643854d1920b",
+          "name": "Create Collection",
+          "request": {
+            "name": "Create Collection",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "collections"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"sharing\": {\n    \"users\": [\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      },\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      }\n    ],\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      },\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      }\n    ],\n    \"workspace\": {\n      \"members\": \"<string>\"\n    }\n  },\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7e737db4-49cf-413d-9079-75eb89472ce8",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"sharing\": {\n    \"users\": [\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      },\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      }\n    ],\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      },\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      }\n    ],\n    \"workspace\": {\n      \"members\": \"<string>\"\n    }\n  },\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"sharing\": {\n    \"users\": [\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      },\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      }\n    ],\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      },\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      }\n    ],\n    \"workspace\": {\n      \"members\": \"<string>\"\n    }\n  },\n  \"description\": \"string\",\n  \"creator\": {\n    \"email\": \"string\",\n    \"id\": \"<uuid>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f10eb232-328f-4edb-aeb7-a7fc8199a9a0",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"sharing\": {\n    \"users\": [\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      },\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      }\n    ],\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      },\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      }\n    ],\n    \"workspace\": {\n      \"members\": \"<string>\"\n    }\n  },\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "178cd0a5-c3ee-4aac-8eab-9a7b82cce1a5",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"sharing\": {\n    \"users\": [\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      },\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      }\n    ],\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      },\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      }\n    ],\n    \"workspace\": {\n      \"members\": \"<string>\"\n    }\n  },\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b38c5eea-30f1-46ca-8049-5c18a7e0a445",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "collections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"sharing\": {\n    \"users\": [\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      },\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      }\n    ],\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      },\n      {\n        \"access\": \"<string>\",\n        \"id\": \"<uuid>\"\n      }\n    ],\n    \"workspace\": {\n      \"members\": \"<string>\"\n    }\n  },\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.hex.tech/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "261351a3-afad-4d6c-be3d-29f881b5eaad",
+    "name": "Hex Cells Collections API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "API specification for the Hex External API",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Hex Cells Threads API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Threads",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "ListThreads",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/threads",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "numDays",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "hasFeedback",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "roles",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of user org roles to filter by (ADMIN, MANAGER, EDITOR, EXPLORER, MEMBER, GUEST)"
+              },
+              {
+                "name": "warnings",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of warning types to filter by (DATA_LIMITATION, USER_DOUBT, MISSING_CONTEXT, OTHER)"
+              },
+              {
+                "name": "topicIds",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of topic IDs to filter by"
+              }
+            ]
+          },
+          "docs": "List agent threads in the workspace, sorted by most recently created first. Requires Manager org role or higher. Workspace admins receive every non-private thread; managers receive threads they created plus Threads-type threads on projects they have access to. Threads marked private are returned with their title redacted.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max request"
+        },
+        {
+          "info": {
+            "name": "CreateThread",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.hex.tech/api/v1/threads",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Start an agent thread with a prompt. The Hex agent will analyze data and respond to the prompt. The thread runs asynchronously — poll its status or visit the returned URL to view progress.\n\nAvailability of this endpoint varies by organization. Contact Hex support to request access.\n\nThis endpoint is subject to the following rate limits:\n- `hex-send-thread-message`: Rate limits for sending messages to threads\n  - Max requests per minute may vary\n  - Max requests per hour may vary"
+        },
+        {
+          "info": {
+            "name": "GetThread",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/threads/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the response of an agent thread. Returns the current status (RUNNING, IDLE, or ERROR) and the agent's response content when available.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+        },
+        {
+          "info": {
+            "name": "GetThreadMessages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/threads/:threadId/messages",
+            "params": [
+              {
+                "name": "threadId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List the messages in an agent thread, rendered as a single flat list of text blocks. Within a page messages are chronological (oldest first); each text block is prefixed with the authoring role, and thinking and error blocks are tagged. Tool-call, tool-result, and mention blocks are omitted, and inline references are left as raw tags. By default the most recent page is returned (matching the MCP get_thread tool); pass the `before` cursor to fetch older messages and `after` to fetch newer ones. S"
+        },
+        {
+          "info": {
+            "name": "ContinueThread",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.hex.tech/api/v1/threads/:id/followup",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Continue an existing agent thread with a follow-up prompt. This endpoint does not support queuing: the thread must be idle before a follow-up can be sent.\n\nAvailability of this endpoint varies by organization. Contact Hex support to request access.\n\nThis endpoint is subject to the following rate limits:\n- `hex-send-thread-message`: Rate limits for sending messages to threads\n  - Max requests per minute may vary\n  - Max requests per hour may vary"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

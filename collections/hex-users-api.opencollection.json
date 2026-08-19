@@ -1,0 +1,102 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Hex Cells Users API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Me",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/users/me"
+          },
+          "docs": "Returns information about the current logged in user.\nUser metadata will be omitted when authenticating with a workspace token.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+        },
+        {
+          "info": {
+            "name": "ListUsers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/users",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "userIds",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of user IDs"
+              }
+            ]
+          },
+          "docs": "List all users in the workspace\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+        },
+        {
+          "info": {
+            "name": "DeactivateUser",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.hex.tech/api/v1/users/:userId/deactivate",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deactivate a user\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

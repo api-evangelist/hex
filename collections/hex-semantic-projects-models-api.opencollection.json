@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Hex Cells Semantic (projects|models) API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Semantic (projects|models)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "IngestSemanticProject",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.hex.tech/api/v1/semantic-(projects|models)/:semanticProjectId/ingest",
+            "params": [
+              {
+                "name": "semanticProjectId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Ingest a semantic project from a zip file.\n\nThis API endpoint is subject to a maximum of 3 requests per minute."
+        },
+        {
+          "info": {
+            "name": "UpdateSemanticProject",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.hex.tech/api/v1/semantic-(projects|models)/:semanticProjectId",
+            "params": [
+              {
+                "name": "semanticProjectId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this endpoint to add or remove a status (including endorsements) from datasets and views within a semantic project\n\nThis endpoint uses atomic semantics - if any update in the batch fails validation,\nthe entire request fails and no changes are applied."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

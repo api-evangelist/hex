@@ -1,0 +1,470 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Hex Cells Projects API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "ListProjects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/projects",
+            "params": [
+              {
+                "name": "includeArchived",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "includeComponents",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "includeTrashed",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "includeSharing",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "statuses",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "categories",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "creatorEmail",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ownerEmail",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "collectionId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sortDirection",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List all viewable projects, sorted by most recently created first."
+        },
+        {
+          "info": {
+            "name": "CreateProject",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.hex.tech/api/v1/projects",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new project.\n\nCreates a new project in the workspace with the specified title.\nOptionally provide a description and project language."
+        },
+        {
+          "info": {
+            "name": "GetQueriedTables",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/projects/:projectId/queriedTables",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Given a project ID, return the list of warehouse tables queried in the project."
+        },
+        {
+          "info": {
+            "name": "EditProjectSharingCollections",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.hex.tech/api/v1/projects/:projectId/sharing/collections",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a project to collections or remove it from collections.\nFor projects, use `CAN_VIEW` to grant the UI permission labeled \"Can explore\".\nUse `APP_ONLY` to grant the UI permission labeled \"Can view app\".\nWorkspace tokens calling this endpoint need to have \"Collections -> Write access\" scope\nin addition to \"Projects -> Write access\" scope."
+        },
+        {
+          "info": {
+            "name": "EditProjectSharingOrgAndPublic",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.hex.tech/api/v1/projects/:projectId/sharing/workspaceAndPublic",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update workspace or public-web sharing for a project.\nFor projects, use `CAN_VIEW` to grant the UI permission labeled \"Can explore\".\nUse `APP_ONLY` to grant the UI permission labeled \"Can view app\"."
+        },
+        {
+          "info": {
+            "name": "EditProjectSharingGroups",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.hex.tech/api/v1/projects/:projectId/sharing/groups",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add groups to a project or update/remove their project sharing access.\nFor projects, use `CAN_VIEW` to grant the UI permission labeled \"Can explore\".\nUse `APP_ONLY` to grant the UI permission labeled \"Can view app\"."
+        },
+        {
+          "info": {
+            "name": "EditProjectSharingUsers",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.hex.tech/api/v1/projects/:projectId/sharing/users",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add users to a project or update/remove their project sharing access.\nFor projects, use `CAN_VIEW` to grant the UI permission labeled \"Can explore\".\nUse `APP_ONLY` to grant the UI permission labeled \"Can view app\"."
+        },
+        {
+          "info": {
+            "name": "GetProject",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/projects/:projectId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "The project to fetch."
+              },
+              {
+                "name": "includeSharing",
+                "value": "",
+                "type": "query",
+                "description": "Whether to include sharing metadata in the response."
+              }
+            ]
+          },
+          "docs": "Get metadata about a single project.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+        },
+        {
+          "info": {
+            "name": "UpdateProject",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.hex.tech/api/v1/projects/:projectId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this endpoint to add or remove a status (including endorsements) from a project"
+        },
+        {
+          "info": {
+            "name": "GetProjectRuns",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/projects/:projectId/runs",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "statusFilter",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "runTriggerFilter",
+                "value": "",
+                "type": "query",
+                "description": "Filter by how the run was triggered\nValid values: `API`, `SCHEDULED`, `APP_REFRESH`"
+              }
+            ]
+          },
+          "docs": "Get the status of runs of a project.\nBy default, all run types are returned (API-triggered, scheduled, and publish/refresh runs).\nUse the `runTriggerFilter` parameter to filter to a specific type."
+        },
+        {
+          "info": {
+            "name": "RunProject",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.hex.tech/api/v1/projects/:projectId/runs",
+            "headers": [
+              {
+                "name": "flag-config-override",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Trigger a run of the latest published version of a project.\n\nThis API endpoint is subject to a maximum of 20 requests per minute and 60 requests per hour."
+        },
+        {
+          "info": {
+            "name": "GetRunStatus",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/projects/:projectId/runs/:runId",
+            "headers": [
+              {
+                "name": "enable-expanded-stats",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get the status of a project run."
+        },
+        {
+          "info": {
+            "name": "CancelRun",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.hex.tech/api/v1/projects/:projectId/runs/:runId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Cancel a project run."
+        },
+        {
+          "info": {
+            "name": "ExportProject",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.hex.tech/api/v1/projects/export",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Exports a Hex project in the *.hex.yaml format.\n\nAvailability of this endpoint varies by organization. Contact Hex support to request access.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+        },
+        {
+          "info": {
+            "name": "GetChartImageFromRun",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/projects/:projectId/runs/:runId/cells/:staticId/image",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "The project the run belongs to."
+              },
+              {
+                "name": "runId",
+                "value": "",
+                "type": "path",
+                "description": "The run to read the chart image from."
+              },
+              {
+                "name": "staticId",
+                "value": "",
+                "type": "path",
+                "description": "The staticId of the chart cell."
+              },
+              {
+                "name": "width",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "height",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "includeTitle",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get the rendered PNG image of a chart cell from a completed run by staticCellId.\nThe `staticId` parameter should be the cell's staticId (which remains stable across project versions), as opposed to its cellId (which is scoped to a specific version).\n\nReturns a JSON object containing the base64-encoded PNG image of the chart cell as rendered at the time of the specified run, along with project/run/cell IDs and MIME type.\nThe cell must have been executed and must not be in an error state.\nOnly cha"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

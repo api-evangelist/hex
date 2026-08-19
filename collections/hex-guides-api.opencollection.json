@@ -1,0 +1,104 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Hex Cells Guides API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Guides",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "UpsertGuideDraft",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.hex.tech/api/v1/guides/draft",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update or create guide drafts by filePath.\n\nAccepts a dictionary mapping file paths to their contents.\nFor each file:\n- If the guide doesn't exist, it will be created.\n- If the guide exists but has no draft, a new draft will be created.\n- If the guide exists with a draft, the draft contents will be updated."
+        },
+        {
+          "info": {
+            "name": "PublishGuideDrafts",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.hex.tech/api/v1/guides/publish",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Publish all currently drafted guides."
+        },
+        {
+          "info": {
+            "name": "DeleteGuideDraft",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.hex.tech/api/v1/guides/draft/:orgGuideFileId",
+            "params": [
+              {
+                "name": "orgGuideFileId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          }
+        },
+        {
+          "info": {
+            "name": "ListDraftGuides",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/guides/draft/list",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "externalSource",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List draft guides\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

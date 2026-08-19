@@ -1,0 +1,1676 @@
+{
+  "item": [
+    {
+      "id": "d6a9b3b5-66ed-461d-8b6d-547cd15d8ad2",
+      "name": "Data Connections",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b6deaf05-c962-4fdc-80a1-0eba05927855",
+          "name": "Get Data Connection",
+          "request": {
+            "name": "Get Data Connection",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "data-connections",
+                ":dataConnectionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "dataConnectionId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1138d717-846c-4592-8f62-3b8ea7064a63",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections",
+                    ":dataConnectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataConnectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"string\",\n  \"type\": \"redshift\",\n  \"connectionDetails\": {\n    \"athena\": {\n      \"accessKeyId\": \"string\",\n      \"workgroup\": \"string\",\n      \"catalog\": \"string\",\n      \"s3OutputPath\": \"string\",\n      \"port\": 8329.157900766726,\n      \"hostname\": \"string\"\n    }\n  },\n  \"connectViaSsh\": true,\n  \"includeMagic\": false,\n  \"allowWritebackCells\": false,\n  \"schemaRefreshAccess\": \"ADMINS\",\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"NONE\",\n      \"guests\": \"VIEW_RESULTS\",\n      \"members\": \"NONE\"\n    },\n    \"groups\": [\n      {\n        \"access\": \"VIEW_RESULTS\",\n        \"group\": {\n          \"name\": \"string\",\n          \"id\": \"1e30eBAD-AeCe-15b0-BC3c-B0FDC52ca0eB\"\n        }\n      },\n      {\n        \"access\": \"NONE\",\n        \"group\": {\n          \"name\": \"string\",\n          \"id\": \"218aC8Ca-9ef7-25fa-b332-91e8A5875Aa2\"\n        }\n      }\n    ]\n  },\n  \"description\": \"string\",\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"string\",\n          \"string\"\n        ],\n        \"matchType\": \"PREFIX\"\n      },\n      \"include\": {\n        \"values\": [\n          \"string\",\n          \"string\"\n        ],\n        \"matchType\": \"SUFFIX\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"string\",\n          \"string\"\n        ],\n        \"matchType\": \"SUFFIX\"\n      },\n      \"include\": {\n        \"values\": [\n          \"string\",\n          \"string\"\n        ],\n        \"matchType\": \"REGEX\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"string\",\n          \"string\"\n        ],\n        \"matchType\": \"REGEX\"\n      },\n      \"include\": {\n        \"values\": [\n          \"string\",\n          \"string\"\n        ],\n        \"matchType\": \"PREFIX\"\n      }\n    }\n  },\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"WEEKLY\",\n    \"enabled\": false,\n    \"daily\": {\n      \"timezoneString\": \"string\",\n      \"minute\": 11,\n      \"hour\": 0\n    },\n    \"weekly\": {\n      \"timezoneString\": \"string\",\n      \"minute\": 16,\n      \"hour\": 0,\n      \"dayOfWeek\": \"THURSDAY\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"string\",\n      \"minute\": 58,\n      \"hour\": 22,\n      \"day\": 6\n    },\n    \"custom\": {\n      \"timezoneString\": \"string\",\n      \"cron\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f12ad517-300e-4934-bcff-87612ab8607f",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections",
+                    ":dataConnectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataConnectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c4eaddd8-a103-40b3-9f3f-e5d137df4382",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections",
+                    ":dataConnectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataConnectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7365e67f-fa44-4618-976e-57afb91fcd39",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections",
+                    ":dataConnectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataConnectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "da824569-fec5-4e10-93c7-48621a199406",
+          "name": "Edit Data Connection",
+          "request": {
+            "name": "Edit Data Connection",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "data-connections",
+                ":dataConnectionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "dataConnectionId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": {\n      \"upsert\": [\n        {\n          \"access\": \"<string>\",\n          \"group\": {\n            \"id\": \"<uuid>\"\n          }\n        },\n        {\n          \"access\": \"<string>\",\n          \"group\": {\n            \"id\": \"<uuid>\"\n          }\n        }\n      ]\n    }\n  },\n  \"schemaRefreshAccess\": \"<string>\",\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  },\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"allowWritebackCells\": \"<boolean>\",\n  \"includeMagic\": \"<boolean>\",\n  \"connectViaSsh\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"connectionDetails\": {\n    \"athena\": {\n      \"secretAccessKey\": \"<string>\",\n      \"accessKeyId\": \"<string>\",\n      \"workgroup\": \"<string>\",\n      \"catalog\": \"<string>\",\n      \"s3OutputPath\": \"<string>\",\n      \"port\": \"<double>\",\n      \"hostname\": \"<string>\"\n    }\n  },\n  \"name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "abaafb50-9509-4701-89ef-24e33b9e6ec1",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections",
+                    ":dataConnectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataConnectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": {\n      \"upsert\": [\n        {\n          \"access\": \"<string>\",\n          \"group\": {\n            \"id\": \"<uuid>\"\n          }\n        },\n        {\n          \"access\": \"<string>\",\n          \"group\": {\n            \"id\": \"<uuid>\"\n          }\n        }\n      ]\n    }\n  },\n  \"schemaRefreshAccess\": \"<string>\",\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  },\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"allowWritebackCells\": \"<boolean>\",\n  \"includeMagic\": \"<boolean>\",\n  \"connectViaSsh\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"connectionDetails\": {\n    \"athena\": {\n      \"secretAccessKey\": \"<string>\",\n      \"accessKeyId\": \"<string>\",\n      \"workgroup\": \"<string>\",\n      \"catalog\": \"<string>\",\n      \"s3OutputPath\": \"<string>\",\n      \"port\": \"<double>\",\n      \"hostname\": \"<string>\"\n    }\n  },\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"string\",\n  \"type\": \"databricks\",\n  \"connectionDetails\": {\n    \"athena\": {\n      \"accessKeyId\": \"string\",\n      \"workgroup\": \"string\",\n      \"catalog\": \"string\",\n      \"s3OutputPath\": \"string\",\n      \"port\": 9693.21017660896,\n      \"hostname\": \"string\"\n    }\n  },\n  \"connectViaSsh\": false,\n  \"includeMagic\": false,\n  \"allowWritebackCells\": true,\n  \"schemaRefreshAccess\": \"<string>\",\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"name\": \"string\",\n          \"id\": \"<uuid>\"\n        }\n      },\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"name\": \"string\",\n          \"id\": \"<uuid>\"\n        }\n      }\n    ]\n  },\n  \"description\": \"string\",\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4b364909-5aae-4087-b84f-393fb9d75eab",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections",
+                    ":dataConnectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataConnectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": {\n      \"upsert\": [\n        {\n          \"access\": \"<string>\",\n          \"group\": {\n            \"id\": \"<uuid>\"\n          }\n        },\n        {\n          \"access\": \"<string>\",\n          \"group\": {\n            \"id\": \"<uuid>\"\n          }\n        }\n      ]\n    }\n  },\n  \"schemaRefreshAccess\": \"<string>\",\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  },\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"allowWritebackCells\": \"<boolean>\",\n  \"includeMagic\": \"<boolean>\",\n  \"connectViaSsh\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"connectionDetails\": {\n    \"athena\": {\n      \"secretAccessKey\": \"<string>\",\n      \"accessKeyId\": \"<string>\",\n      \"workgroup\": \"<string>\",\n      \"catalog\": \"<string>\",\n      \"s3OutputPath\": \"<string>\",\n      \"port\": \"<double>\",\n      \"hostname\": \"<string>\"\n    }\n  },\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3be473ed-ec40-4513-a681-70a1f5494701",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections",
+                    ":dataConnectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataConnectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": {\n      \"upsert\": [\n        {\n          \"access\": \"<string>\",\n          \"group\": {\n            \"id\": \"<uuid>\"\n          }\n        },\n        {\n          \"access\": \"<string>\",\n          \"group\": {\n            \"id\": \"<uuid>\"\n          }\n        }\n      ]\n    }\n  },\n  \"schemaRefreshAccess\": \"<string>\",\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  },\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"allowWritebackCells\": \"<boolean>\",\n  \"includeMagic\": \"<boolean>\",\n  \"connectViaSsh\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"connectionDetails\": {\n    \"athena\": {\n      \"secretAccessKey\": \"<string>\",\n      \"accessKeyId\": \"<string>\",\n      \"workgroup\": \"<string>\",\n      \"catalog\": \"<string>\",\n      \"s3OutputPath\": \"<string>\",\n      \"port\": \"<double>\",\n      \"hostname\": \"<string>\"\n    }\n  },\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6aa373fd-f735-42b3-aa4b-93b586a28f1b",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections",
+                    ":dataConnectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataConnectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": {\n      \"upsert\": [\n        {\n          \"access\": \"<string>\",\n          \"group\": {\n            \"id\": \"<uuid>\"\n          }\n        },\n        {\n          \"access\": \"<string>\",\n          \"group\": {\n            \"id\": \"<uuid>\"\n          }\n        }\n      ]\n    }\n  },\n  \"schemaRefreshAccess\": \"<string>\",\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  },\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"allowWritebackCells\": \"<boolean>\",\n  \"includeMagic\": \"<boolean>\",\n  \"connectViaSsh\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"connectionDetails\": {\n    \"athena\": {\n      \"secretAccessKey\": \"<string>\",\n      \"accessKeyId\": \"<string>\",\n      \"workgroup\": \"<string>\",\n      \"catalog\": \"<string>\",\n      \"s3OutputPath\": \"<string>\",\n      \"port\": \"<double>\",\n      \"hostname\": \"<string>\"\n    }\n  },\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "294e19ed-d0cd-49c7-8299-b88837510b26",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections",
+                    ":dataConnectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataConnectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": {\n      \"upsert\": [\n        {\n          \"access\": \"<string>\",\n          \"group\": {\n            \"id\": \"<uuid>\"\n          }\n        },\n        {\n          \"access\": \"<string>\",\n          \"group\": {\n            \"id\": \"<uuid>\"\n          }\n        }\n      ]\n    }\n  },\n  \"schemaRefreshAccess\": \"<string>\",\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  },\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"allowWritebackCells\": \"<boolean>\",\n  \"includeMagic\": \"<boolean>\",\n  \"connectViaSsh\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"connectionDetails\": {\n    \"athena\": {\n      \"secretAccessKey\": \"<string>\",\n      \"accessKeyId\": \"<string>\",\n      \"workgroup\": \"<string>\",\n      \"catalog\": \"<string>\",\n      \"s3OutputPath\": \"<string>\",\n      \"port\": \"<double>\",\n      \"hostname\": \"<string>\"\n    }\n  },\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a72ea142-cb8c-43ef-8dfd-592762513137",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections",
+                    ":dataConnectionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataConnectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": {\n      \"upsert\": [\n        {\n          \"access\": \"<string>\",\n          \"group\": {\n            \"id\": \"<uuid>\"\n          }\n        },\n        {\n          \"access\": \"<string>\",\n          \"group\": {\n            \"id\": \"<uuid>\"\n          }\n        }\n      ]\n    }\n  },\n  \"schemaRefreshAccess\": \"<string>\",\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  },\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"allowWritebackCells\": \"<boolean>\",\n  \"includeMagic\": \"<boolean>\",\n  \"connectViaSsh\": \"<boolean>\",\n  \"description\": \"<string>\",\n  \"connectionDetails\": {\n    \"athena\": {\n      \"secretAccessKey\": \"<string>\",\n      \"accessKeyId\": \"<string>\",\n      \"workgroup\": \"<string>\",\n      \"catalog\": \"<string>\",\n      \"s3OutputPath\": \"<string>\",\n      \"port\": \"<double>\",\n      \"hostname\": \"<string>\"\n    }\n  },\n  \"name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "741521cc-b595-4239-80af-653e42bf8d1e",
+          "name": "List Data Connections",
+          "request": {
+            "name": "List Data Connections",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "data-connections"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "key": "before",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortBy",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortDirection",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1578131e-9812-4d02-ac1d-e46e9c7fe43f",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": ""
+                    },
+                    {
+                      "key": "before",
+                      "value": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"values\": [\n    {\n      \"id\": \"<uuid>\",\n      \"name\": \"string\",\n      \"type\": \"clickhouse\",\n      \"description\": \"string\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"name\": \"string\",\n      \"type\": \"snowflake\",\n      \"description\": \"string\"\n    }\n  ],\n  \"pagination\": {\n    \"after\": \"string\",\n    \"before\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "650ced8c-f0e2-4300-99b5-e7b38c1eabb0",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": ""
+                    },
+                    {
+                      "key": "before",
+                      "value": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "18fb01a4-de77-467e-8e9d-f91b05a8fdcf",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": ""
+                    },
+                    {
+                      "key": "before",
+                      "value": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8aa8a73f-4b4d-47ec-8597-464d198d8a0e",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "after",
+                      "value": ""
+                    },
+                    {
+                      "key": "before",
+                      "value": ""
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortDirection",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f19110db-8768-40ef-a9a1-12bf0f2d9c12",
+          "name": "Create Data Connection",
+          "request": {
+            "name": "Create Data Connection",
+            "description": {},
+            "url": {
+              "path": [
+                "v1",
+                "data-connections"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"connectionDetails\": {\n    \"athena\": {\n      \"secretAccessKey\": \"<string>\",\n      \"accessKeyId\": \"<string>\",\n      \"s3OutputPath\": \"<string>\",\n      \"port\": \"<double>\",\n      \"hostname\": \"<string>\",\n      \"workgroup\": \"<string>\",\n      \"catalog\": \"<string>\"\n    }\n  },\n  \"type\": \"<string>\",\n  \"name\": \"<string>\",\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"id\": \"<uuid>\"\n        }\n      },\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"id\": \"<uuid>\"\n        }\n      }\n    ]\n  },\n  \"schemaRefreshAccess\": \"<string>\",\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  },\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"allowWritebackCells\": \"<boolean>\",\n  \"includeMagic\": \"<boolean>\",\n  \"connectViaSsh\": \"<boolean>\",\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d66ca144-44c7-4006-a432-c5f9969f98e9",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connectionDetails\": {\n    \"athena\": {\n      \"secretAccessKey\": \"<string>\",\n      \"accessKeyId\": \"<string>\",\n      \"s3OutputPath\": \"<string>\",\n      \"port\": \"<double>\",\n      \"hostname\": \"<string>\",\n      \"workgroup\": \"<string>\",\n      \"catalog\": \"<string>\"\n    }\n  },\n  \"type\": \"<string>\",\n  \"name\": \"<string>\",\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"id\": \"<uuid>\"\n        }\n      },\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"id\": \"<uuid>\"\n        }\n      }\n    ]\n  },\n  \"schemaRefreshAccess\": \"<string>\",\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  },\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"allowWritebackCells\": \"<boolean>\",\n  \"includeMagic\": \"<boolean>\",\n  \"connectViaSsh\": \"<boolean>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"type\": \"<string>\",\n  \"connectionDetails\": {\n    \"athena\": {\n      \"accessKeyId\": \"string\",\n      \"workgroup\": \"string\",\n      \"catalog\": \"string\",\n      \"s3OutputPath\": \"string\",\n      \"port\": 5441.760272803808,\n      \"hostname\": \"string\"\n    }\n  },\n  \"connectViaSsh\": true,\n  \"includeMagic\": false,\n  \"allowWritebackCells\": false,\n  \"schemaRefreshAccess\": \"<string>\",\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"name\": \"string\",\n          \"id\": \"<uuid>\"\n        }\n      },\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"name\": \"string\",\n          \"id\": \"<uuid>\"\n        }\n      }\n    ]\n  },\n  \"description\": \"string\",\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b1a94316-a91e-4324-96bd-aedc6c92745d",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connectionDetails\": {\n    \"athena\": {\n      \"secretAccessKey\": \"<string>\",\n      \"accessKeyId\": \"<string>\",\n      \"s3OutputPath\": \"<string>\",\n      \"port\": \"<double>\",\n      \"hostname\": \"<string>\",\n      \"workgroup\": \"<string>\",\n      \"catalog\": \"<string>\"\n    }\n  },\n  \"type\": \"<string>\",\n  \"name\": \"<string>\",\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"id\": \"<uuid>\"\n        }\n      },\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"id\": \"<uuid>\"\n        }\n      }\n    ]\n  },\n  \"schemaRefreshAccess\": \"<string>\",\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  },\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"allowWritebackCells\": \"<boolean>\",\n  \"includeMagic\": \"<boolean>\",\n  \"connectViaSsh\": \"<boolean>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "46d8338b-140e-4ba4-9a52-9614e82e6842",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connectionDetails\": {\n    \"athena\": {\n      \"secretAccessKey\": \"<string>\",\n      \"accessKeyId\": \"<string>\",\n      \"s3OutputPath\": \"<string>\",\n      \"port\": \"<double>\",\n      \"hostname\": \"<string>\",\n      \"workgroup\": \"<string>\",\n      \"catalog\": \"<string>\"\n    }\n  },\n  \"type\": \"<string>\",\n  \"name\": \"<string>\",\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"id\": \"<uuid>\"\n        }\n      },\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"id\": \"<uuid>\"\n        }\n      }\n    ]\n  },\n  \"schemaRefreshAccess\": \"<string>\",\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  },\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"allowWritebackCells\": \"<boolean>\",\n  \"includeMagic\": \"<boolean>\",\n  \"connectViaSsh\": \"<boolean>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1aa72964-3c68-4c95-a802-7b28efb39e54",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connectionDetails\": {\n    \"athena\": {\n      \"secretAccessKey\": \"<string>\",\n      \"accessKeyId\": \"<string>\",\n      \"s3OutputPath\": \"<string>\",\n      \"port\": \"<double>\",\n      \"hostname\": \"<string>\",\n      \"workgroup\": \"<string>\",\n      \"catalog\": \"<string>\"\n    }\n  },\n  \"type\": \"<string>\",\n  \"name\": \"<string>\",\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"id\": \"<uuid>\"\n        }\n      },\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"id\": \"<uuid>\"\n        }\n      }\n    ]\n  },\n  \"schemaRefreshAccess\": \"<string>\",\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  },\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"allowWritebackCells\": \"<boolean>\",\n  \"includeMagic\": \"<boolean>\",\n  \"connectViaSsh\": \"<boolean>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2d8a0f50-b9b1-4a51-9cda-fe6f6bb93832",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connectionDetails\": {\n    \"athena\": {\n      \"secretAccessKey\": \"<string>\",\n      \"accessKeyId\": \"<string>\",\n      \"s3OutputPath\": \"<string>\",\n      \"port\": \"<double>\",\n      \"hostname\": \"<string>\",\n      \"workgroup\": \"<string>\",\n      \"catalog\": \"<string>\"\n    }\n  },\n  \"type\": \"<string>\",\n  \"name\": \"<string>\",\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"id\": \"<uuid>\"\n        }\n      },\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"id\": \"<uuid>\"\n        }\n      }\n    ]\n  },\n  \"schemaRefreshAccess\": \"<string>\",\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  },\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"allowWritebackCells\": \"<boolean>\",\n  \"includeMagic\": \"<boolean>\",\n  \"connectViaSsh\": \"<boolean>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "67e7746e-9d47-49b5-86d1-14cbfcde6165",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connectionDetails\": {\n    \"athena\": {\n      \"secretAccessKey\": \"<string>\",\n      \"accessKeyId\": \"<string>\",\n      \"s3OutputPath\": \"<string>\",\n      \"port\": \"<double>\",\n      \"hostname\": \"<string>\",\n      \"workgroup\": \"<string>\",\n      \"catalog\": \"<string>\"\n    }\n  },\n  \"type\": \"<string>\",\n  \"name\": \"<string>\",\n  \"sharing\": {\n    \"workspace\": {\n      \"public\": \"<string>\",\n      \"guests\": \"<string>\",\n      \"members\": \"<string>\"\n    },\n    \"groups\": [\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"id\": \"<uuid>\"\n        }\n      },\n      {\n        \"access\": \"<string>\",\n        \"group\": {\n          \"id\": \"<uuid>\"\n        }\n      }\n    ]\n  },\n  \"schemaRefreshAccess\": \"<string>\",\n  \"schemaRefreshSchedule\": {\n    \"cadence\": \"<string>\",\n    \"enabled\": \"<boolean>\",\n    \"daily\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\"\n    },\n    \"weekly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"dayOfWeek\": \"<string>\"\n    },\n    \"monthly\": {\n      \"timezoneString\": \"<string>\",\n      \"minute\": \"<integer>\",\n      \"hour\": \"<integer>\",\n      \"day\": \"<integer>\"\n    },\n    \"custom\": {\n      \"timezoneString\": \"<string>\",\n      \"cron\": \"<string>\"\n    }\n  },\n  \"schemaFilters\": {\n    \"tables\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"schemas\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    },\n    \"databases\": {\n      \"exclude\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      },\n      \"include\": {\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"matchType\": \"<string>\"\n      }\n    }\n  },\n  \"allowWritebackCells\": \"<boolean>\",\n  \"includeMagic\": \"<boolean>\",\n  \"connectViaSsh\": \"<boolean>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "92dc3e5b-69f5-4cd6-a188-412d19513768",
+          "name": "Update Data Connection Schema",
+          "request": {
+            "name": "Update Data Connection Schema",
+            "description": {
+              "content": "Use this endpoint to add or remove a status (including endorsements) from databases, schemas, and tables\nwithin a data connection\n\nThis endpoint uses atomic semantics - if any update in the batch fails validation,\nthe entire request fails and no changes are applied",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "data-connections",
+                ":dataConnectionId",
+                "schema"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "dataConnectionId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"updates\": [\n    {\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"status\": \"<string>\"\n    },\n    {\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"status\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9957a7d2-eb39-43fe-b3fa-d166e8538f9c",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections",
+                    ":dataConnectionId",
+                    "schema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataConnectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"updates\": [\n    {\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"status\": \"<string>\"\n    },\n    {\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"status\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"updated\": {\n    \"tables\": [\n      {\n        \"status\": \"string\",\n        \"name\": \"string\"\n      },\n      {\n        \"status\": \"string\",\n        \"name\": \"string\"\n      }\n    ],\n    \"schemas\": [\n      {\n        \"status\": \"string\",\n        \"name\": \"string\"\n      },\n      {\n        \"status\": \"string\",\n        \"name\": \"string\"\n      }\n    ],\n    \"databases\": [\n      {\n        \"status\": \"string\",\n        \"name\": \"string\"\n      },\n      {\n        \"status\": \"string\",\n        \"name\": \"string\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "61da6e68-7f57-48d9-9130-368a4ef65b98",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections",
+                    ":dataConnectionId",
+                    "schema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataConnectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"updates\": [\n    {\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"status\": \"<string>\"\n    },\n    {\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"status\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"traceId\": \"string\",\n  \"details\": [\n    {\n      \"name\": \"string\",\n      \"type\": \"DATABASE\",\n      \"reason\": \"ambiguous_name\",\n      \"value\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"type\": \"SCHEMA\",\n      \"reason\": \"invalid_name_format\",\n      \"value\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b61520a9-9bad-4ebc-a5ec-d6e219df686f",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections",
+                    ":dataConnectionId",
+                    "schema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataConnectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"updates\": [\n    {\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"status\": \"<string>\"\n    },\n    {\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"status\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fe0aaf28-f321-4754-abc0-c739fe4f20e4",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "data-connections",
+                    ":dataConnectionId",
+                    "schema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataConnectionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"updates\": [\n    {\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"status\": \"<string>\"\n    },\n    {\n      \"type\": \"<string>\",\n      \"name\": \"<string>\",\n      \"status\": \"<string>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"traceId\": \"string\",\n  \"details\": [\n    {\n      \"name\": \"string\",\n      \"type\": \"DATABASE\",\n      \"reason\": \"ambiguous_name\",\n      \"value\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"type\": \"SCHEMA\",\n      \"reason\": \"invalid_name_format\",\n      \"value\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.hex.tech/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3e5d6147-f218-4458-af0d-1665cb3e3fb7",
+    "name": "Hex Cells Data Connections API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "API specification for the Hex External API",
+      "type": "text/plain"
+    }
+  }
+}

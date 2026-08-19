@@ -1,0 +1,344 @@
+{
+  "item": [
+    {
+      "id": "18c2bf81-f5ae-40f8-88fc-dce269008c8a",
+      "name": "Embedding",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "71435069-007a-48bc-9c7b-7d4abee003d7",
+          "name": "Create Presigned Url",
+          "request": {
+            "name": "Create Presigned Url",
+            "description": {
+              "content": "Create an embedded url for a project",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "embedding",
+                "createPresignedUrl",
+                ":projectId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "projectId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hexUserAttributes\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\"\n  },\n  \"scope\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"inputParameters\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"expiresIn\": \"15000\",\n  \"displayOptions\": {\n    \"theme\": \"<string>\",\n    \"showEmbeddedRunButton\": \"<boolean>\",\n    \"noEmbedHeaderPadding\": \"<boolean>\",\n    \"noEmbedBasePadding\": \"<boolean>\",\n    \"noEmbedOutline\": \"<boolean>\",\n    \"noEmbedFooter\": \"<boolean>\",\n    \"key_0\": {}\n  },\n  \"testMode\": \"<boolean>\",\n  \"key_0\": {},\n  \"key_1\": {}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5fbaef6c-a03b-4708-a6bd-781d8495ac9f",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "embedding",
+                    "createPresignedUrl",
+                    ":projectId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"hexUserAttributes\": {\n    \"orgId\": \"my-org-id\",\n    \"groupId\": \"my-group-id\"\n  },\n  \"scope\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"inputParameters\": {\n    \"key_0\": {}\n  },\n  \"expiresIn\": \"15000\",\n  \"displayOptions\": {\n    \"theme\": \"<string>\",\n    \"showEmbeddedRunButton\": \"<boolean>\",\n    \"noEmbedHeaderPadding\": \"<boolean>\",\n    \"noEmbedBasePadding\": \"<boolean>\",\n    \"noEmbedOutline\": \"<boolean>\",\n    \"noEmbedFooter\": \"<boolean>\"\n  },\n  \"testMode\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ad0ba43a-c8cf-433e-9dee-220610b4d9f1",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "embedding",
+                    "createPresignedUrl",
+                    ":projectId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"hexUserAttributes\": {\n    \"orgId\": \"my-org-id\",\n    \"groupId\": \"my-group-id\"\n  },\n  \"scope\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"inputParameters\": {\n    \"key_0\": {}\n  },\n  \"expiresIn\": \"15000\",\n  \"displayOptions\": {\n    \"theme\": \"<string>\",\n    \"showEmbeddedRunButton\": \"<boolean>\",\n    \"noEmbedHeaderPadding\": \"<boolean>\",\n    \"noEmbedBasePadding\": \"<boolean>\",\n    \"noEmbedOutline\": \"<boolean>\",\n    \"noEmbedFooter\": \"<boolean>\"\n  },\n  \"testMode\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "00fb3809-81fa-4046-8cb4-64fac5489712",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "embedding",
+                    "createPresignedUrl",
+                    ":projectId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"hexUserAttributes\": {\n    \"orgId\": \"my-org-id\",\n    \"groupId\": \"my-group-id\"\n  },\n  \"scope\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"inputParameters\": {\n    \"key_0\": {}\n  },\n  \"expiresIn\": \"15000\",\n  \"displayOptions\": {\n    \"theme\": \"<string>\",\n    \"showEmbeddedRunButton\": \"<boolean>\",\n    \"noEmbedHeaderPadding\": \"<boolean>\",\n    \"noEmbedBasePadding\": \"<boolean>\",\n    \"noEmbedOutline\": \"<boolean>\",\n    \"noEmbedFooter\": \"<boolean>\"\n  },\n  \"testMode\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5545f40c-34ea-435d-9d66-8a3c439dd242",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "embedding",
+                    "createPresignedUrl",
+                    ":projectId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "projectId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"hexUserAttributes\": {\n    \"orgId\": \"my-org-id\",\n    \"groupId\": \"my-group-id\"\n  },\n  \"scope\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"inputParameters\": {\n    \"key_0\": {}\n  },\n  \"expiresIn\": \"15000\",\n  \"displayOptions\": {\n    \"theme\": \"<string>\",\n    \"showEmbeddedRunButton\": \"<boolean>\",\n    \"noEmbedHeaderPadding\": \"<boolean>\",\n    \"noEmbedBasePadding\": \"<boolean>\",\n    \"noEmbedOutline\": \"<boolean>\",\n    \"noEmbedFooter\": \"<boolean>\"\n  },\n  \"testMode\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"reason\": \"string\",\n  \"details\": \"string\",\n  \"traceId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.hex.tech/api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "40cf6696-be35-43a2-a856-b5fd01aa2e96",
+    "name": "Hex Cells Embedding API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "API specification for the Hex External API",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Hex Cells API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cells",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetChartImageFromLogic",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/cells/:cellId/image",
+            "params": [
+              {
+                "name": "cellId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "width",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "height",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "includeTitle",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get the rendered PNG image of a chart cell from the current notebook session by cellId.\nThe \"cellId\" path parameter should be the cell's ID (scoped to a\nspecific version), as opposed to its staticId (which remains stable across versions).\n\nReturns a JSON object containing the base64-encoded PNG image of the chart cell\nas it currently appears in the Logic view, along with the cell ID and MIME type.\nThe cell must have been executed and must not be in an error state.\nOnly chart-type cells are suppo"
+        },
+        {
+          "info": {
+            "name": "GetCell",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/cells/:cellId",
+            "params": [
+              {
+                "name": "cellId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a single cell by ID\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+        },
+        {
+          "info": {
+            "name": "UpdateCell",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.hex.tech/api/v1/cells/:cellId",
+            "params": [
+              {
+                "name": "cellId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a cell's source and/or data connection. For SQL cells, can update the SQL source, output dataframe, and data connection. For code and markdown cells, can update the source. Returns the updated cell.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+        },
+        {
+          "info": {
+            "name": "DeleteCell",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.hex.tech/api/v1/cells/:cellId",
+            "params": [
+              {
+                "name": "cellId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a cell from the draft version of a project by ID\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+        },
+        {
+          "info": {
+            "name": "GetCellOutput",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/cells/:cellId/output",
+            "params": [
+              {
+                "name": "cellId",
+                "value": "",
+                "type": "path",
+                "description": "The SQL cell ID or static cell ID to read output for."
+              }
+            ]
+          },
+          "docs": "**Unstable**: This endpoint is unstable API. Hex may make breaking changes to this endpoint without notice.\n\nGet the latest output preview for a SQL cell in the active draft notebook session.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+        },
+        {
+          "info": {
+            "name": "ListCells",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.hex.tech/api/v1/cells",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "The project to list cells from"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List cells from the draft version of a project. Returns code, SQL, and markdown cell contents.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+        },
+        {
+          "info": {
+            "name": "CreateCell",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.hex.tech/api/v1/cells",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new cell in the draft version of a project\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

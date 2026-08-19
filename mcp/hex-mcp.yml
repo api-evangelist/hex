@@ -7,11 +7,10 @@ server:
   transport: http
   url: https://app.hex.tech/mcp
   auth: oauth
-  note: >-
-    Hosted remote MCP server (Streamable HTTP + OAuth). For single-tenant / regional
-    deployments replace app.hex.tech with your workspace domain (e.g. eu.hex.tech).
-    Available on Team and Enterprise plans; requires Explorer workspace role or higher.
-    Works with Claude Desktop, Cursor, ChatGPT, Codex, Glean, and Figma.
+  note: Hosted remote MCP server (Streamable HTTP + OAuth). For single-tenant / regional deployments replace
+    app.hex.tech with your workspace domain (e.g. eu.hex.tech). Available on Team and Enterprise plans;
+    requires Explorer workspace role or higher. Works with Claude Desktop, Cursor, ChatGPT, Codex, Glean,
+    and Figma.
 tools:
 - name: search_projects
   description: Find projects in your Hex workspace.
@@ -21,3 +20,10 @@ tools:
   description: Retrieve messages and results from a Thread.
 - name: continue_thread
   description: Add follow-up questions to an existing Thread.
+deployment:
+  mode: remote
+  endpoint: https://app.hex.tech/mcp
+  verified: probed
+  probe: gated
+  checked: '2026-08-12'
+  source: catalog MCP census
