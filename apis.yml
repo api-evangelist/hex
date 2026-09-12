@@ -306,6 +306,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Website
+  url: https://www.hex.tech/
 - type: Overlay
   url: overlays/hex-openapi-overlay.yaml
 - type: AgenticAccess
