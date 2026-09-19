@@ -159,6 +159,8 @@ apis:
   humanURL: https://learn.hex.tech/docs/api-integrations/api/overview
   baseURL: https://app.hex.tech/api/v1
   tags:
+  - Embeddings
+  tags_raw:
   - Embedding
   properties:
   - type: OpenAPI
