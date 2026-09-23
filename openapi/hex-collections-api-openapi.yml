@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Hex Cells Collections API
+  title: Hex Collections API
   version: 1.0.0
   description: API specification for the Hex External API
   license:
@@ -49,6 +49,8 @@ paths:
           $ref: '#/components/schemas/CollectionId'
       tags:
       - Collections
+      summary: Get collection
+      x-summary-source: derived
     patch:
       operationId: EditCollection
       responses:
@@ -100,6 +102,8 @@ paths:
               type: object
       tags:
       - Collections
+      summary: Edit collection
+      x-summary-source: derived
   /v1/collections:
     get:
       operationId: ListCollections
@@ -151,6 +155,8 @@ paths:
           $ref: '#/components/schemas/ListCollectionsSortByEnum'
       tags:
       - Collections
+      summary: List collections
+      x-summary-source: derived
     post:
       operationId: CreateCollection
       responses:
@@ -196,38 +202,10 @@ paths:
               type: object
       tags:
       - Collections
+      summary: Create collection
+      x-summary-source: derived
 components:
   schemas:
-    PaginationApiResource:
-      properties:
-        after:
-          allOf:
-          - $ref: '#/components/schemas/ApiPaginationCursor'
-          nullable: true
-        before:
-          allOf:
-          - $ref: '#/components/schemas/ApiPaginationCursor'
-          nullable: true
-      required:
-      - after
-      - before
-      type: object
-      additionalProperties: false
-    ListCollectionsSortByEnum:
-      $ref: '#/components/schemas/EnumValues_typeofListCollectionsSortByEnum_'
-    ListCollectionsResponse:
-      properties:
-        values:
-          items:
-            $ref: '#/components/schemas/CollectionApiResource'
-          type: array
-        pagination:
-          $ref: '#/components/schemas/PaginationApiResource'
-      required:
-      - values
-      - pagination
-      type: object
-      additionalProperties: false
     CollectionApiResource:
       properties:
         id:
@@ -252,6 +230,26 @@ components:
       - id
       - name
       - sharing
+      type: object
+      additionalProperties: false
+    PageSize:
+      type: integer
+      format: int32
+      default: '25'
+      description: Number of results to fetch per page for paginated requests
+      minimum: 1
+      maximum: 100
+    ListCollectionsResponse:
+      properties:
+        values:
+          items:
+            $ref: '#/components/schemas/CollectionApiResource'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/PaginationApiResource'
+      required:
+      - values
+      - pagination
       type: object
       additionalProperties: false
     CollectionApiResourceSharing:
@@ -287,16 +285,11 @@ components:
           type: object
       type: object
       additionalProperties: false
-    ApiPaginationCursor:
+    UserId:
       type: string
-      description: 'A cursor string used with `before` and `after` parameters to paginate through a list
-
-        of items on the API.'
-    EnumValues_typeofListCollectionsSortByEnum_:
-      type: string
-      enum:
-      - NAME
-      nullable: false
+      format: uuid
+      description: Unique ID for a user. This can be found from the users page (in Settings).
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
     TsoaErrorResponsePayload:
       properties:
         details:
@@ -308,38 +301,50 @@ components:
       required:
       - reason
       type: object
+    CollectionAccess:
+      $ref: '#/components/schemas/EnumValues_typeofCollectionAccess_'
     GroupId:
       type: string
       format: uuid
       description: Unique ID for a group. This can be found from the groups page (in Settings).
       pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    CollectionAccess:
-      $ref: '#/components/schemas/EnumValues_typeofCollectionAccess_'
-    Name:
-      type: string
-      minLength: 1
     TraceId:
       type: string
       description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
-    PageSize:
-      type: integer
-      format: int32
-      default: '25'
-      description: Number of results to fetch per page for paginated requests
-      minimum: 1
-      maximum: 100
-    UserId:
+    EnumValues_typeofCollectionAccess_:
       type: string
-      format: uuid
-      description: Unique ID for a user. This can be found from the users page (in Settings).
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    ApiPaginationCursor:
+      type: string
+      description: 'A cursor string used with `before` and `after` parameters to paginate through a list
+
+        of items on the API.'
     CollectionId:
       type: string
       format: uuid
       description: Unique ID for a collection.
       pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    EnumValues_typeofCollectionAccess_:
+    PaginationApiResource:
+      properties:
+        after:
+          allOf:
+          - $ref: '#/components/schemas/ApiPaginationCursor'
+        before:
+          allOf:
+          - $ref: '#/components/schemas/ApiPaginationCursor'
+      required:
+      - after
+      - before
+      type: object
+      additionalProperties: false
+    ListCollectionsSortByEnum:
+      $ref: '#/components/schemas/EnumValues_typeofListCollectionsSortByEnum_'
+    Name:
       type: string
+      minLength: 1
+    EnumValues_typeofListCollectionsSortByEnum_:
+      type: string
+      enum:
+      - NAME
   securitySchemes:
     bearerAuth:
       type: http

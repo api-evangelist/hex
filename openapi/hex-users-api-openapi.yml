@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Hex Cells Users API
+  title: Hex Users API
   version: 1.0.0
   description: API specification for the Hex External API
   license:
@@ -17,7 +17,18 @@ paths:
     get:
       operationId: Me
       summary: Me
-      description: "Returns information about the current logged in user.\nUser metadata will be omitted when authenticating with a workspace token.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      description: 'Returns information about the current logged in user.
+
+        User metadata will be omitted when authenticating with a workspace token.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
       responses:
         '200':
           description: Successful response
@@ -30,8 +41,9 @@ paths:
                     id:
                       type: string
                     name:
-                      type: string
-                      nullable: true
+                      type:
+                      - string
+                      - 'null'
                     email:
                       type: string
                     role:
@@ -46,8 +58,9 @@ paths:
                       - EMBEDDED_USER
                       - ANONYMOUS
                     lastLoginDate:
-                      type: string
-                      nullable: true
+                      type:
+                      - string
+                      - 'null'
                     org:
                       type: object
                       properties:
@@ -56,12 +69,14 @@ paths:
                       required:
                       - id
                     token:
-                      type: object
-                      nullable: true
+                      type:
+                      - object
+                      - 'null'
                       properties:
                         exp:
-                          type: number
-                          nullable: true
+                          type:
+                          - number
+                          - 'null'
                       required:
                       - exp
                   required:
@@ -81,12 +96,14 @@ paths:
                       required:
                       - id
                     token:
-                      type: object
-                      nullable: true
+                      type:
+                      - object
+                      - 'null'
                       properties:
                         exp:
-                          type: number
-                          nullable: true
+                          type:
+                          - number
+                          - 'null'
                       required:
                       - exp
                   required:
@@ -127,19 +144,30 @@ paths:
     get:
       operationId: ListUsers
       summary: ListUsers
-      description: "List all users in the workspace\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      description: 'List all users in the workspace
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
       parameters:
       - in: query
         name: after
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           default: null
       - in: query
         name: before
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           default: null
       - in: query
         name: limit
@@ -167,14 +195,16 @@ paths:
       - in: query
         name: groupId
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
       - in: query
         name: userIds
         description: Comma-separated list of user IDs
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Comma-separated list of user IDs
       responses:
         '200':
@@ -192,8 +222,9 @@ paths:
                         id:
                           type: string
                         name:
-                          type: string
-                          nullable: true
+                          type:
+                          - string
+                          - 'null'
                         email:
                           type: string
                         role:
@@ -208,8 +239,9 @@ paths:
                           - EMBEDDED_USER
                           - ANONYMOUS
                         lastLoginDate:
-                          type: string
-                          nullable: true
+                          type:
+                          - string
+                          - 'null'
                       required:
                       - id
                       - name
@@ -220,12 +252,14 @@ paths:
                     type: object
                     properties:
                       before:
-                        type: string
-                        nullable: true
+                        type:
+                        - string
+                        - 'null'
                         default: null
                       after:
-                        type: string
-                        nullable: true
+                        type:
+                        - string
+                        - 'null'
                         default: null
                     required:
                     - before
@@ -269,7 +303,16 @@ paths:
     post:
       operationId: DeactivateUser
       summary: DeactivateUser
-      description: "Deactivate a user\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      description: 'Deactivate a user
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
       parameters:
       - in: path
         name: userId
@@ -290,8 +333,9 @@ paths:
                       id:
                         type: string
                       name:
-                        type: string
-                        nullable: true
+                        type:
+                        - string
+                        - 'null'
                       email:
                         type: string
                       role:
@@ -306,8 +350,9 @@ paths:
                         - EMBEDDED_USER
                         - ANONYMOUS
                       lastLoginDate:
-                        type: string
-                        nullable: true
+                        type:
+                        - string
+                        - 'null'
                     required:
                     - id
                     - name
@@ -344,37 +389,6 @@ paths:
       - Users
 components:
   schemas:
-    error.BAD_REQUEST:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Invalid input data
-        code:
-          type: string
-          description: The error code
-          example: BAD_REQUEST
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Invalid input data error (400)
-      description: The error information
-      example:
-        code: BAD_REQUEST
-        message: Invalid input data
-        issues: []
     error.UNAUTHORIZED:
       type: object
       properties:
@@ -405,6 +419,37 @@ components:
       example:
         code: UNAUTHORIZED
         message: Authorization not provided
+        issues: []
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
         issues: []
     error.NOT_FOUND:
       type: object
@@ -437,37 +482,6 @@ components:
         code: NOT_FOUND
         message: Not found
         issues: []
-    error.INTERNAL_SERVER_ERROR:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Internal server error
-        code:
-          type: string
-          description: The error code
-          example: INTERNAL_SERVER_ERROR
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Internal server error error (500)
-      description: The error information
-      example:
-        code: INTERNAL_SERVER_ERROR
-        message: Internal server error
-        issues: []
     error.FORBIDDEN:
       type: object
       properties:
@@ -498,6 +512,37 @@ components:
       example:
         code: FORBIDDEN
         message: Insufficient access
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
         issues: []
   securitySchemes:
     bearerAuth:

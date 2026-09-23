@@ -1,0 +1,32 @@
+# Front Door AI Index — hex — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: hex
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.hex.tech
+  final_host: hex.tech
+  ownership: inherited
+  owner: hex
+  shares_host_with: null
+  inherited_from: hex.tech
+  verdict: scored
+  score: null
+  host_score: 46
+  density: null
+  words: 3819
+  tiers:
+    agentic: 13
+    core: 32
+    model: 1
+  ambiguous: 11
+  top_terms:
+    AI: 32
+    agent: 11
+    prompts: 6
+    AI agent: 3
+    MCP: 2
+    AI assistant: 1
+    ChatGPT: 1
+    agentic: 1

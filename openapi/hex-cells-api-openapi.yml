@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: Hex Cells API
   version: 1.0.0
@@ -100,11 +100,22 @@ paths:
           type: boolean
       tags:
       - Cells
+      summary: Get chart image from logic
+      x-summary-source: derived
   /v1/cells/{cellId}:
     get:
       operationId: GetCell
       summary: GetCell
-      description: "Get a single cell by ID\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      description: 'Get a single cell by ID
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
       parameters:
       - in: path
         name: cellId
@@ -146,25 +157,29 @@ paths:
                     - EXPLORE
                     - COLLAPSIBLE
                   label:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                   dataConnectionId:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                   contents:
                     type: object
                     properties:
                       codeCell:
-                        type: object
-                        nullable: true
+                        type:
+                        - object
+                        - 'null'
                         properties:
                           source:
                             type: string
                         required:
                         - source
                       sqlCell:
-                        type: object
-                        nullable: true
+                        type:
+                        - object
+                        - 'null'
                         properties:
                           source:
                             type: string
@@ -175,8 +190,9 @@ paths:
                         - source
                         - outputDataframe
                       markdownCell:
-                        type: object
-                        nullable: true
+                        type:
+                        - object
+                        - 'null'
                         properties:
                           source:
                             type: string
@@ -231,7 +247,16 @@ paths:
     patch:
       operationId: UpdateCell
       summary: UpdateCell
-      description: "Update a cell's source and/or data connection. For SQL cells, can update the SQL source, output dataframe, and data connection. For code and markdown cells, can update the source. Returns the updated cell.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      description: 'Update a cell''s source and/or data connection. For SQL cells, can update the SQL source, output dataframe, and data connection. For code and markdown cells, can update the source. Returns the updated cell.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
       parameters:
       - in: path
         name: cellId
@@ -246,8 +271,9 @@ paths:
               type: object
               properties:
                 dataConnectionId:
-                  type: string
-                  nullable: true
+                  type:
+                  - string
+                  - 'null'
                   description: Data connection to attach to a SQL cell. Pass null to detach the existing data connection.
                 contents:
                   type: object
@@ -311,25 +337,29 @@ paths:
                     - EXPLORE
                     - COLLAPSIBLE
                   label:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                   dataConnectionId:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                   contents:
                     type: object
                     properties:
                       codeCell:
-                        type: object
-                        nullable: true
+                        type:
+                        - object
+                        - 'null'
                         properties:
                           source:
                             type: string
                         required:
                         - source
                       sqlCell:
-                        type: object
-                        nullable: true
+                        type:
+                        - object
+                        - 'null'
                         properties:
                           source:
                             type: string
@@ -340,8 +370,9 @@ paths:
                         - source
                         - outputDataframe
                       markdownCell:
-                        type: object
-                        nullable: true
+                        type:
+                        - object
+                        - 'null'
                         properties:
                           source:
                             type: string
@@ -396,7 +427,16 @@ paths:
     delete:
       operationId: DeleteCell
       summary: DeleteCell
-      description: "Delete a cell from the draft version of a project by ID\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      description: 'Delete a cell from the draft version of a project by ID
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
       parameters:
       - in: path
         name: cellId
@@ -451,7 +491,19 @@ paths:
     get:
       operationId: GetCellOutput
       summary: GetCellOutput
-      description: "**Unstable**: This endpoint is unstable API. Hex may make breaking changes to this endpoint without notice.\n\nGet the latest output preview for a SQL cell in the active draft notebook session.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      description: '**Unstable**: This endpoint is unstable API. Hex may make breaking changes to this endpoint without notice.
+
+
+        Get the latest output preview for a SQL cell in the active draft notebook session.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
       parameters:
       - in: path
         name: cellId
@@ -518,8 +570,9 @@ paths:
                         rowsReturned:
                           type: number
                         totalRows:
-                          type: number
-                          nullable: true
+                          type:
+                          - number
+                          - 'null'
                         totalRowsKind:
                           type: string
                           enum:
@@ -545,8 +598,9 @@ paths:
                           items:
                             type: object
                             additionalProperties:
-                              type: string
-                              nullable: true
+                              type:
+                              - string
+                              - 'null'
                       required:
                       - type
                       - rowLimit
@@ -565,8 +619,9 @@ paths:
                         message:
                           type: string
                         traceback:
-                          type: string
-                          nullable: true
+                          type:
+                          - string
+                          - 'null'
                       required:
                       - type
                       - message
@@ -612,7 +667,16 @@ paths:
     post:
       operationId: CreateCell
       summary: CreateCell
-      description: "Create a new cell in the draft version of a project\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      description: 'Create a new cell in the draft version of a project
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
       requestBody:
         required: true
         content:
@@ -733,25 +797,29 @@ paths:
                     - EXPLORE
                     - COLLAPSIBLE
                   label:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                   dataConnectionId:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                   contents:
                     type: object
                     properties:
                       codeCell:
-                        type: object
-                        nullable: true
+                        type:
+                        - object
+                        - 'null'
                         properties:
                           source:
                             type: string
                         required:
                         - source
                       sqlCell:
-                        type: object
-                        nullable: true
+                        type:
+                        - object
+                        - 'null'
                         properties:
                           source:
                             type: string
@@ -762,8 +830,9 @@ paths:
                         - source
                         - outputDataframe
                       markdownCell:
-                        type: object
-                        nullable: true
+                        type:
+                        - object
+                        - 'null'
                         properties:
                           source:
                             type: string
@@ -812,7 +881,16 @@ paths:
     get:
       operationId: ListCells
       summary: ListCells
-      description: "List cells from the draft version of a project. Returns code, SQL, and markdown cell contents.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      description: 'List cells from the draft version of a project. Returns code, SQL, and markdown cell contents.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
       parameters:
       - in: query
         name: projectId
@@ -824,14 +902,16 @@ paths:
       - in: query
         name: after
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           default: null
       - in: query
         name: before
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           default: null
       - in: query
         name: limit
@@ -880,25 +960,29 @@ paths:
                           - EXPLORE
                           - COLLAPSIBLE
                         label:
-                          type: string
-                          nullable: true
+                          type:
+                          - string
+                          - 'null'
                         dataConnectionId:
-                          type: string
-                          nullable: true
+                          type:
+                          - string
+                          - 'null'
                         contents:
                           type: object
                           properties:
                             codeCell:
-                              type: object
-                              nullable: true
+                              type:
+                              - object
+                              - 'null'
                               properties:
                                 source:
                                   type: string
                               required:
                               - source
                             sqlCell:
-                              type: object
-                              nullable: true
+                              type:
+                              - object
+                              - 'null'
                               properties:
                                 source:
                                   type: string
@@ -909,8 +993,9 @@ paths:
                               - source
                               - outputDataframe
                             markdownCell:
-                              type: object
-                              nullable: true
+                              type:
+                              - object
+                              - 'null'
                               properties:
                                 source:
                                   type: string
@@ -934,12 +1019,14 @@ paths:
                     type: object
                     properties:
                       before:
-                        type: string
-                        nullable: true
+                        type:
+                        - string
+                        - 'null'
                         default: null
                       after:
-                        type: string
-                        nullable: true
+                        type:
+                        - string
+                        - 'null'
                         default: null
                     required:
                     - before
@@ -981,6 +1068,37 @@ paths:
       - Cells
 components:
   schemas:
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
     error.BAD_REQUEST:
       type: object
       properties:
@@ -1026,54 +1144,6 @@ components:
       - mimeType
       type: object
       additionalProperties: false
-    error.UNAUTHORIZED:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Authorization not provided
-        code:
-          type: string
-          description: The error code
-          example: UNAUTHORIZED
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Authorization not provided error (401)
-      description: The error information
-      example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
-        issues: []
-    ChartImageDimension:
-      type: integer
-      format: int32
-      description: Chart image total dimension (width or height) in pixels.
-      minimum: 100
-      maximum: 2000
-    TsoaErrorResponsePayload:
-      properties:
-        details:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        reason:
-          type: string
-      required:
-      - reason
-      type: object
     error.NOT_FOUND:
       type: object
       properties:
@@ -1105,9 +1175,48 @@ components:
         code: NOT_FOUND
         message: Not found
         issues: []
-    TraceId:
-      type: string
-      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
     error.INTERNAL_SERVER_ERROR:
       type: object
       properties:
@@ -1144,37 +1253,15 @@ components:
       format: uuid
       description: Unique ID for a cell. This can be found by going into the menu of a cell in the notebook.
       pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    error.FORBIDDEN:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Insufficient access
-        code:
-          type: string
-          description: The error code
-          example: FORBIDDEN
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Insufficient access error (403)
-      description: The error information
-      example:
-        code: FORBIDDEN
-        message: Insufficient access
-        issues: []
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+    ChartImageDimension:
+      type: integer
+      format: int32
+      description: Chart image total dimension (width or height) in pixels.
+      minimum: 100
+      maximum: 2000
   securitySchemes:
     bearerAuth:
       type: http

@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Hex Cells Semantic (projects|models) API
+  title: Hex Semantic (projects|models) API
   version: 1.0.0
   description: API specification for the Hex External API
   license:
@@ -90,6 +90,8 @@ paths:
               type: object
       tags:
       - Semantic (projects|models)
+      summary: Ingest semantic project
+      x-summary-source: derived
   /v1/semantic-(projects|models)/{semanticProjectId}:
     patch:
       operationId: UpdateSemanticProject
@@ -152,49 +154,23 @@ paths:
               $ref: '#/components/schemas/UpdateSemanticProjectRequest'
       tags:
       - Semantic (projects|models)
+      summary: Update semantic project
+      x-summary-source: derived
 components:
   schemas:
-    MetricflowModelSchemas:
-      $ref: '#/components/schemas/Record_string.Record_string.HexSLTypes.DataType__'
-    UpdateSemanticProjectResponse:
-      description: Response body for successful status updates
-      properties:
-        updated:
-          properties:
-            views:
-              items:
-                properties:
-                  status:
-                    type: string
-                    nullable: true
-                  name:
-                    type: string
-                required:
-                - status
-                - name
-                type: object
-              type: array
-            datasets:
-              items:
-                properties:
-                  status:
-                    type: string
-                    nullable: true
-                  name:
-                    type: string
-                required:
-                - status
-                - name
-                type: object
-              type: array
-          required:
-          - views
-          - datasets
-          type: object
-      required:
-      - updated
+    HexSLProblemWithDisplay:
+      allOf:
+      - $ref: '#/components/schemas/HexSLTypes.PublicProblem'
+      - properties:
+          display:
+            type: string
+        required:
+        - display
+        type: object
+    Record_string.Record_string.HexSLTypes.DataType__:
+      properties: {}
       type: object
-      additionalProperties: false
+      description: Construct a type with a set of properties K of type T
     HexSLTypes.PublicProblem:
       description: A problem encountered during the import of a public HexSL project.
       properties:
@@ -219,6 +195,75 @@ components:
       - impact_paths
       type: object
       additionalProperties: false
+    ProblemKeyPath:
+      items:
+        anyOf:
+        - type: string
+        - type: number
+          format: double
+      type: array
+    UpdateSemanticProjectResponse:
+      description: Response body for successful status updates
+      properties:
+        updated:
+          properties:
+            views:
+              items:
+                properties:
+                  status:
+                    type:
+                    - string
+                    - 'null'
+                  name:
+                    type: string
+                required:
+                - status
+                - name
+                type: object
+              type: array
+            datasets:
+              items:
+                properties:
+                  status:
+                    type:
+                    - string
+                    - 'null'
+                  name:
+                    type: string
+                required:
+                - status
+                - name
+                type: object
+              type: array
+          required:
+          - views
+          - datasets
+          type: object
+      required:
+      - updated
+      type: object
+      additionalProperties: false
+    UpdateSemanticProjectRequest:
+      description: 'Request body for updating semantic datasets and views
+
+        Currently, only status updates are supported.'
+      properties:
+        updates:
+          items:
+            $ref: '#/components/schemas/SemanticObjectUpdate'
+          type: array
+          description: Array of updates to apply
+      required:
+      - updates
+      type: object
+      additionalProperties: false
+    SemanticProjectId:
+      type: string
+      format: uuid
+      description: 'Unique ID for a Hex semantic project. This can be found from the semantic
+
+        projects admin panel (in Settings).'
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
     Pick_TsoaErrorResponsePayload.Exclude_keyofTsoaErrorResponsePayload.details__:
       properties:
         reason:
@@ -256,6 +301,9 @@ components:
       - reason
       type: object
       additionalProperties: false
+    Omit_TsoaErrorResponsePayload.details_:
+      $ref: '#/components/schemas/Pick_TsoaErrorResponsePayload.Exclude_keyofTsoaErrorResponsePayload.details__'
+      description: Construct a type with the properties of T except for those in type K.
     TsoaErrorResponsePayload:
       properties:
         details:
@@ -267,6 +315,44 @@ components:
       required:
       - reason
       type: object
+    SemanticObjectUpdate:
+      description: 'A single update for a semantic object (dataset or view)
+
+        Currently, only status updates are supported.'
+      properties:
+        type:
+          type: string
+          enum:
+          - DATASET
+          - VIEW
+          description: The type of object to update
+        name:
+          type: string
+          description: The name of the dataset or view
+        status:
+          type:
+          - string
+          - 'null'
+          description: The status name to apply, or null to remove the current status
+      required:
+      - type
+      - name
+      - status
+      type: object
+      additionalProperties: false
+    ProblemSeverity:
+      type: string
+      enum:
+      - fatal
+      - error
+      - warning
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+    ProblemMessage:
+      type: string
+    MetricflowModelSchemas:
+      $ref: '#/components/schemas/Record_string.Record_string.HexSLTypes.DataType__'
     SemanticProjectsSyncResponsePayload:
       properties:
         traceId:
@@ -297,85 +383,6 @@ components:
       - contents
       type: object
       additionalProperties: false
-    HexSLProblemWithDisplay:
-      allOf:
-      - $ref: '#/components/schemas/HexSLTypes.PublicProblem'
-      - properties:
-          display:
-            type: string
-        required:
-        - display
-        type: object
-    ProblemSeverity:
-      type: string
-      enum:
-      - fatal
-      - error
-      - warning
-    ProblemKeyPath:
-      items:
-        anyOf:
-        - type: string
-        - type: number
-          format: double
-      type: array
-    Record_string.Record_string.HexSLTypes.DataType__:
-      properties: {}
-      type: object
-      description: Construct a type with a set of properties K of type T
-    SemanticProjectId:
-      type: string
-      format: uuid
-      description: 'Unique ID for a Hex semantic project. This can be found from the semantic
-
-        projects admin panel (in Settings).'
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    TraceId:
-      type: string
-      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
-    Omit_TsoaErrorResponsePayload.details_:
-      $ref: '#/components/schemas/Pick_TsoaErrorResponsePayload.Exclude_keyofTsoaErrorResponsePayload.details__'
-      description: Construct a type with the properties of T except for those in type K.
-    SemanticObjectUpdate:
-      description: 'A single update for a semantic object (dataset or view)
-
-        Currently, only status updates are supported.'
-      properties:
-        type:
-          type: string
-          enum:
-          - DATASET
-          - VIEW
-          description: The type of object to update
-        name:
-          type: string
-          description: The name of the dataset or view
-        status:
-          type: string
-          nullable: true
-          description: The status name to apply, or null to remove the current status
-      required:
-      - type
-      - name
-      - status
-      type: object
-      additionalProperties: false
-    UpdateSemanticProjectRequest:
-      description: 'Request body for updating semantic datasets and views
-
-        Currently, only status updates are supported.'
-      properties:
-        updates:
-          items:
-            $ref: '#/components/schemas/SemanticObjectUpdate'
-          type: array
-          description: Array of updates to apply
-      required:
-      - updates
-      type: object
-      additionalProperties: false
-    ProblemMessage:
-      type: string
   securitySchemes:
     bearerAuth:
       type: http

@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Hex Cells Threads API
+  title: Hex Threads API
   version: 1.0.0
   description: API specification for the Hex External API
   license:
@@ -17,7 +17,19 @@ paths:
     post:
       operationId: CreateThread
       summary: CreateThread
-      description: "Start an agent thread with a prompt. The Hex agent will analyze data and respond to the prompt. The thread runs asynchronously — poll its status or visit the returned URL to view progress.\n\nAvailability of this endpoint varies by organization. Contact Hex support to request access.\n\nThis endpoint is subject to the following rate limits:\n- `hex-send-thread-message`: Rate limits for sending messages to threads\n  - Max requests per minute may vary\n  - Max requests per hour may vary"
+      description: 'Start an agent thread with a prompt. The Hex agent will analyze data and respond to the prompt. The thread runs asynchronously — poll its status or visit the returned URL to view progress.
+
+
+        Availability of this endpoint varies by organization. Contact Hex support to request access.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-send-thread-message`: Rate limits for sending messages to threads
+
+        - Max requests per minute may vary
+
+        - Max requests per hour may vary'
       requestBody:
         required: true
         content:
@@ -32,8 +44,9 @@ paths:
                   type: object
                   properties:
                     dataConnectionId:
-                      type: string
-                      nullable: true
+                      type:
+                      - string
+                      - 'null'
                       description: Data connection referenced by the prompt
                     tableIds:
                       type: array
@@ -57,19 +70,23 @@ paths:
                       description: Projects referenced by the prompt
                   description: Entities referenced by the prompt
                 previewId:
-                  type: string
-                  nullable: true
+                  type:
+                  - string
+                  - 'null'
                 projectId:
-                  type: string
-                  nullable: true
+                  type:
+                  - string
+                  - 'null'
                   description: Run the thread against an existing project. Mutually exclusive with `newProject`
                 newProject:
-                  type: boolean
-                  nullable: true
+                  type:
+                  - boolean
+                  - 'null'
                   description: Create a new project for the thread to work on. Mutually exclusive with `projectId`
                 muted:
-                  type: boolean
-                  nullable: true
+                  type:
+                  - boolean
+                  - 'null'
                   description: If true, the thread will not be shown in any aggregated UI surfaces and will not contribute to user-facing statistics. The thread is still individually viewable. Only applies for non-project-backed threads (ignored when `projectId` or `newProject` is set). This is distinct from a `sensitive` thread.
               required:
               - prompt
@@ -88,8 +105,9 @@ paths:
                   createdAt:
                     type: string
                   projectId:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                 required:
                 - threadId
                 - url
@@ -124,19 +142,30 @@ paths:
     get:
       operationId: ListThreads
       summary: ListThreads
-      description: "List agent threads in the workspace, sorted by most recently created first. Requires Manager org role or higher. Workspace admins receive every non-private thread; managers receive threads they created plus Threads-type threads on projects they have access to. Threads marked private are returned with their title redacted.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      description: 'List agent threads in the workspace, sorted by most recently created first. Requires Manager org role or higher. Workspace admins receive every non-private thread; managers receive threads they created plus Threads-type threads on projects they have access to. Threads marked private are returned with their title redacted.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
       parameters:
       - in: query
         name: after
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           default: null
       - in: query
         name: before
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           default: null
       - in: query
         name: limit
@@ -148,8 +177,9 @@ paths:
       - in: query
         name: source
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           enum:
           - HEX
           - SLACK
@@ -159,13 +189,15 @@ paths:
       - in: query
         name: userId
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
       - in: query
         name: type
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           enum:
           - THREADS
           - NOTEBOOK
@@ -174,35 +206,39 @@ paths:
       - in: query
         name: numDays
         schema:
-          type: integer
-          nullable: true
-          minimum: 0
-          exclusiveMinimum: true
+          type:
+          - integer
+          - 'null'
+          exclusiveMinimum: 0
       - in: query
         name: hasFeedback
         schema:
-          type: boolean
-          nullable: true
+          type:
+          - boolean
+          - 'null'
       - in: query
         name: roles
         description: Comma-separated list of user org roles to filter by (ADMIN, MANAGER, EDITOR, EXPLORER, MEMBER, GUEST)
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Comma-separated list of user org roles to filter by (ADMIN, MANAGER, EDITOR, EXPLORER, MEMBER, GUEST)
       - in: query
         name: warnings
         description: Comma-separated list of warning types to filter by (DATA_LIMITATION, USER_DOUBT, MISSING_CONTEXT, OTHER)
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Comma-separated list of warning types to filter by (DATA_LIMITATION, USER_DOUBT, MISSING_CONTEXT, OTHER)
       - in: query
         name: topicIds
         description: Comma-separated list of topic IDs to filter by
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Comma-separated list of topic IDs to filter by
       responses:
         '200':
@@ -218,12 +254,14 @@ paths:
                       type: object
                       properties:
                         title:
-                          type: string
-                          nullable: true
+                          type:
+                          - string
+                          - 'null'
                           description: Title of the thread, when available. Null for private threads
                         creditsUsed:
-                          type: number
-                          nullable: true
+                          type:
+                          - number
+                          - 'null'
                           description: The total credits used by the thread
                         topics:
                           type: array
@@ -267,8 +305,9 @@ paths:
                                 - THUMBS
                                 - FLAG
                               selectedReason:
-                                type: string
-                                nullable: true
+                                type:
+                                - string
+                                - 'null'
                               userLiked:
                                 type: boolean
                             required:
@@ -277,19 +316,23 @@ paths:
                             - type
                             - userLiked
                         warningsGeneratedAt:
-                          type: string
-                          nullable: true
+                          type:
+                          - string
+                          - 'null'
                         threadSummary:
-                          type: string
-                          nullable: true
+                          type:
+                          - string
+                          - 'null'
                         threadIntent:
-                          type: string
-                          nullable: true
+                          type:
+                          - string
+                          - 'null'
                         model:
                           type: string
                         userId:
-                          type: string
-                          nullable: true
+                          type:
+                          - string
+                          - 'null'
                         type:
                           type: string
                           description: User-facing label for the type of agent thread
@@ -320,12 +363,14 @@ paths:
                     type: object
                     properties:
                       before:
-                        type: string
-                        nullable: true
+                        type:
+                        - string
+                        - 'null'
                         default: null
                       after:
-                        type: string
-                        nullable: true
+                        type:
+                        - string
+                        - 'null'
                         default: null
                     required:
                     - before
@@ -369,7 +414,16 @@ paths:
     get:
       operationId: GetThread
       summary: GetThread
-      description: "Get the response of an agent thread. Returns the current status (RUNNING, IDLE, or ERROR) and the agent's response content when available.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      description: 'Get the response of an agent thread. Returns the current status (RUNNING, IDLE, or ERROR) and the agent''s response content when available.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
       parameters:
       - in: path
         name: id
@@ -385,12 +439,14 @@ paths:
                 type: object
                 properties:
                   title:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                     description: Title of the thread, when available. Null for private threads
                   creditsUsed:
-                    type: number
-                    nullable: true
+                    type:
+                    - number
+                    - 'null'
                     description: The total credits used by the thread
                   topics:
                     type: array
@@ -434,8 +490,9 @@ paths:
                           - THUMBS
                           - FLAG
                         selectedReason:
-                          type: string
-                          nullable: true
+                          type:
+                          - string
+                          - 'null'
                         userLiked:
                           type: boolean
                       required:
@@ -444,19 +501,23 @@ paths:
                       - type
                       - userLiked
                   warningsGeneratedAt:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                   threadSummary:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                   threadIntent:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                   model:
                     type: string
                   userId:
-                    type: string
-                    nullable: true
+                    type:
+                    - string
+                    - 'null'
                   type:
                     type: string
                     description: User-facing label for the type of agent thread
@@ -479,8 +540,9 @@ paths:
                   url:
                     type: string
                   error:
-                    type: object
-                    nullable: true
+                    type:
+                    - object
+                    - 'null'
                     properties:
                       type:
                         type: string
@@ -517,8 +579,9 @@ paths:
                     - type
                     - message
                   response:
-                    type: array
-                    nullable: true
+                    type:
+                    - array
+                    - 'null'
                     items:
                       oneOf:
                       - type: object
@@ -543,8 +606,9 @@ paths:
                           staticId:
                             type: string
                           label:
-                            type: string
-                            nullable: true
+                            type:
+                            - string
+                            - 'null'
                         required:
                         - type
                         - id
@@ -559,8 +623,9 @@ paths:
                           id:
                             type: string
                           title:
-                            type: string
-                            nullable: true
+                            type:
+                            - string
+                            - 'null'
                         required:
                         - type
                         - id
@@ -628,7 +693,16 @@ paths:
     get:
       operationId: GetThreadMessages
       summary: GetThreadMessages
-      description: "List the messages in an agent thread, rendered as a single flat list of text blocks. Within a page messages are chronological (oldest first); each text block is prefixed with the authoring role, and thinking and error blocks are tagged. Tool-call, tool-result, and mention blocks are omitted, and inline references are left as raw tags. By default the most recent page is returned (matching the MCP get_thread tool); pass the `before` cursor to fetch older messages and `after` to fetch newer ones. Supports cursor pagination with a maximum page size of 50.\n\nThis endpoint is subject to the following rate limits:\n- `hex-api`: Default rate limit group for the Hex API\n  - Max requests per minute may vary (default: 30)\n  - Max requests per hour may vary (default: 1800)"
+      description: 'List the messages in an agent thread, rendered as a single flat list of text blocks. Within a page messages are chronological (oldest first); each text block is prefixed with the authoring role, and thinking and error blocks are tagged. Tool-call, tool-result, and mention blocks are omitted, and inline references are left as raw tags. By default the most recent page is returned (matching the MCP get_thread tool); pass the `before` cursor to fetch older messages and `after` to fetch newer ones. Supports cursor pagination with a maximum page size of 50.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
       parameters:
       - in: path
         name: threadId
@@ -638,14 +712,16 @@ paths:
       - in: query
         name: after
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           default: null
       - in: query
         name: before
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           default: null
       - in: query
         name: limit
@@ -682,12 +758,14 @@ paths:
                     type: object
                     properties:
                       before:
-                        type: string
-                        nullable: true
+                        type:
+                        - string
+                        - 'null'
                         default: null
                       after:
-                        type: string
-                        nullable: true
+                        type:
+                        - string
+                        - 'null'
                         default: null
                     required:
                     - before
@@ -731,7 +809,19 @@ paths:
     post:
       operationId: ContinueThread
       summary: ContinueThread
-      description: "Continue an existing agent thread with a follow-up prompt. This endpoint does not support queuing: the thread must be idle before a follow-up can be sent.\n\nAvailability of this endpoint varies by organization. Contact Hex support to request access.\n\nThis endpoint is subject to the following rate limits:\n- `hex-send-thread-message`: Rate limits for sending messages to threads\n  - Max requests per minute may vary\n  - Max requests per hour may vary"
+      description: 'Continue an existing agent thread with a follow-up prompt. This endpoint does not support queuing: the thread must be idle before a follow-up can be sent.
+
+
+        Availability of this endpoint varies by organization. Contact Hex support to request access.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-send-thread-message`: Rate limits for sending messages to threads
+
+        - Max requests per minute may vary
+
+        - Max requests per hour may vary'
       parameters:
       - in: path
         name: id
@@ -752,8 +842,9 @@ paths:
                   type: object
                   properties:
                     dataConnectionId:
-                      type: string
-                      nullable: true
+                      type:
+                      - string
+                      - 'null'
                       description: Data connection referenced by the prompt
                     tableIds:
                       type: array
@@ -821,37 +912,6 @@ paths:
       - Threads
 components:
   schemas:
-    error.BAD_REQUEST:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Invalid input data
-        code:
-          type: string
-          description: The error code
-          example: BAD_REQUEST
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Invalid input data error (400)
-      description: The error information
-      example:
-        code: BAD_REQUEST
-        message: Invalid input data
-        issues: []
     error.UNAUTHORIZED:
       type: object
       properties:
@@ -882,6 +942,37 @@ components:
       example:
         code: UNAUTHORIZED
         message: Authorization not provided
+        issues: []
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
         issues: []
     error.NOT_FOUND:
       type: object
@@ -914,37 +1005,6 @@ components:
         code: NOT_FOUND
         message: Not found
         issues: []
-    error.INTERNAL_SERVER_ERROR:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Internal server error
-        code:
-          type: string
-          description: The error code
-          example: INTERNAL_SERVER_ERROR
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Internal server error error (500)
-      description: The error information
-      example:
-        code: INTERNAL_SERVER_ERROR
-        message: Internal server error
-        issues: []
     error.FORBIDDEN:
       type: object
       properties:
@@ -975,6 +1035,37 @@ components:
       example:
         code: FORBIDDEN
         message: Insufficient access
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
         issues: []
   securitySchemes:
     bearerAuth:
