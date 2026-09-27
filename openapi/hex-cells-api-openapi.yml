@@ -1068,6 +1068,138 @@ paths:
       - Cells
 components:
   schemas:
+    CellId:
+      type: string
+      format: uuid
+      description: Unique ID for a cell. This can be found by going into the menu of a cell in the notebook.
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+    ChartImageDimension:
+      type: integer
+      format: int32
+      description: Chart image total dimension (width or height) in pixels.
+      minimum: 100
+      maximum: 2000
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+    ChartImageResponsePayload:
+      properties:
+        cellId:
+          $ref: '#/components/schemas/CellId'
+        imageBase64:
+          type: string
+        mimeType:
+          type: string
+      required:
+      - cellId
+      - imageBase64
+      - mimeType
+      type: object
+      additionalProperties: false
     error.UNAUTHORIZED:
       type: object
       properties:
@@ -1130,138 +1262,6 @@ components:
         code: BAD_REQUEST
         message: Invalid input data
         issues: []
-    ChartImageResponsePayload:
-      properties:
-        cellId:
-          $ref: '#/components/schemas/CellId'
-        imageBase64:
-          type: string
-        mimeType:
-          type: string
-      required:
-      - cellId
-      - imageBase64
-      - mimeType
-      type: object
-      additionalProperties: false
-    error.NOT_FOUND:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Not found
-        code:
-          type: string
-          description: The error code
-          example: NOT_FOUND
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Not found error (404)
-      description: The error information
-      example:
-        code: NOT_FOUND
-        message: Not found
-        issues: []
-    error.FORBIDDEN:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Insufficient access
-        code:
-          type: string
-          description: The error code
-          example: FORBIDDEN
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Insufficient access error (403)
-      description: The error information
-      example:
-        code: FORBIDDEN
-        message: Insufficient access
-        issues: []
-    TsoaErrorResponsePayload:
-      properties:
-        details:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        reason:
-          type: string
-      required:
-      - reason
-      type: object
-    error.INTERNAL_SERVER_ERROR:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Internal server error
-        code:
-          type: string
-          description: The error code
-          example: INTERNAL_SERVER_ERROR
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Internal server error error (500)
-      description: The error information
-      example:
-        code: INTERNAL_SERVER_ERROR
-        message: Internal server error
-        issues: []
-    CellId:
-      type: string
-      format: uuid
-      description: Unique ID for a cell. This can be found by going into the menu of a cell in the notebook.
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    TraceId:
-      type: string
-      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
-    ChartImageDimension:
-      type: integer
-      format: int32
-      description: Chart image total dimension (width or height) in pixels.
-      minimum: 100
-      maximum: 2000
   securitySchemes:
     bearerAuth:
       type: http

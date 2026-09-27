@@ -253,6 +253,54 @@ paths:
       - Guides
 components:
   schemas:
+    UnknownExternalSourceInput:
+      $ref: '#/components/schemas/UnknownExternalSourceLocatorInput'
+    PublishGuidesResponsePayload:
+      properties:
+        message:
+          type: string
+        publishedGuides:
+          items:
+            $ref: '#/components/schemas/GuideFileApiResource'
+          type: array
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+      required:
+      - message
+      - publishedGuides
+      - traceId
+      type: object
+      additionalProperties: false
+    GuideFileApiResource:
+      properties:
+        id:
+          $ref: '#/components/schemas/OrgGuideFileId'
+          description: The unique ID of the guide file.
+        filePath:
+          type: string
+          description: 'The file path of the guide file.
+
+            example: "guide.md"'
+      required:
+      - id
+      - filePath
+      type: object
+      additionalProperties: false
+    PublishGuidesRequestBody:
+      properties:
+        orgGuideFileIds:
+          items:
+            $ref: '#/components/schemas/OrgGuideFileId'
+          type: array
+          description: The IDs of the guides to publish if publishAllGuides is false.
+        publishAllDraftGuides:
+          type: boolean
+          description: Publish all draft guides (ignores the orgGuideFileIds field if true)
+      type: object
+      additionalProperties: false
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
     error.INTERNAL_SERVER_ERROR:
       type: object
       properties:
@@ -284,153 +332,18 @@ components:
         code: INTERNAL_SERVER_ERROR
         message: Internal server error
         issues: []
-    error.UNAUTHORIZED:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Authorization not provided
-        code:
-          type: string
-          description: The error code
-          example: UNAUTHORIZED
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Authorization not provided error (401)
-      description: The error information
-      example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
-        issues: []
-    error.NOT_FOUND:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Not found
-        code:
-          type: string
-          description: The error code
-          example: NOT_FOUND
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Not found error (404)
-      description: The error information
-      example:
-        code: NOT_FOUND
-        message: Not found
-        issues: []
-    PublishGuidesResponsePayload:
-      properties:
-        message:
-          type: string
-        publishedGuides:
-          items:
-            $ref: '#/components/schemas/GuideFileApiResource'
-          type: array
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-      required:
-      - message
-      - publishedGuides
-      - traceId
-      type: object
-      additionalProperties: false
-    TsoaErrorResponsePayload:
-      properties:
-        details:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        reason:
-          type: string
-      required:
-      - reason
-      type: object
-    UnknownExternalSourceInput:
-      $ref: '#/components/schemas/UnknownExternalSourceLocatorInput'
-    GuideFileApiResource:
+    UnknownExternalSourceLocatorInput:
       properties:
         id:
-          $ref: '#/components/schemas/OrgGuideFileId'
-          description: The unique ID of the guide file.
-        filePath:
           type: string
-          description: 'The file path of the guide file.
-
-            example: "guide.md"'
+          description: An optional identifier that can be used to distinguish between different unspecified external sources.
+        source:
+          type: string
+          enum:
+          - unknown
       required:
-      - id
-      - filePath
+      - source
       type: object
-      additionalProperties: false
-    ExternalSourceInput:
-      anyOf:
-      - $ref: '#/components/schemas/UnknownExternalSourceInput'
-      - $ref: '#/components/schemas/GithubExternalSourceInput'
-      description: 'A unique identifier for a file that is sourced from an external source.
-
-        This is used to track the where the guide file was authored from and where we expect updates to come from.'
-    error.BAD_REQUEST:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Invalid input data
-        code:
-          type: string
-          description: The error code
-          example: BAD_REQUEST
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Invalid input data error (400)
-      description: The error information
-      example:
-        code: BAD_REQUEST
-        message: Invalid input data
-        issues: []
-    TraceId:
-      type: string
-      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
     GithubExternalSourceLocatorWithMetadataInput:
       allOf:
       - $ref: '#/components/schemas/GithubExternalSourceLocatorInput'
@@ -447,11 +360,18 @@ components:
         - branch
         - commitHash
         type: object
-    OrgGuideFileId:
-      type: string
-      format: uuid
-      description: Unique ID for a guide file. This can be found by going into the menu of a guide file in the guide files side bar.
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    GithubExternalSourceInput:
+      allOf:
+      - $ref: '#/components/schemas/GithubExternalSourceLocatorWithMetadataInput'
+      - properties:
+          path:
+            type: string
+            description: 'The path to the guide file within the github repository
+
+              e.g. `guides/guide.md`'
+        required:
+        - path
+        type: object
     GithubExternalSourceLocatorInput:
       properties:
         repo:
@@ -472,73 +392,6 @@ components:
       - owner
       - source
       type: object
-    GithubExternalSourceInput:
-      allOf:
-      - $ref: '#/components/schemas/GithubExternalSourceLocatorWithMetadataInput'
-      - properties:
-          path:
-            type: string
-            description: 'The path to the guide file within the github repository
-
-              e.g. `guides/guide.md`'
-        required:
-        - path
-        type: object
-    error.FORBIDDEN:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Insufficient access
-        code:
-          type: string
-          description: The error code
-          example: FORBIDDEN
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Insufficient access error (403)
-      description: The error information
-      example:
-        code: FORBIDDEN
-        message: Insufficient access
-        issues: []
-    UnknownExternalSourceLocatorInput:
-      properties:
-        id:
-          type: string
-          description: An optional identifier that can be used to distinguish between different unspecified external sources.
-        source:
-          type: string
-          enum:
-          - unknown
-      required:
-      - source
-      type: object
-    PublishGuidesRequestBody:
-      properties:
-        orgGuideFileIds:
-          items:
-            $ref: '#/components/schemas/OrgGuideFileId'
-          type: array
-          description: The IDs of the guides to publish if publishAllGuides is false.
-        publishAllDraftGuides:
-          type: boolean
-          description: Publish all draft guides (ignores the orgGuideFileIds field if true)
-      type: object
-      additionalProperties: false
     UpsertGuideDraftRequestBody:
       properties:
         forceWrite:
@@ -601,6 +454,153 @@ components:
       - traceId
       type: object
       additionalProperties: false
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+    OrgGuideFileId:
+      type: string
+      format: uuid
+      description: Unique ID for a guide file. This can be found by going into the menu of a guide file in the guide files side bar.
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    ExternalSourceInput:
+      anyOf:
+      - $ref: '#/components/schemas/UnknownExternalSourceInput'
+      - $ref: '#/components/schemas/GithubExternalSourceInput'
+      description: 'A unique identifier for a file that is sourced from an external source.
+
+        This is used to track the where the guide file was authored from and where we expect updates to come from.'
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
   securitySchemes:
     bearerAuth:
       type: http

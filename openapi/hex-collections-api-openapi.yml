@@ -232,6 +232,30 @@ components:
       - sharing
       type: object
       additionalProperties: false
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+    ApiPaginationCursor:
+      type: string
+      description: 'A cursor string used with `before` and `after` parameters to paginate through a list
+
+        of items on the API.'
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
+    GroupId:
+      type: string
+      format: uuid
+      description: Unique ID for a group. This can be found from the groups page (in Settings).
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
     PageSize:
       type: integer
       format: int32
@@ -239,19 +263,6 @@ components:
       description: Number of results to fetch per page for paginated requests
       minimum: 1
       maximum: 100
-    ListCollectionsResponse:
-      properties:
-        values:
-          items:
-            $ref: '#/components/schemas/CollectionApiResource'
-          type: array
-        pagination:
-          $ref: '#/components/schemas/PaginationApiResource'
-      required:
-      - values
-      - pagination
-      type: object
-      additionalProperties: false
     CollectionApiResourceSharing:
       properties:
         users:
@@ -285,43 +296,33 @@ components:
           type: object
       type: object
       additionalProperties: false
-    UserId:
-      type: string
-      format: uuid
-      description: Unique ID for a user. This can be found from the users page (in Settings).
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    TsoaErrorResponsePayload:
-      properties:
-        details:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        reason:
-          type: string
-      required:
-      - reason
-      type: object
     CollectionAccess:
       $ref: '#/components/schemas/EnumValues_typeofCollectionAccess_'
-    GroupId:
+    ListCollectionsResponse:
+      properties:
+        values:
+          items:
+            $ref: '#/components/schemas/CollectionApiResource'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/PaginationApiResource'
+      required:
+      - values
+      - pagination
+      type: object
+      additionalProperties: false
+    Name:
       type: string
-      format: uuid
-      description: Unique ID for a group. This can be found from the groups page (in Settings).
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    TraceId:
-      type: string
-      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
-    EnumValues_typeofCollectionAccess_:
-      type: string
-    ApiPaginationCursor:
-      type: string
-      description: 'A cursor string used with `before` and `after` parameters to paginate through a list
-
-        of items on the API.'
+      minLength: 1
     CollectionId:
       type: string
       format: uuid
       description: Unique ID for a collection.
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    UserId:
+      type: string
+      format: uuid
+      description: Unique ID for a user. This can be found from the users page (in Settings).
       pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
     PaginationApiResource:
       properties:
@@ -338,13 +339,12 @@ components:
       additionalProperties: false
     ListCollectionsSortByEnum:
       $ref: '#/components/schemas/EnumValues_typeofListCollectionsSortByEnum_'
-    Name:
-      type: string
-      minLength: 1
     EnumValues_typeofListCollectionsSortByEnum_:
       type: string
       enum:
       - NAME
+    EnumValues_typeofCollectionAccess_:
+      type: string
   securitySchemes:
     bearerAuth:
       type: http
