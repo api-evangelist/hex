@@ -389,17 +389,17 @@ paths:
       - Users
 components:
   schemas:
-    error.INTERNAL_SERVER_ERROR:
+    error.BAD_REQUEST:
       type: object
       properties:
         message:
           type: string
           description: The error message
-          example: Internal server error
+          example: Invalid input data
         code:
           type: string
           description: The error code
-          example: INTERNAL_SERVER_ERROR
+          example: BAD_REQUEST
         issues:
           type: array
           items:
@@ -414,11 +414,11 @@ components:
       required:
       - message
       - code
-      title: Internal server error error (500)
+      title: Invalid input data error (400)
       description: The error information
       example:
-        code: INTERNAL_SERVER_ERROR
-        message: Internal server error
+        code: BAD_REQUEST
+        message: Invalid input data
         issues: []
     error.NOT_FOUND:
       type: object
@@ -451,37 +451,6 @@ components:
         code: NOT_FOUND
         message: Not found
         issues: []
-    error.FORBIDDEN:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Insufficient access
-        code:
-          type: string
-          description: The error code
-          example: FORBIDDEN
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Insufficient access error (403)
-      description: The error information
-      example:
-        code: FORBIDDEN
-        message: Insufficient access
-        issues: []
     error.UNAUTHORIZED:
       type: object
       properties:
@@ -513,17 +482,17 @@ components:
         code: UNAUTHORIZED
         message: Authorization not provided
         issues: []
-    error.BAD_REQUEST:
+    error.FORBIDDEN:
       type: object
       properties:
         message:
           type: string
           description: The error message
-          example: Invalid input data
+          example: Insufficient access
         code:
           type: string
           description: The error code
-          example: BAD_REQUEST
+          example: FORBIDDEN
         issues:
           type: array
           items:
@@ -538,11 +507,42 @@ components:
       required:
       - message
       - code
-      title: Invalid input data error (400)
+      title: Insufficient access error (403)
       description: The error information
       example:
-        code: BAD_REQUEST
-        message: Invalid input data
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
         issues: []
   securitySchemes:
     bearerAuth:

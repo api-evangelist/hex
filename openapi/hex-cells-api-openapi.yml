@@ -1068,36 +1068,17 @@ paths:
       - Cells
 components:
   schemas:
-    CellId:
-      type: string
-      format: uuid
-      description: Unique ID for a cell. This can be found by going into the menu of a cell in the notebook.
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    TraceId:
-      type: string
-      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
-    TsoaErrorResponsePayload:
-      properties:
-        details:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        reason:
-          type: string
-      required:
-      - reason
-      type: object
-    error.INTERNAL_SERVER_ERROR:
+    error.BAD_REQUEST:
       type: object
       properties:
         message:
           type: string
           description: The error message
-          example: Internal server error
+          example: Invalid input data
         code:
           type: string
           description: The error code
-          example: INTERNAL_SERVER_ERROR
+          example: BAD_REQUEST
         issues:
           type: array
           items:
@@ -1112,12 +1093,23 @@ components:
       required:
       - message
       - code
-      title: Internal server error error (500)
+      title: Invalid input data error (400)
       description: The error information
       example:
-        code: INTERNAL_SERVER_ERROR
-        message: Internal server error
+        code: BAD_REQUEST
+        message: Invalid input data
         issues: []
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
     error.NOT_FOUND:
       type: object
       properties:
@@ -1149,12 +1141,42 @@ components:
         code: NOT_FOUND
         message: Not found
         issues: []
-    ChartImageDimension:
-      type: integer
-      format: int32
-      description: Chart image total dimension (width or height) in pixels.
-      minimum: 100
-      maximum: 2000
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    CellId:
+      type: string
+      format: uuid
+      description: Unique ID for a cell. This can be found by going into the menu of a cell in the notebook.
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
     error.FORBIDDEN:
       type: object
       properties:
@@ -1200,17 +1222,26 @@ components:
       - mimeType
       type: object
       additionalProperties: false
-    error.UNAUTHORIZED:
+    ChartImageDimension:
+      type: integer
+      format: int32
+      description: Chart image total dimension (width or height) in pixels.
+      minimum: 100
+      maximum: 2000
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+    error.INTERNAL_SERVER_ERROR:
       type: object
       properties:
         message:
           type: string
           description: The error message
-          example: Authorization not provided
+          example: Internal server error
         code:
           type: string
           description: The error code
-          example: UNAUTHORIZED
+          example: INTERNAL_SERVER_ERROR
         issues:
           type: array
           items:
@@ -1225,42 +1256,11 @@ components:
       required:
       - message
       - code
-      title: Authorization not provided error (401)
+      title: Internal server error error (500)
       description: The error information
       example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
-        issues: []
-    error.BAD_REQUEST:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Invalid input data
-        code:
-          type: string
-          description: The error code
-          example: BAD_REQUEST
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Invalid input data error (400)
-      description: The error information
-      example:
-        code: BAD_REQUEST
-        message: Invalid input data
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
         issues: []
   securitySchemes:
     bearerAuth:
