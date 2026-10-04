@@ -1068,79 +1068,20 @@ paths:
       - Cells
 components:
   schemas:
-    error.BAD_REQUEST:
-      type: object
+    ChartImageResponsePayload:
       properties:
-        message:
+        cellId:
+          $ref: '#/components/schemas/CellId'
+        imageBase64:
           type: string
-          description: The error message
-          example: Invalid input data
-        code:
-          type: string
-          description: The error code
-          example: BAD_REQUEST
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Invalid input data error (400)
-      description: The error information
-      example:
-        code: BAD_REQUEST
-        message: Invalid input data
-        issues: []
-    TsoaErrorResponsePayload:
-      properties:
-        details:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        reason:
+        mimeType:
           type: string
       required:
-      - reason
+      - cellId
+      - imageBase64
+      - mimeType
       type: object
-    error.NOT_FOUND:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Not found
-        code:
-          type: string
-          description: The error code
-          example: NOT_FOUND
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Not found error (404)
-      description: The error information
-      example:
-        code: NOT_FOUND
-        message: Not found
-        issues: []
+      additionalProperties: false
     error.UNAUTHORIZED:
       type: object
       properties:
@@ -1172,11 +1113,6 @@ components:
         code: UNAUTHORIZED
         message: Authorization not provided
         issues: []
-    CellId:
-      type: string
-      format: uuid
-      description: Unique ID for a cell. This can be found by going into the menu of a cell in the notebook.
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
     error.FORBIDDEN:
       type: object
       properties:
@@ -1208,26 +1144,23 @@ components:
         code: FORBIDDEN
         message: Insufficient access
         issues: []
-    ChartImageResponsePayload:
-      properties:
-        cellId:
-          $ref: '#/components/schemas/CellId'
-        imageBase64:
-          type: string
-        mimeType:
-          type: string
-      required:
-      - cellId
-      - imageBase64
-      - mimeType
-      type: object
-      additionalProperties: false
     ChartImageDimension:
       type: integer
       format: int32
       description: Chart image total dimension (width or height) in pixels.
       minimum: 100
       maximum: 2000
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
     TraceId:
       type: string
       description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
@@ -1261,6 +1194,73 @@ components:
       example:
         code: INTERNAL_SERVER_ERROR
         message: Internal server error
+        issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+    CellId:
+      type: string
+      format: uuid
+      description: Unique ID for a cell. This can be found by going into the menu of a cell in the notebook.
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
         issues: []
   securitySchemes:
     bearerAuth:

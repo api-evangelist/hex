@@ -158,8 +158,90 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    Pick_TsoaErrorResponsePayload.Exclude_keyofTsoaErrorResponsePayload.details__:
+      properties:
+        reason:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+      required:
+      - reason
+      type: object
+      description: From T, pick a set of properties whose keys are in the union K
+    SemanticProjectsSyncResponsePayload:
+      properties:
+        traceId:
+          type: string
+        contents:
+          items:
+            type: string
+          type: array
+        warnings:
+          items:
+            type: string
+          type: array
+        skipped:
+          properties: {}
+          additionalProperties: {}
+          type: object
+        problems:
+          items:
+            $ref: '#/components/schemas/HexSLProblemWithDisplay'
+          type: array
+        debug:
+          properties:
+            metricflowModelSchemas:
+              $ref: '#/components/schemas/MetricflowModelSchemas'
+          type: object
+      required:
+      - traceId
+      - contents
+      type: object
+      additionalProperties: false
+    UpdateStatusErrorDetail:
+      description: Details about a failed update
+      properties:
+        name:
+          type: string
+          description: The name of the dataset or view
+        type:
+          type: string
+          enum:
+          - DATASET
+          - VIEW
+          description: The type of object
+        reason:
+          type: string
+          enum:
+          - not_found
+          - invalid_status
+          description: The reason for the failure
+        value:
+          type: string
+          description: The invalid value (for invalid_status errors)
+      required:
+      - name
+      - type
+      - reason
+      type: object
+      additionalProperties: false
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
     MetricflowModelSchemas:
       $ref: '#/components/schemas/Record_string.Record_string.HexSLTypes.DataType__'
+    Record_string.Record_string.HexSLTypes.DataType__:
+      properties: {}
+      type: object
+      description: Construct a type with a set of properties K of type T
     UpdateSemanticProjectResponse:
       description: Response body for successful status updates
       properties:
@@ -201,92 +283,29 @@ components:
       - updated
       type: object
       additionalProperties: false
-    TsoaErrorResponsePayload:
-      properties:
-        details:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        reason:
-          type: string
-      required:
-      - reason
-      type: object
-    ProblemKeyPath:
-      items:
-        anyOf:
-        - type: string
-        - type: number
-          format: double
-      type: array
-    SemanticProjectId:
+    TraceId:
       type: string
-      format: uuid
-      description: 'Unique ID for a Hex semantic project. This can be found from the semantic
-
-        projects admin panel (in Settings).'
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    SemanticProjectsSyncResponsePayload:
-      properties:
-        traceId:
-          type: string
-        contents:
-          items:
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+    ProblemSeverity:
+      type: string
+      enum:
+      - fatal
+      - error
+      - warning
+    ProblemMessage:
+      type: string
+    Omit_TsoaErrorResponsePayload.details_:
+      $ref: '#/components/schemas/Pick_TsoaErrorResponsePayload.Exclude_keyofTsoaErrorResponsePayload.details__'
+      description: Construct a type with the properties of T except for those in type K.
+    HexSLProblemWithDisplay:
+      allOf:
+      - $ref: '#/components/schemas/HexSLTypes.PublicProblem'
+      - properties:
+          display:
             type: string
-          type: array
-        warnings:
-          items:
-            type: string
-          type: array
-        skipped:
-          properties: {}
-          additionalProperties: {}
-          type: object
-        problems:
-          items:
-            $ref: '#/components/schemas/HexSLProblemWithDisplay'
-          type: array
-        debug:
-          properties:
-            metricflowModelSchemas:
-              $ref: '#/components/schemas/MetricflowModelSchemas'
-          type: object
-      required:
-      - traceId
-      - contents
-      type: object
-      additionalProperties: false
-    Record_string.Record_string.HexSLTypes.DataType__:
-      properties: {}
-      type: object
-      description: Construct a type with a set of properties K of type T
-    UpdateStatusErrorDetail:
-      description: Details about a failed update
-      properties:
-        name:
-          type: string
-          description: The name of the dataset or view
-        type:
-          type: string
-          enum:
-          - DATASET
-          - VIEW
-          description: The type of object
-        reason:
-          type: string
-          enum:
-          - not_found
-          - invalid_status
-          description: The reason for the failure
-        value:
-          type: string
-          description: The invalid value (for invalid_status errors)
-      required:
-      - name
-      - type
-      - reason
-      type: object
-      additionalProperties: false
+        required:
+        - display
+        type: object
     UpdateSemanticProjectRequest:
       description: 'Request body for updating semantic datasets and views
 
@@ -301,50 +320,6 @@ components:
       - updates
       type: object
       additionalProperties: false
-    HexSLProblemWithDisplay:
-      allOf:
-      - $ref: '#/components/schemas/HexSLTypes.PublicProblem'
-      - properties:
-          display:
-            type: string
-        required:
-        - display
-        type: object
-    Omit_TsoaErrorResponsePayload.details_:
-      $ref: '#/components/schemas/Pick_TsoaErrorResponsePayload.Exclude_keyofTsoaErrorResponsePayload.details__'
-      description: Construct a type with the properties of T except for those in type K.
-    HexSLTypes.PublicProblem:
-      description: A problem encountered during the import of a public HexSL project.
-      properties:
-        severity:
-          $ref: '#/components/schemas/ProblemSeverity'
-        message:
-          $ref: '#/components/schemas/ProblemMessage'
-        cause_paths:
-          items:
-            $ref: '#/components/schemas/ProblemKeyPath'
-          type: array
-        impact_paths:
-          items:
-            $ref: '#/components/schemas/ProblemKeyPath'
-          type: array
-        validated_by_json_schema:
-          type: boolean
-      required:
-      - severity
-      - message
-      - cause_paths
-      - impact_paths
-      type: object
-      additionalProperties: false
-    ProblemSeverity:
-      type: string
-      enum:
-      - fatal
-      - error
-      - warning
-    ProblemMessage:
-      type: string
     SemanticObjectUpdate:
       description: 'A single update for a semantic object (dataset or view)
 
@@ -370,19 +345,44 @@ components:
       - status
       type: object
       additionalProperties: false
-    TraceId:
-      type: string
-      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
-    Pick_TsoaErrorResponsePayload.Exclude_keyofTsoaErrorResponsePayload.details__:
+    HexSLTypes.PublicProblem:
+      description: A problem encountered during the import of a public HexSL project.
       properties:
-        reason:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
+        severity:
+          $ref: '#/components/schemas/ProblemSeverity'
+        message:
+          $ref: '#/components/schemas/ProblemMessage'
+        cause_paths:
+          items:
+            $ref: '#/components/schemas/ProblemKeyPath'
+          type: array
+        impact_paths:
+          items:
+            $ref: '#/components/schemas/ProblemKeyPath'
+          type: array
+        validated_by_json_schema:
+          type: boolean
       required:
-      - reason
+      - severity
+      - message
+      - cause_paths
+      - impact_paths
       type: object
-      description: From T, pick a set of properties whose keys are in the union K
+      additionalProperties: false
+    ProblemKeyPath:
+      items:
+        anyOf:
+        - type: string
+        - type: number
+          format: double
+      type: array
+    SemanticProjectId:
+      type: string
+      format: uuid
+      description: 'Unique ID for a Hex semantic project. This can be found from the semantic
+
+        projects admin panel (in Settings).'
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
   securitySchemes:
     bearerAuth:
       type: http
