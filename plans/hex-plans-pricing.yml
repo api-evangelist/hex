@@ -1,0 +1,91 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://hex.tech/pricing/
+sources:
+- https://hex.tech/pricing/
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T104522
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: per-seat
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-07'
+  managed_tier: Professional
+published: true
+note: Per-seat tiers plus pay-as-you-go compute profiles billed per minute; AI credits grants per plan.
+  Enterprise is Custom.
+plan_count: 10
+currency: USD
+plans:
+- name: Community
+  price_text: Free
+  period: month
+  unit: per user
+  included_quota: Hex agent trial, connect any data source, all cell types, Small compute, up to 5 published
+    apps, 7-day version history
+- name: Professional
+  price_text: $36 per Editor / month
+  price: 36
+  currency: USD
+  period: month
+  unit: per Editor
+  included_quota: Hex agent, Standard credits, up to 5 published apps, 30-day version history, Medium
+    compute
+- name: Team
+  price_text: $75 per Editor / month
+  price: 75
+  currency: USD
+  period: month
+  unit: per Editor
+  included_quota: Extended credits, unlimited published apps, unlimited version history, scheduled runs
+    and alerts, advanced compute add-ons
+- name: Enterprise
+  price_text: Custom
+  period: none
+  included_quota: Everything in Team plus Explorer seat add-on, audit logs, Premium credits, OIDC SSO,
+    BYOK, dedicated support
+- name: Large compute profile
+  price_text: $0.32
+  price: 0.32
+  currency: USD
+  period: per-use
+  unit: per hour (16 GB, 2 CPU), billed per minute
+- name: Extra large compute profile
+  price_text: $0.65
+  price: 0.65
+  currency: USD
+  period: per-use
+  unit: per hour (32 GB, 4 CPU)
+- name: 2XL compute profile
+  price_text: $1.29
+  price: 1.29
+  currency: USD
+  period: per-use
+  unit: per hour (64 GB, 8 CPU)
+- name: 4XL compute profile
+  price_text: $2.58
+  price: 2.58
+  currency: USD
+  period: per-use
+  unit: per hour (128 GB, 16 CPU)
+- name: A10G GPU
+  price_text: $4.06
+  price: 4.06
+  currency: USD
+  period: per-use
+  unit: per hour (27 GB, 6 CPU)
+- name: L4 GPU
+  price_text: $2.93
+  price: 2.93
+  currency: USD
+  period: per-use
+  unit: per hour (27 GB, 6 CPU)
+rate_limit_statements:
+- Up to 5 published apps
+- Free trials are limited to Medium compute.
+- Up to 3 shared collections
+- Up to 3 shared components
