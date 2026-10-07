@@ -311,6 +311,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Plans
+  url: plans/hex-plans-pricing.yml
 - type: CapabilityMap
   url: capabilities/hex-capability-edges.yml
   name: Hex Business Capability Map
