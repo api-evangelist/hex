@@ -7,14 +7,17 @@ front_door_ai:
   probed_at: '2026-09-17'
   host: www.hex.tech
   final_host: hex.tech
-  ownership: inherited
+  ownership: own
   owner: hex
   shares_host_with: null
-  inherited_from: hex.tech
+  inherited_from: null
+  alias_of: hex.tech
   verdict: scored
-  score: null
+  score: 46
+  band: 6
+  band_label: dominant
   host_score: 46
-  density: null
+  density: 12.05
   words: 3819
   tiers:
     agentic: 13

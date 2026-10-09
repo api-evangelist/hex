@@ -27,3 +27,16 @@ deployment:
   probe: gated
   checked: '2026-08-12'
   source: catalog MCP census
+rfc9728:
+  endpoint: https://app.hex.tech/mcp
+  metadata_url: https://app.hex.tech/.well-known/oauth-protected-resource
+  discovered_via: WWW-Authenticate resource_metadata on an anonymous POST initialize
+  fetched: '2026-09-25'
+  http_status: 200
+  content_type: application/json
+  document:
+    resource: https://app.hex.tech/mcp
+    authorization_servers:
+    - https://auth.app.hex.tech
+    bearer_methods_supported:
+    - header
