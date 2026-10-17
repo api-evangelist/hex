@@ -253,83 +253,8 @@ paths:
       - Guides
 components:
   schemas:
-    error.UNAUTHORIZED:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Authorization not provided
-        code:
-          type: string
-          description: The error code
-          example: UNAUTHORIZED
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Authorization not provided error (401)
-      description: The error information
-      example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
-        issues: []
-    TraceId:
-      type: string
-      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
-    error.NOT_FOUND:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Not found
-        code:
-          type: string
-          description: The error code
-          example: NOT_FOUND
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Not found error (404)
-      description: The error information
-      example:
-        code: NOT_FOUND
-        message: Not found
-        issues: []
-    UnknownExternalSourceLocatorInput:
-      properties:
-        id:
-          type: string
-          description: An optional identifier that can be used to distinguish between different unspecified external sources.
-        source:
-          type: string
-          enum:
-          - unknown
-      required:
-      - source
-      type: object
+    UnknownExternalSourceInput:
+      $ref: '#/components/schemas/UnknownExternalSourceLocatorInput'
     error.FORBIDDEN:
       type: object
       properties:
@@ -361,11 +286,146 @@ components:
         code: FORBIDDEN
         message: Insufficient access
         issues: []
+    ExternalSourceInput:
+      anyOf:
+      - $ref: '#/components/schemas/UnknownExternalSourceInput'
+      - $ref: '#/components/schemas/GithubExternalSourceInput'
+      description: 'A unique identifier for a file that is sourced from an external source.
+
+        This is used to track the where the guide file was authored from and where we expect updates to come from.'
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
     OrgGuideFileId:
       type: string
       format: uuid
       description: Unique ID for a guide file. This can be found by going into the menu of a guide file in the guide files side bar.
       pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    PublishGuidesResponsePayload:
+      properties:
+        message:
+          type: string
+        publishedGuides:
+          items:
+            $ref: '#/components/schemas/GuideFileApiResource'
+          type: array
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+      required:
+      - message
+      - publishedGuides
+      - traceId
+      type: object
+      additionalProperties: false
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+    GuideFileApiResource:
+      properties:
+        id:
+          $ref: '#/components/schemas/OrgGuideFileId'
+          description: The unique ID of the guide file.
+        filePath:
+          type: string
+          description: 'The file path of the guide file.
+
+            example: "guide.md"'
+      required:
+      - id
+      - filePath
+      type: object
+      additionalProperties: false
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    PublishGuidesRequestBody:
+      properties:
+        orgGuideFileIds:
+          items:
+            $ref: '#/components/schemas/OrgGuideFileId'
+          type: array
+          description: The IDs of the guides to publish if publishAllGuides is false.
+        publishAllDraftGuides:
+          type: boolean
+          description: Publish all draft guides (ignores the orgGuideFileIds field if true)
+      type: object
+      additionalProperties: false
+    GithubExternalSourceLocatorInput:
+      properties:
+        repo:
+          type: string
+          description: The name of the github repository.
+        owner:
+          type: string
+          description: The owner of the github repository.
+        base:
+          type: string
+          description: The base URL of the github instance. This is usually `https://github.com` (default) unless uploaded from a self-hosted github instance.
+        source:
+          type: string
+          enum:
+          - github
+      required:
+      - repo
+      - owner
+      - source
+      type: object
     UpsertGuideDraftRequestBody:
       properties:
         forceWrite:
@@ -402,44 +462,18 @@ components:
       - files
       type: object
       additionalProperties: false
-    ExternalSourceInput:
-      anyOf:
-      - $ref: '#/components/schemas/UnknownExternalSourceInput'
-      - $ref: '#/components/schemas/GithubExternalSourceInput'
-      description: 'A unique identifier for a file that is sourced from an external source.
-
-        This is used to track the where the guide file was authored from and where we expect updates to come from.'
-    error.INTERNAL_SERVER_ERROR:
-      type: object
+    UnknownExternalSourceLocatorInput:
       properties:
-        message:
+        id:
           type: string
-          description: The error message
-          example: Internal server error
-        code:
+          description: An optional identifier that can be used to distinguish between different unspecified external sources.
+        source:
           type: string
-          description: The error code
-          example: INTERNAL_SERVER_ERROR
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
+          enum:
+          - unknown
       required:
-      - message
-      - code
-      title: Internal server error error (500)
-      description: The error information
-      example:
-        code: INTERNAL_SERVER_ERROR
-        message: Internal server error
-        issues: []
+      - source
+      type: object
     error.BAD_REQUEST:
       type: object
       properties:
@@ -471,6 +505,60 @@ components:
         code: BAD_REQUEST
         message: Invalid input data
         issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
+    GithubExternalSourceInput:
+      allOf:
+      - $ref: '#/components/schemas/GithubExternalSourceLocatorWithMetadataInput'
+      - properties:
+          path:
+            type: string
+            description: 'The path to the guide file within the github repository
+
+              e.g. `guides/guide.md`'
+        required:
+        - path
+        type: object
     UpsertGuideDraftResponsePayload:
       properties:
         files:
@@ -497,44 +585,6 @@ components:
       - traceId
       type: object
       additionalProperties: false
-    PublishGuidesRequestBody:
-      properties:
-        orgGuideFileIds:
-          items:
-            $ref: '#/components/schemas/OrgGuideFileId'
-          type: array
-          description: The IDs of the guides to publish if publishAllGuides is false.
-        publishAllDraftGuides:
-          type: boolean
-          description: Publish all draft guides (ignores the orgGuideFileIds field if true)
-      type: object
-      additionalProperties: false
-    TsoaErrorResponsePayload:
-      properties:
-        details:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        reason:
-          type: string
-      required:
-      - reason
-      type: object
-    GuideFileApiResource:
-      properties:
-        id:
-          $ref: '#/components/schemas/OrgGuideFileId'
-          description: The unique ID of the guide file.
-        filePath:
-          type: string
-          description: 'The file path of the guide file.
-
-            example: "guide.md"'
-      required:
-      - id
-      - filePath
-      type: object
-      additionalProperties: false
     GithubExternalSourceLocatorWithMetadataInput:
       allOf:
       - $ref: '#/components/schemas/GithubExternalSourceLocatorInput'
@@ -550,56 +600,6 @@ components:
         required:
         - branch
         - commitHash
-        type: object
-    GithubExternalSourceLocatorInput:
-      properties:
-        repo:
-          type: string
-          description: The name of the github repository.
-        owner:
-          type: string
-          description: The owner of the github repository.
-        base:
-          type: string
-          description: The base URL of the github instance. This is usually `https://github.com` (default) unless uploaded from a self-hosted github instance.
-        source:
-          type: string
-          enum:
-          - github
-      required:
-      - repo
-      - owner
-      - source
-      type: object
-    PublishGuidesResponsePayload:
-      properties:
-        message:
-          type: string
-        publishedGuides:
-          items:
-            $ref: '#/components/schemas/GuideFileApiResource'
-          type: array
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-      required:
-      - message
-      - publishedGuides
-      - traceId
-      type: object
-      additionalProperties: false
-    UnknownExternalSourceInput:
-      $ref: '#/components/schemas/UnknownExternalSourceLocatorInput'
-    GithubExternalSourceInput:
-      allOf:
-      - $ref: '#/components/schemas/GithubExternalSourceLocatorWithMetadataInput'
-      - properties:
-          path:
-            type: string
-            description: 'The path to the guide file within the github repository
-
-              e.g. `guides/guide.md`'
-        required:
-        - path
         type: object
   securitySchemes:
     bearerAuth:

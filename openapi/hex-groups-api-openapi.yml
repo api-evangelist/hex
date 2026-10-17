@@ -242,6 +242,30 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    EnumValues_typeofListGroupsSortByEnum_:
+      type: string
+      enum:
+      - CREATED_AT
+      - NAME
+    Name:
+      type: string
+      minLength: 1
+    UserId:
+      type: string
+      format: uuid
+      description: Unique ID for a user. This can be found from the users page (in Settings).
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
     GroupMembers:
       properties:
         users:
@@ -256,6 +280,36 @@ components:
           maxItems: 100
       type: object
       additionalProperties: false
+    SortDirectionEnum:
+      $ref: '#/components/schemas/EnumValues_typeofSortDirectionEnum_'
+    ApiPaginationCursor:
+      type: string
+      description: 'A cursor string used with `before` and `after` parameters to paginate through a list
+
+        of items on the API.'
+    EnumValues_typeofSortDirectionEnum_:
+      type: string
+      enum:
+      - DESC
+      - ASC
+    ListGroupsResponse:
+      properties:
+        values:
+          items:
+            $ref: '#/components/schemas/GroupApiResource'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/PaginationApiResource'
+      required:
+      - values
+      - pagination
+      type: object
+      additionalProperties: false
+    GroupId:
+      type: string
+      format: uuid
+      description: Unique ID for a group. This can be found from the groups page (in Settings).
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
     GroupApiResource:
       properties:
         id:
@@ -268,6 +322,34 @@ components:
       - id
       - name
       - createdAt
+      type: object
+      additionalProperties: false
+    Timestamp:
+      type: string
+      format: timestamp
+      description: An ISO 8601 timestamp with timezone like 1970-01-01T00:00:00Z.
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+    LargerPageSize:
+      type: integer
+      format: int32
+      default: '25'
+      description: Number of results to fetch per page for paginated requests
+      minimum: 1
+      maximum: 500
+    CreateGroupResponse:
+      properties:
+        id:
+          $ref: '#/components/schemas/GroupId'
+        name:
+          $ref: '#/components/schemas/Name'
+        members:
+          $ref: '#/components/schemas/GroupMembers'
+      required:
+      - id
+      - name
+      - members
       type: object
       additionalProperties: false
     PaginationApiResource:
@@ -283,90 +365,8 @@ components:
       - before
       type: object
       additionalProperties: false
-    TsoaErrorResponsePayload:
-      properties:
-        details:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        reason:
-          type: string
-      required:
-      - reason
-      type: object
-    EnumValues_typeofSortDirectionEnum_:
-      type: string
-      enum:
-      - DESC
-      - ASC
-    SortDirectionEnum:
-      $ref: '#/components/schemas/EnumValues_typeofSortDirectionEnum_'
-    CreateGroupResponse:
-      properties:
-        id:
-          $ref: '#/components/schemas/GroupId'
-        name:
-          $ref: '#/components/schemas/Name'
-        members:
-          $ref: '#/components/schemas/GroupMembers'
-      required:
-      - id
-      - name
-      - members
-      type: object
-      additionalProperties: false
-    TraceId:
-      type: string
-      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
-    GroupId:
-      type: string
-      format: uuid
-      description: Unique ID for a group. This can be found from the groups page (in Settings).
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    ListGroupsResponse:
-      properties:
-        values:
-          items:
-            $ref: '#/components/schemas/GroupApiResource'
-          type: array
-        pagination:
-          $ref: '#/components/schemas/PaginationApiResource'
-      required:
-      - values
-      - pagination
-      type: object
-      additionalProperties: false
-    ApiPaginationCursor:
-      type: string
-      description: 'A cursor string used with `before` and `after` parameters to paginate through a list
-
-        of items on the API.'
-    EnumValues_typeofListGroupsSortByEnum_:
-      type: string
-      enum:
-      - CREATED_AT
-      - NAME
-    Name:
-      type: string
-      minLength: 1
-    LargerPageSize:
-      type: integer
-      format: int32
-      default: '25'
-      description: Number of results to fetch per page for paginated requests
-      minimum: 1
-      maximum: 500
-    UserId:
-      type: string
-      format: uuid
-      description: Unique ID for a user. This can be found from the users page (in Settings).
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
     ListGroupsSortByEnum:
       $ref: '#/components/schemas/EnumValues_typeofListGroupsSortByEnum_'
-    Timestamp:
-      type: string
-      format: timestamp
-      description: An ISO 8601 timestamp with timezone like 1970-01-01T00:00:00Z.
   securitySchemes:
     bearerAuth:
       type: http
