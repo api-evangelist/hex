@@ -54,3 +54,42 @@
     builder: Pipedream repo (component)
   status: not-a-workflow
   arazzo: null
+- slug: hex-fivetran
+  label: Fivetran
+  partner: fivetran
+  partner_name: Fivetran
+  type: marketplace
+  marketplace: fivetran-connectors
+  channel: elt-connector
+  evidence: https://fivetran.com/docs/connectors/applications/hex
+  source: edge
+  relationship: ipaas-bridge
+  contract_reference:
+    register: Fivetran connectors (fivetran.com/docs/connectors, docs-sitemap.xml + Partner-Built program)
+    spec_file: null
+    role: elt-connector:fivetran
+    registered_name: Hex
+    matched_domain: hex.tech
+    matched_by: domain
+    detected_by: sweep-data-integration.py
+    detected: '2026-10-18'
+    signal_note: one edge per (provider, platform); connectors, streams, packages and usage are context, never read
+    connector_paths:
+    - connectors/applications/hex
+    vendor_link: https://hex.tech/
+    builder: Fivetran
+  status: pending-generation
+  arazzo: null
+- slug: hex-slack-own
+  label: Slack (own)
+  partner: slack
+  partner_name: Slack (own)
+  category: Slack app
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://slack.com/marketplace/A03ASJHQEHZ-hex
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
