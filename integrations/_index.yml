@@ -78,7 +78,7 @@
     - connectors/applications/hex
     vendor_link: https://hex.tech/
     builder: Fivetran
-  status: pending-generation
+  status: not-a-workflow
   arazzo: null
 - slug: hex-slack-own
   label: Slack (own)
