@@ -13,95 +13,6 @@ security:
 tags:
 - name: Cells
 paths:
-  /v1/cells/{cellId}/image:
-    get:
-      operationId: GetChartImageFromLogic
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChartImageResponsePayload'
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '403':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '404':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '422':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '500':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-      description: 'Get the rendered PNG image of a chart cell from the current notebook session by cellId.
-
-        The "cellId" path parameter should be the cell''s ID (scoped to a
-
-        specific version), as opposed to its staticId (which remains stable across versions).
-
-
-        Returns a JSON object containing the base64-encoded PNG image of the chart cell
-
-        as it currently appears in the Logic view, along with the cell ID and MIME type.
-
-        The cell must have been executed and must not be in an error state.
-
-        Only chart-type cells are supported.
-
-
-        The optional `width` and `height` query params set the output image size in pixels.
-
-        Both must be provided to apply, and must be between 100 and 2000.
-
-        The optional `includeTitle` query param includes the chart title in the image when true.
-
-
-        Rate limit: 20 requests per minute.'
-      parameters:
-      - in: path
-        name: cellId
-        required: true
-        schema:
-          $ref: '#/components/schemas/CellId'
-      - in: query
-        name: width
-        required: false
-        schema:
-          $ref: '#/components/schemas/ChartImageDimension'
-      - in: query
-        name: height
-        required: false
-        schema:
-          $ref: '#/components/schemas/ChartImageDimension'
-      - in: query
-        name: includeTitle
-        required: false
-        schema:
-          type: boolean
-      tags:
-      - Cells
-      summary: Get chart image from logic
-      x-summary-source: derived
   /v1/cells/{cellId}:
     get:
       operationId: GetCell
@@ -111,11 +22,9 @@ paths:
 
         This endpoint is subject to the following rate limits:
 
-        - `hex-api`: Default rate limit group for the Hex API
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
 
-        - Max requests per minute may vary (default: 30)
-
-        - Max requests per hour may vary (default: 1800)'
+        - Max 30 requests per minute'
       parameters:
       - in: path
         name: cellId
@@ -252,11 +161,9 @@ paths:
 
         This endpoint is subject to the following rate limits:
 
-        - `hex-api`: Default rate limit group for the Hex API
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
 
-        - Max requests per minute may vary (default: 30)
-
-        - Max requests per hour may vary (default: 1800)'
+        - Max 30 requests per minute'
       parameters:
       - in: path
         name: cellId
@@ -432,11 +339,9 @@ paths:
 
         This endpoint is subject to the following rate limits:
 
-        - `hex-api`: Default rate limit group for the Hex API
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
 
-        - Max requests per minute may vary (default: 30)
-
-        - Max requests per hour may vary (default: 1800)'
+        - Max 30 requests per minute'
       parameters:
       - in: path
         name: cellId
@@ -601,6 +506,7 @@ paths:
                               type:
                               - string
                               - 'null'
+                            description: Row keyed by column name. Values are serialized as strings regardless of the declared column type, for lossless transport.
                       required:
                       - type
                       - rowLimit
@@ -672,11 +578,9 @@ paths:
 
         This endpoint is subject to the following rate limits:
 
-        - `hex-api`: Default rate limit group for the Hex API
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
 
-        - Max requests per minute may vary (default: 30)
-
-        - Max requests per hour may vary (default: 1800)'
+        - Max 30 requests per minute'
       requestBody:
         required: true
         content:
@@ -886,11 +790,9 @@ paths:
 
         This endpoint is subject to the following rate limits:
 
-        - `hex-api`: Default rate limit group for the Hex API
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
 
-        - Max requests per minute may vary (default: 30)
-
-        - Max requests per hour may vary (default: 1800)'
+        - Max 30 requests per minute'
       parameters:
       - in: query
         name: projectId
@@ -1016,21 +918,7 @@ paths:
                       - contents
                       - projectId
                   pagination:
-                    type: object
-                    properties:
-                      before:
-                        type:
-                        - string
-                        - 'null'
-                        default: null
-                      after:
-                        type:
-                        - string
-                        - 'null'
-                        default: null
-                    required:
-                    - before
-                    - after
+                    $ref: '#/components/schemas/Pagination'
                 required:
                 - values
                 - pagination
@@ -1066,8 +954,152 @@ paths:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
       tags:
       - Cells
+  /v1/cells/{cellId}/image:
+    get:
+      operationId: GetChartImageFromLogic
+      summary: GetChartImageFromLogic
+      description: 'Get the rendered PNG image of a chart cell from the project''s current notebook (draft) session.
+
+        The cell must have been executed and must not be in an error state.
+
+        Only chart-type cells are supported.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-chart-image`: Rate limits for rendering chart images
+
+        - Max 20 requests per minute'
+      parameters:
+      - in: path
+        name: cellId
+        description: The id of the chart cell (scoped to a specific version); a staticCellId is also accepted and resolved within the draft version.
+        schema:
+          type: string
+          description: The id of the chart cell (scoped to a specific version); a staticCellId is also accepted and resolved within the draft version.
+        required: true
+      - in: query
+        name: width
+        description: Output image width in pixels, between 100 and 2000. Both width and height must be provided to apply.
+        schema:
+          type: integer
+          minimum: 100
+          maximum: 2000
+          description: Output image width in pixels, between 100 and 2000. Both width and height must be provided to apply.
+      - in: query
+        name: height
+        description: Output image height in pixels, between 100 and 2000. Both width and height must be provided to apply.
+        schema:
+          type: integer
+          minimum: 100
+          maximum: 2000
+          description: Output image height in pixels, between 100 and 2000. Both width and height must be provided to apply.
+      - in: query
+        name: includeTitle
+        description: Include the chart title in the image when true.
+        schema:
+          type: boolean
+          description: Include the chart title in the image when true.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cellId:
+                    type: string
+                  imageBase64:
+                    type: string
+                    description: Base64-encoded PNG image of the chart cell as it currently appears in the notebook.
+                  mimeType:
+                    type: string
+                required:
+                - cellId
+                - imageBase64
+                - mimeType
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Cells
 components:
   schemas:
+    Pagination:
+      type: object
+      properties:
+        before:
+          type:
+          - string
+          - 'null'
+          default: null
+        after:
+          type:
+          - string
+          - 'null'
+          default: null
+      required:
+      - before
+      - after
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
     error.INTERNAL_SERVER_ERROR:
       type: object
       properties:
@@ -1099,17 +1131,6 @@ components:
         code: INTERNAL_SERVER_ERROR
         message: Internal server error
         issues: []
-    TsoaErrorResponsePayload:
-      properties:
-        details:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        reason:
-          type: string
-      required:
-      - reason
-      type: object
     error.FORBIDDEN:
       type: object
       properties:
@@ -1172,65 +1193,6 @@ components:
         code: BAD_REQUEST
         message: Invalid input data
         issues: []
-    error.UNAUTHORIZED:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Authorization not provided
-        code:
-          type: string
-          description: The error code
-          example: UNAUTHORIZED
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Authorization not provided error (401)
-      description: The error information
-      example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
-        issues: []
-    TraceId:
-      type: string
-      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
-    CellId:
-      type: string
-      format: uuid
-      description: Unique ID for a cell. This can be found by going into the menu of a cell in the notebook.
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    ChartImageResponsePayload:
-      properties:
-        cellId:
-          $ref: '#/components/schemas/CellId'
-        imageBase64:
-          type: string
-        mimeType:
-          type: string
-      required:
-      - cellId
-      - imageBase64
-      - mimeType
-      type: object
-      additionalProperties: false
-    ChartImageDimension:
-      type: integer
-      format: int32
-      description: Chart image total dimension (width or height) in pixels.
-      minimum: 100
-      maximum: 2000
     error.NOT_FOUND:
       type: object
       properties:

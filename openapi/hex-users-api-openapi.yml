@@ -24,11 +24,9 @@ paths:
 
         This endpoint is subject to the following rate limits:
 
-        - `hex-api`: Default rate limit group for the Hex API
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
 
-        - Max requests per minute may vary (default: 30)
-
-        - Max requests per hour may vary (default: 1800)'
+        - Max 30 requests per minute'
       responses:
         '200':
           description: Successful response
@@ -149,11 +147,9 @@ paths:
 
         This endpoint is subject to the following rate limits:
 
-        - `hex-api`: Default rate limit group for the Hex API
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
 
-        - Max requests per minute may vary (default: 30)
-
-        - Max requests per hour may vary (default: 1800)'
+        - Max 30 requests per minute'
       parameters:
       - in: query
         name: after
@@ -249,21 +245,7 @@ paths:
                       - role
                       - lastLoginDate
                   pagination:
-                    type: object
-                    properties:
-                      before:
-                        type:
-                        - string
-                        - 'null'
-                        default: null
-                      after:
-                        type:
-                        - string
-                        - 'null'
-                        default: null
-                    required:
-                    - before
-                    - after
+                    $ref: '#/components/schemas/Pagination'
                 required:
                 - values
                 - pagination
@@ -308,11 +290,9 @@ paths:
 
         This endpoint is subject to the following rate limits:
 
-        - `hex-api`: Default rate limit group for the Hex API
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
 
-        - Max requests per minute may vary (default: 30)
-
-        - Max requests per hour may vary (default: 1800)'
+        - Max 30 requests per minute'
       parameters:
       - in: path
         name: userId
@@ -389,6 +369,53 @@ paths:
       - Users
 components:
   schemas:
+    Pagination:
+      type: object
+      properties:
+        before:
+          type:
+          - string
+          - 'null'
+          default: null
+        after:
+          type:
+          - string
+          - 'null'
+          default: null
+      required:
+      - before
+      - after
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
     error.INTERNAL_SERVER_ERROR:
       type: object
       properties:
@@ -450,37 +477,6 @@ components:
       example:
         code: FORBIDDEN
         message: Insufficient access
-        issues: []
-    error.UNAUTHORIZED:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Authorization not provided
-        code:
-          type: string
-          description: The error code
-          example: UNAUTHORIZED
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Authorization not provided error (401)
-      description: The error information
-      example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
         issues: []
     error.BAD_REQUEST:
       type: object

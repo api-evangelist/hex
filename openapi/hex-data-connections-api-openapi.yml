@@ -13,11 +13,11 @@ security:
 tags:
 - name: Data Connections
 paths:
-  /v1/data-connections/{dataConnectionId}:
-    get:
-      operationId: GetDataConnection
+  /v1/data-connections:
+    post:
+      operationId: CreateDataConnection
       responses:
-        '200':
+        '201':
           description: ''
           content:
             application/json:
@@ -35,22 +35,207 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+        '422':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TsoaErrorResponsePayload'
         '500':
           description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TsoaErrorResponsePayload'
-      parameters:
-      - in: path
-        name: dataConnectionId
+      parameters: []
+      requestBody:
         required: true
-        schema:
-          $ref: '#/components/schemas/DataConnectionId'
+        content:
+          application/json:
+            schema:
+              properties:
+                sharing:
+                  properties:
+                    workspace:
+                      properties:
+                        public:
+                          $ref: '#/components/schemas/DataConnectionPublicSharingAccessLevelEnum'
+                        guests:
+                          $ref: '#/components/schemas/DataConnectionSharingAccessLevelEnum'
+                        members:
+                          $ref: '#/components/schemas/DataConnectionSharingAccessLevelEnum'
+                      type: object
+                    groups:
+                      items:
+                        properties:
+                          access:
+                            $ref: '#/components/schemas/DataConnectionSharingAccessLevelEnum'
+                          group:
+                            properties:
+                              id:
+                                $ref: '#/components/schemas/GroupId'
+                            required:
+                            - id
+                            type: object
+                        required:
+                        - access
+                        - group
+                        type: object
+                      type: array
+                  type: object
+                schemaRefreshAccess:
+                  $ref: '#/components/schemas/DataConnectionSchemaRefreshAccess'
+                schemaRefreshSchedule:
+                  $ref: '#/components/schemas/SchemaRefreshScheduleApiResource'
+                schemaFilters:
+                  properties:
+                    tables:
+                      $ref: '#/components/schemas/SchemaEntityFilter'
+                    schemas:
+                      $ref: '#/components/schemas/SchemaEntityFilter'
+                    databases:
+                      $ref: '#/components/schemas/SchemaEntityFilter'
+                  type: object
+                sensitivity:
+                  properties:
+                    configured:
+                      type: boolean
+                      description: The stored sensitivity setting. OAuth user-scoped results may still make the connection effectively sensitive. Defaults to false.
+                  required:
+                  - configured
+                  type: object
+                allowWritebackCells:
+                  type: boolean
+                includeMagic:
+                  type: boolean
+                connectViaSsh:
+                  type: boolean
+                description:
+                  type: string
+                connectionDetails:
+                  $ref: '#/components/schemas/CreateConnectionDetails'
+                type:
+                  $ref: '#/components/schemas/DataConnectionApiType'
+                name:
+                  $ref: '#/components/schemas/Name'
+              required:
+              - connectionDetails
+              - type
+              - name
+              type: object
       tags:
       - Data Connections
-      summary: Get data connection
+      summary: Create data connection
       x-summary-source: derived
+    get:
+      operationId: ListDataConnections
+      summary: ListDataConnections
+      description: 'List the workspace''s data connections.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
+      parameters:
+      - in: query
+        name: after
+        schema:
+          type:
+          - string
+          - 'null'
+          default: null
+      - in: query
+        name: before
+        schema:
+          type:
+          - string
+          - 'null'
+          default: null
+      - in: query
+        name: limit
+        schema:
+          type: number
+          minimum: 1
+          maximum: 100
+          default: 25
+      - in: query
+        name: sortBy
+        schema:
+          type: string
+          enum:
+          - NAME
+          - CREATED_AT
+          default: NAME
+      - in: query
+        name: sortDirection
+        schema:
+          type: string
+          enum:
+          - ASC
+          - DESC
+          default: ASC
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  values:
+                    type: array
+                    items:
+                      anyOf:
+                      - $ref: '#/components/schemas/DataConnection'
+                      - $ref: '#/components/schemas/DataConnectionBasic'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                required:
+                - values
+                - pagination
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Data Connections
+  /v1/data-connections/{dataConnectionId}:
     patch:
       operationId: EditDataConnection
       responses:
@@ -148,6 +333,14 @@ paths:
                     databases:
                       $ref: '#/components/schemas/SchemaEntityFilter'
                   type: object
+                sensitivity:
+                  properties:
+                    configured:
+                      type: boolean
+                      description: The stored sensitivity setting. Editable even when OAuth user-scoped results override it. Omit sensitivity to leave the setting unchanged.
+                  required:
+                  - configured
+                  type: object
                 allowWritebackCells:
                   type: boolean
                 includeMagic:
@@ -165,175 +358,64 @@ paths:
       - Data Connections
       summary: Edit data connection
       x-summary-source: derived
-  /v1/data-connections:
     get:
-      operationId: ListDataConnections
+      operationId: GetDataConnection
+      summary: GetDataConnection
+      description: 'Get a single data connection by its ID.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
+      parameters:
+      - in: path
+        name: dataConnectionId
+        schema:
+          type: string
+        required: true
       responses:
         '200':
-          description: ''
+          description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListDataConnectionsResponse'
+                $ref: '#/components/schemas/DataConnection'
         '400':
-          description: ''
+          description: Invalid input data
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
         '403':
-          description: ''
+          description: Insufficient access
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '500':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-      parameters:
-      - in: query
-        name: after
-        required: false
-        schema:
-          default: null
-      - in: query
-        name: before
-        required: false
-        schema:
-          default: null
-      - in: query
-        name: limit
-        required: false
-        schema:
-          $ref: '#/components/schemas/PageSize'
-      - in: query
-        name: sortBy
-        required: false
-        schema:
-          $ref: '#/components/schemas/ListDataConnectionsSortByEnum'
-      - in: query
-        name: sortDirection
-        required: false
-        schema:
-          $ref: '#/components/schemas/SortDirectionEnum'
-      tags:
-      - Data Connections
-      summary: List data connections
-      x-summary-source: derived
-    post:
-      operationId: CreateDataConnection
-      responses:
-        '201':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataConnectionWithSensitiveFieldsApiResource'
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '403':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+                $ref: '#/components/schemas/error.FORBIDDEN'
         '404':
-          description: ''
+          description: Not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '422':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
+                $ref: '#/components/schemas/error.NOT_FOUND'
         '500':
-          description: ''
+          description: Internal server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                sharing:
-                  properties:
-                    workspace:
-                      properties:
-                        public:
-                          $ref: '#/components/schemas/DataConnectionPublicSharingAccessLevelEnum'
-                        guests:
-                          $ref: '#/components/schemas/DataConnectionSharingAccessLevelEnum'
-                        members:
-                          $ref: '#/components/schemas/DataConnectionSharingAccessLevelEnum'
-                      type: object
-                    groups:
-                      items:
-                        properties:
-                          access:
-                            $ref: '#/components/schemas/DataConnectionSharingAccessLevelEnum'
-                          group:
-                            properties:
-                              id:
-                                $ref: '#/components/schemas/GroupId'
-                            required:
-                            - id
-                            type: object
-                        required:
-                        - access
-                        - group
-                        type: object
-                      type: array
-                  type: object
-                schemaRefreshAccess:
-                  $ref: '#/components/schemas/DataConnectionSchemaRefreshAccess'
-                schemaRefreshSchedule:
-                  $ref: '#/components/schemas/SchemaRefreshScheduleApiResource'
-                schemaFilters:
-                  properties:
-                    tables:
-                      $ref: '#/components/schemas/SchemaEntityFilter'
-                    schemas:
-                      $ref: '#/components/schemas/SchemaEntityFilter'
-                    databases:
-                      $ref: '#/components/schemas/SchemaEntityFilter'
-                  type: object
-                allowWritebackCells:
-                  type: boolean
-                includeMagic:
-                  type: boolean
-                connectViaSsh:
-                  type: boolean
-                description:
-                  type: string
-                connectionDetails:
-                  $ref: '#/components/schemas/CreateConnectionDetails'
-                type:
-                  $ref: '#/components/schemas/DataConnectionApiType'
-                name:
-                  $ref: '#/components/schemas/Name'
-              required:
-              - connectionDetails
-              - type
-              - name
-              type: object
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
       tags:
       - Data Connections
-      summary: Create data connection
-      x-summary-source: derived
   /v1/data-connections/{dataConnectionId}/schema:
     patch:
       operationId: UpdateDataConnectionSchema
@@ -402,37 +484,100 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    DataConnectionId:
-      type: string
-      format: uuid
-      description: Unique ID for a data connection.
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    SchemaFilterMatchType:
-      $ref: '#/components/schemas/EnumValues_typeofSchemaFilterMatchType_'
-    PageSize:
-      type: integer
-      format: int32
-      default: '25'
-      description: Number of results to fetch per page for paginated requests
-      minimum: 1
-      maximum: 100
-    EnumValues_typeofSortDirectionEnum_:
-      type: string
-      enum:
-      - DESC
-      - ASC
-    ApiPaginationCursor:
-      type: string
-      description: 'A cursor string used with `before` and `after` parameters to paginate through a list
+    ScheduleCadenceApiEnum:
+      $ref: '#/components/schemas/EnumValues_typeofScheduleCadenceApiEnum_'
+      description: Types of cadence of a schedule for a Hex project.
+    Pagination:
+      type: object
+      properties:
+        before:
+          type:
+          - string
+          - 'null'
+          default: null
+        after:
+          type:
+          - string
+          - 'null'
+          default: null
+      required:
+      - before
+      - after
+    SchemaObjectUpdate:
+      description: 'Schema object update request - specifies a status change for a database, schema, or table.
 
-        of items on the API.'
-    ListDataConnectionsSortByEnum:
-      $ref: '#/components/schemas/EnumValues_typeofListDataConnectionsSortByEnum_'
-    EnumValues_typeofDataConnectionPublicSharingAccessLevelEnum_:
+        Currently, only status updates are supported.'
+      properties:
+        type:
+          type: string
+          enum:
+          - DATABASE
+          - SCHEMA
+          - TABLE
+          description: The type of object to update
+        name:
+          type: string
+          description: The name of the object - simple for DATABASE, qualified for SCHEMA/TABLE
+        status:
+          type:
+          - string
+          - 'null'
+          description: The status name to apply, or null to remove the current status
+      required:
+      - type
+      - name
+      - status
+      type: object
+      additionalProperties: false
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    EnumValues_typeofDataConnectionSharingAccessLevelEnum_:
       type: string
       enum:
       - NONE
+      - QUERY
       - VIEW_RESULTS
+    Pick_TsoaErrorResponsePayload.Exclude_keyofTsoaErrorResponsePayload.details__:
+      properties:
+        reason:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+      required:
+      - reason
+      type: object
+      description: From T, pick a set of properties whose keys are in the union K
+    DataConnectionSharingAccessLevelEnum:
+      $ref: '#/components/schemas/EnumValues_typeofDataConnectionSharingAccessLevelEnum_'
     UpdateDataConnectionSchemaResponse:
       description: Response body for successful schema object status updates
       properties:
@@ -489,49 +634,179 @@ components:
       - updated
       type: object
       additionalProperties: false
-    TraceId:
+    EnumValues_typeofScheduleCadenceApiEnum_:
       type: string
-      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
-    PaginationApiResource:
-      properties:
-        after:
-          allOf:
-          - $ref: '#/components/schemas/ApiPaginationCursor'
-        before:
-          allOf:
-          - $ref: '#/components/schemas/ApiPaginationCursor'
-      required:
-      - after
-      - before
-      type: object
-      additionalProperties: false
+      enum:
+      - HOURLY
+      - DAILY
+      - WEEKLY
+      - MONTHLY
+      - CUSTOM
+    DataConnectionSchemaRefreshAccess:
+      $ref: '#/components/schemas/EnumValues_typeofDataConnectionSchemaRefreshAccess_'
     EnumValues_typeofDataConnectionSchemaRefreshAccess_:
       type: string
       enum:
       - ADMINS
       - USERS_WITH_QUERY_ACCESS
-    TimezoneDesignator:
-      type: string
-      description: An ISO 8601 timezone designator like +08:00.
-    DataConnectionSchemaRefreshAccess:
-      $ref: '#/components/schemas/EnumValues_typeofDataConnectionSchemaRefreshAccess_'
-    DataConnectionSharingAccessLevelEnum:
-      $ref: '#/components/schemas/EnumValues_typeofDataConnectionSharingAccessLevelEnum_'
-    GroupId:
+    DataConnectionWithSensitiveFieldsApiResource:
+      properties:
+        id:
+          $ref: '#/components/schemas/DataConnectionId'
+        name:
+          $ref: '#/components/schemas/Name'
+        type:
+          $ref: '#/components/schemas/DataConnectionApiType'
+        description:
+          type: string
+        sensitivity:
+          $ref: '#/components/schemas/DataConnectionSensitivityApiResource'
+        connectionDetails:
+          allOf:
+          - $ref: '#/components/schemas/ReadableConnectionDetails'
+        connectViaSsh:
+          type: boolean
+        includeMagic:
+          type: boolean
+        allowWritebackCells:
+          type: boolean
+        schemaFilters:
+          properties:
+            tables:
+              $ref: '#/components/schemas/SchemaEntityFilter'
+            schemas:
+              $ref: '#/components/schemas/SchemaEntityFilter'
+            databases:
+              $ref: '#/components/schemas/SchemaEntityFilter'
+          type: object
+        schemaRefreshSchedule:
+          $ref: '#/components/schemas/SchemaRefreshScheduleApiResource'
+        schemaRefreshAccess:
+          $ref: '#/components/schemas/DataConnectionSchemaRefreshAccess'
+        sharing:
+          properties:
+            workspace:
+              properties:
+                public:
+                  $ref: '#/components/schemas/DataConnectionSharingAccessLevelEnum'
+                guests:
+                  $ref: '#/components/schemas/DataConnectionSharingAccessLevelEnum'
+                members:
+                  $ref: '#/components/schemas/DataConnectionSharingAccessLevelEnum'
+              type: object
+            groups:
+              items:
+                properties:
+                  access:
+                    $ref: '#/components/schemas/DataConnectionSharingAccessLevelEnum'
+                  group:
+                    properties:
+                      name:
+                        type: string
+                      id:
+                        $ref: '#/components/schemas/GroupId'
+                    required:
+                    - name
+                    - id
+                    type: object
+                required:
+                - access
+                - group
+                type: object
+              type: array
+          type: object
+      required:
+      - id
+      - name
+      - type
+      - sensitivity
+      - connectionDetails
+      - connectViaSsh
+      - includeMagic
+      - allowWritebackCells
+      - schemaRefreshAccess
+      - sharing
+      type: object
+      additionalProperties: false
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+    Omit_TsoaErrorResponsePayload.details_:
+      $ref: '#/components/schemas/Pick_TsoaErrorResponsePayload.Exclude_keyofTsoaErrorResponsePayload.details__'
+      description: Construct a type with the properties of T except for those in type K.
+    DataConnectionId:
       type: string
       format: uuid
-      description: Unique ID for a group. This can be found from the groups page (in Settings).
+      description: Unique ID for a data connection.
       pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    Pick_TsoaErrorResponsePayload.Exclude_keyofTsoaErrorResponsePayload.details__:
+    EnumValues_typeofDataConnectionPublicSharingAccessLevelEnum_:
+      type: string
+      enum:
+      - NONE
+      - VIEW_RESULTS
+    EnumValues_typeofSchemaFilterMatchType_:
+      type: string
+      enum:
+      - EXACT
+      - PREFIX
+      - REGEX
+      - SUFFIX
+    TsoaErrorResponsePayload:
       properties:
-        reason:
+        details:
           type: string
         traceId:
           $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
       required:
       - reason
       type: object
-      description: From T, pick a set of properties whose keys are in the union K
+    DataConnectionApiType:
+      $ref: '#/components/schemas/EnumValues_typeofDataConnectionApiType_'
+    EnumValues_typeofDayOfWeekApiEnum_:
+      type: string
+      enum:
+      - SUNDAY
+      - MONDAY
+      - TUESDAY
+      - WEDNESDAY
+      - THURSDAY
+      - FRIDAY
+      - SATURDAY
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+    TimezoneStringDesignator:
+      type: string
     UpdateDataConnectionSchemaRequest:
       description: 'Request body for updating data connection schema object statuses
 
@@ -557,78 +832,742 @@ components:
       - redshift
       - snowflake
       - trino
-    TimezoneStringDesignator:
-      type: string
-    ListDataConnectionsResponse:
-      properties:
-        values:
-          items:
-            anyOf:
-            - $ref: '#/components/schemas/DataConnectionApiResource'
-            - $ref: '#/components/schemas/DataConnectionWithSensitiveFieldsApiResource'
-          type: array
-        pagination:
-          $ref: '#/components/schemas/PaginationApiResource'
-      required:
-      - values
-      - pagination
+    DataConnectionBasic:
       type: object
-      additionalProperties: false
-    EnumValues_typeofSchemaFilterMatchType_:
-      type: string
-      enum:
-      - EXACT
-      - PREFIX
-      - REGEX
-      - SUFFIX
-    EnumValues_typeofDataConnectionSharingAccessLevelEnum_:
-      type: string
-      enum:
-      - NONE
-      - QUERY
-      - VIEW_RESULTS
-    UpdateSchemaObjectErrorDetail:
-      description: Details about a failed update
       properties:
+        id:
+          type: string
         name:
           type: string
-          description: The name of the object
         type:
           type: string
           enum:
-          - DATABASE
-          - SCHEMA
-          - TABLE
-          description: The type of object
-        reason:
+          - athena
+          - bigquery
+          - clickhouse
+          - databricks
+          - postgres
+          - redshift
+          - snowflake
+          - trino
+        description:
           type: string
-          enum:
-          - not_found
-          - invalid_status
-          - ambiguous_name
-          - database_not_supported
-          - invalid_name_format
-          description: The reason for the failure
-        value:
-          type: string
-          description: The invalid value (for invalid_status errors) or additional context
+        sensitivity:
+          type: object
+          properties:
+            configured:
+              type: boolean
+              description: Whether the data connection has been marked explicitly as sensitive.
+            effective:
+              type: boolean
+              description: The computed effective sensitivity value of the data connection. This takes into account the OAuth user-scoped results setting.
+              readOnly: true
+            overrideReason:
+              type:
+              - string
+              - 'null'
+              enum:
+              - USER_SCOPED_OAUTH_RESULTS
+              description: The reason the effective value is different from the configured value. Null if they are the same.
+              readOnly: true
+          required:
+          - configured
+          - effective
+          - overrideReason
       required:
+      - id
       - name
       - type
-      - reason
+      - sensitivity
+    error.FORBIDDEN:
       type: object
-      additionalProperties: false
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+    TimezoneDesignator:
+      type: string
+      description: An ISO 8601 timezone designator like +08:00.
     Name:
       type: string
       minLength: 1
-    EnumValues_typeofScheduleCadenceApiEnum_:
+    GroupId:
       type: string
-      enum:
-      - HOURLY
-      - DAILY
-      - WEEKLY
-      - MONTHLY
-      - CUSTOM
+      format: uuid
+      description: Unique ID for a group. This can be found from the groups page (in Settings).
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    DataConnectionPublicSharingAccessLevelEnum:
+      $ref: '#/components/schemas/EnumValues_typeofDataConnectionPublicSharingAccessLevelEnum_'
+    DayOfWeekApiEnum:
+      $ref: '#/components/schemas/EnumValues_typeofDayOfWeekApiEnum_'
+    EditConnectionDetails:
+      anyOf:
+      - properties:
+          athena:
+            properties:
+              secretAccessKey:
+                type: string
+              accessKeyId:
+                type: string
+              workgroup:
+                type:
+                - string
+                - 'null'
+              catalog:
+                type:
+                - string
+                - 'null'
+              s3OutputPath:
+                type: string
+              port:
+                type: number
+                format: double
+              hostname:
+                type: string
+            type: object
+        required:
+        - athena
+        type: object
+      - properties:
+          bigquery:
+            properties:
+              serviceAccountJsonConfig:
+                type: string
+              enableStorageApi:
+                type: boolean
+              enableDriveAccess:
+                type: boolean
+              projectId:
+                type: string
+            type: object
+        required:
+        - bigquery
+        type: object
+      - properties:
+          databricks:
+            properties:
+              accessToken:
+                type: string
+              jdbcUrl:
+                type: string
+            type: object
+        required:
+        - databricks
+        type: object
+      - properties:
+          postgres:
+            properties:
+              password:
+                type: string
+              username:
+                type: string
+              database:
+                type: string
+              port:
+                type: number
+                format: double
+              hostname:
+                type: string
+            type: object
+        required:
+        - postgres
+        type: object
+      - properties:
+          redshift:
+            properties:
+              sslRootCert:
+                type:
+                - string
+                - 'null'
+              password:
+                type: string
+              username:
+                type: string
+              database:
+                type: string
+              port:
+                type: number
+                format: double
+              host:
+                type: string
+            type: object
+        required:
+        - redshift
+        type: object
+      - properties:
+          snowflake:
+            properties:
+              role:
+                type:
+                - string
+                - 'null'
+              passphrase:
+                type: string
+              privateKey:
+                type: string
+              username:
+                type: string
+              schema:
+                type:
+                - string
+                - 'null'
+              database:
+                type: string
+              warehouse:
+                type: string
+              accountName:
+                type: string
+            type: object
+        required:
+        - snowflake
+        type: object
+      - properties:
+          trino:
+            properties:
+              sessionProperties:
+                items:
+                  properties:
+                    value:
+                      type: string
+                    key:
+                      type: string
+                  required:
+                  - value
+                  - key
+                  type: object
+                type:
+                - array
+                - 'null'
+              password:
+                type: string
+              username:
+                type: string
+              schema:
+                type: string
+              catalog:
+                type: string
+              port:
+                type: number
+                format: double
+              hostname:
+                type: string
+            type: object
+        required:
+        - trino
+        type: object
+    SchemaFilterMatchType:
+      $ref: '#/components/schemas/EnumValues_typeofSchemaFilterMatchType_'
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+    DataConnection:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - athena
+          - bigquery
+          - clickhouse
+          - databricks
+          - postgres
+          - redshift
+          - snowflake
+          - trino
+        description:
+          type: string
+        sensitivity:
+          type: object
+          properties:
+            configured:
+              type: boolean
+              description: Whether the data connection has been marked explicitly as sensitive.
+            effective:
+              type: boolean
+              description: The computed effective sensitivity value of the data connection. This takes into account the OAuth user-scoped results setting.
+              readOnly: true
+            overrideReason:
+              type:
+              - string
+              - 'null'
+              enum:
+              - USER_SCOPED_OAUTH_RESULTS
+              description: The reason the effective value is different from the configured value. Null if they are the same.
+              readOnly: true
+          required:
+          - configured
+          - effective
+          - overrideReason
+        connectionDetails:
+          anyOf:
+          - type: object
+            properties:
+              athena:
+                type: object
+                properties:
+                  hostname:
+                    type: string
+                  port:
+                    type: number
+                  s3OutputPath:
+                    type: string
+                  catalog:
+                    type:
+                    - string
+                    - 'null'
+                  workgroup:
+                    type:
+                    - string
+                    - 'null'
+                  accessKeyId:
+                    type: string
+            required:
+            - athena
+          - type: object
+            properties:
+              bigquery:
+                type: object
+                properties:
+                  projectId:
+                    type: string
+                  enableDriveAccess:
+                    type: boolean
+                  enableStorageApi:
+                    type: boolean
+            required:
+            - bigquery
+          - type: object
+            properties:
+              clickhouse:
+                type: object
+                properties:
+                  hostname:
+                    type: string
+                  port:
+                    type: number
+                  username:
+                    type: string
+            required:
+            - clickhouse
+          - type: object
+            properties:
+              databricks:
+                type: object
+                properties:
+                  jdbcUrl:
+                    type: string
+            required:
+            - databricks
+          - type: object
+            properties:
+              postgres:
+                type: object
+                properties:
+                  hostname:
+                    type: string
+                  port:
+                    type: number
+                  database:
+                    type: string
+                  username:
+                    type: string
+            required:
+            - postgres
+          - type: object
+            properties:
+              redshift:
+                type: object
+                properties:
+                  host:
+                    type: string
+                  port:
+                    type: number
+                  database:
+                    type: string
+                  username:
+                    type: string
+            required:
+            - redshift
+          - type: object
+            properties:
+              snowflake:
+                type: object
+                properties:
+                  accountName:
+                    type: string
+                  warehouse:
+                    type: string
+                  database:
+                    type: string
+                  schema:
+                    type:
+                    - string
+                    - 'null'
+                  username:
+                    type: string
+                  role:
+                    type:
+                    - string
+                    - 'null'
+            required:
+            - snowflake
+          - type: object
+            properties:
+              trino:
+                type: object
+                properties:
+                  hostname:
+                    type: string
+                  port:
+                    type: number
+                  catalog:
+                    type: string
+                  schema:
+                    type: string
+                  username:
+                    type: string
+                  sessionProperties:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                      - key
+                      - value
+            required:
+            - trino
+        connectViaSsh:
+          type: boolean
+        includeMagic:
+          type: boolean
+        allowWritebackCells:
+          type: boolean
+        schemaFilters:
+          type: object
+          properties:
+            databases:
+              type: object
+              properties:
+                include:
+                  type: object
+                  properties:
+                    matchType:
+                      type: string
+                      enum:
+                      - EXACT
+                      - PREFIX
+                      - REGEX
+                      - SUFFIX
+                    values:
+                      type: array
+                      items:
+                        type: string
+                  required:
+                  - matchType
+                  - values
+                exclude:
+                  type: object
+                  properties:
+                    matchType:
+                      type: string
+                      enum:
+                      - EXACT
+                      - PREFIX
+                      - REGEX
+                      - SUFFIX
+                    values:
+                      type: array
+                      items:
+                        type: string
+                  required:
+                  - matchType
+                  - values
+            schemas:
+              type: object
+              properties:
+                include:
+                  type: object
+                  properties:
+                    matchType:
+                      type: string
+                      enum:
+                      - EXACT
+                      - PREFIX
+                      - REGEX
+                      - SUFFIX
+                    values:
+                      type: array
+                      items:
+                        type: string
+                  required:
+                  - matchType
+                  - values
+                exclude:
+                  type: object
+                  properties:
+                    matchType:
+                      type: string
+                      enum:
+                      - EXACT
+                      - PREFIX
+                      - REGEX
+                      - SUFFIX
+                    values:
+                      type: array
+                      items:
+                        type: string
+                  required:
+                  - matchType
+                  - values
+            tables:
+              type: object
+              properties:
+                include:
+                  type: object
+                  properties:
+                    matchType:
+                      type: string
+                      enum:
+                      - EXACT
+                      - PREFIX
+                      - REGEX
+                      - SUFFIX
+                    values:
+                      type: array
+                      items:
+                        type: string
+                  required:
+                  - matchType
+                  - values
+                exclude:
+                  type: object
+                  properties:
+                    matchType:
+                      type: string
+                      enum:
+                      - EXACT
+                      - PREFIX
+                      - REGEX
+                      - SUFFIX
+                    values:
+                      type: array
+                      items:
+                        type: string
+                  required:
+                  - matchType
+                  - values
+        schemaRefreshSchedule:
+          type: object
+          properties:
+            cadence:
+              type: string
+              enum:
+              - HOURLY
+              - DAILY
+              - WEEKLY
+              - MONTHLY
+              - CUSTOM
+            enabled:
+              type: boolean
+            daily:
+              type:
+              - object
+              - 'null'
+              properties:
+                hour:
+                  type: integer
+                minute:
+                  type: integer
+                timezoneString:
+                  type: string
+              required:
+              - hour
+              - minute
+              - timezoneString
+            weekly:
+              type:
+              - object
+              - 'null'
+              properties:
+                dayOfWeek:
+                  type: string
+                  enum:
+                  - SUNDAY
+                  - MONDAY
+                  - TUESDAY
+                  - WEDNESDAY
+                  - THURSDAY
+                  - FRIDAY
+                  - SATURDAY
+                hour:
+                  type: integer
+                minute:
+                  type: integer
+                timezoneString:
+                  type: string
+              required:
+              - dayOfWeek
+              - hour
+              - minute
+              - timezoneString
+            monthly:
+              type:
+              - object
+              - 'null'
+              properties:
+                day:
+                  type: integer
+                hour:
+                  type: integer
+                minute:
+                  type: integer
+                timezoneString:
+                  type: string
+              required:
+              - day
+              - hour
+              - minute
+              - timezoneString
+            custom:
+              type:
+              - object
+              - 'null'
+              properties:
+                cron:
+                  type: string
+                timezoneString:
+                  type: string
+              required:
+              - cron
+              - timezoneString
+          required:
+          - cadence
+          - enabled
+        schemaRefreshAccess:
+          type: string
+          enum:
+          - ADMINS
+          - USERS_WITH_QUERY_ACCESS
+        sharing:
+          type: object
+          properties:
+            groups:
+              type: array
+              items:
+                type: object
+                properties:
+                  group:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                    required:
+                    - id
+                    - name
+                  access:
+                    type: string
+                    enum:
+                    - NONE
+                    - QUERY
+                    - VIEW_RESULTS
+                required:
+                - group
+                - access
+            workspace:
+              type: object
+              properties:
+                members:
+                  type: string
+                  enum:
+                  - NONE
+                  - QUERY
+                  - VIEW_RESULTS
+                guests:
+                  type: string
+                  enum:
+                  - NONE
+                  - QUERY
+                  - VIEW_RESULTS
+                public:
+                  type: string
+                  enum:
+                  - NONE
+                  - QUERY
+                  - VIEW_RESULTS
+      required:
+      - id
+      - name
+      - type
+      - sensitivity
+      - connectionDetails
+      - connectViaSsh
+      - includeMagic
+      - allowWritebackCells
+      - schemaRefreshAccess
+      - sharing
     ReadableConnectionDetails:
       anyOf:
       - properties:
@@ -776,8 +1715,27 @@ components:
         required:
         - trino
         type: object
-    DataConnectionPublicSharingAccessLevelEnum:
-      $ref: '#/components/schemas/EnumValues_typeofDataConnectionPublicSharingAccessLevelEnum_'
+    DataConnectionSensitivityApiResource:
+      properties:
+        configured:
+          type: boolean
+          description: The stored sensitivity setting, inverse of allowAgentExternalAccess.
+        effective:
+          type: boolean
+          description: Read-only computed sensitivity, including OAuth user-scoped results settings.
+        overrideReason:
+          type:
+          - string
+          - 'null'
+          enum:
+          - USER_SCOPED_OAUTH_RESULTS
+          description: Read-only reason configured=false is overridden; otherwise null.
+      required:
+      - configured
+      - effective
+      - overrideReason
+      type: object
+      additionalProperties: false
     CreateConnectionDetails:
       anyOf:
       - properties:
@@ -968,82 +1926,6 @@ components:
         required:
         - trino
         type: object
-    DataConnectionWithSensitiveFieldsApiResource:
-      properties:
-        id:
-          $ref: '#/components/schemas/DataConnectionId'
-        name:
-          $ref: '#/components/schemas/Name'
-        type:
-          $ref: '#/components/schemas/DataConnectionApiType'
-        description:
-          type: string
-        connectionDetails:
-          allOf:
-          - $ref: '#/components/schemas/ReadableConnectionDetails'
-        connectViaSsh:
-          type: boolean
-        includeMagic:
-          type: boolean
-        allowWritebackCells:
-          type: boolean
-        schemaFilters:
-          properties:
-            tables:
-              $ref: '#/components/schemas/SchemaEntityFilter'
-            schemas:
-              $ref: '#/components/schemas/SchemaEntityFilter'
-            databases:
-              $ref: '#/components/schemas/SchemaEntityFilter'
-          type: object
-        schemaRefreshSchedule:
-          $ref: '#/components/schemas/SchemaRefreshScheduleApiResource'
-        schemaRefreshAccess:
-          $ref: '#/components/schemas/DataConnectionSchemaRefreshAccess'
-        sharing:
-          properties:
-            workspace:
-              properties:
-                public:
-                  $ref: '#/components/schemas/DataConnectionSharingAccessLevelEnum'
-                guests:
-                  $ref: '#/components/schemas/DataConnectionSharingAccessLevelEnum'
-                members:
-                  $ref: '#/components/schemas/DataConnectionSharingAccessLevelEnum'
-              type: object
-            groups:
-              items:
-                properties:
-                  access:
-                    $ref: '#/components/schemas/DataConnectionSharingAccessLevelEnum'
-                  group:
-                    properties:
-                      name:
-                        type: string
-                      id:
-                        $ref: '#/components/schemas/GroupId'
-                    required:
-                    - name
-                    - id
-                    type: object
-                required:
-                - access
-                - group
-                type: object
-              type: array
-          type: object
-      required:
-      - id
-      - name
-      - type
-      - connectionDetails
-      - connectViaSsh
-      - includeMagic
-      - allowWritebackCells
-      - schemaRefreshAccess
-      - sharing
-      type: object
-      additionalProperties: false
     SchemaRefreshScheduleApiResource:
       properties:
         cadence:
@@ -1139,239 +2021,6 @@ components:
       - enabled
       type: object
       additionalProperties: false
-    EditConnectionDetails:
-      anyOf:
-      - properties:
-          athena:
-            properties:
-              secretAccessKey:
-                type: string
-              accessKeyId:
-                type: string
-              workgroup:
-                type:
-                - string
-                - 'null'
-              catalog:
-                type:
-                - string
-                - 'null'
-              s3OutputPath:
-                type: string
-              port:
-                type: number
-                format: double
-              hostname:
-                type: string
-            type: object
-        required:
-        - athena
-        type: object
-      - properties:
-          bigquery:
-            properties:
-              serviceAccountJsonConfig:
-                type: string
-              enableStorageApi:
-                type: boolean
-              enableDriveAccess:
-                type: boolean
-              projectId:
-                type: string
-            type: object
-        required:
-        - bigquery
-        type: object
-      - properties:
-          databricks:
-            properties:
-              accessToken:
-                type: string
-              jdbcUrl:
-                type: string
-            type: object
-        required:
-        - databricks
-        type: object
-      - properties:
-          postgres:
-            properties:
-              password:
-                type: string
-              username:
-                type: string
-              database:
-                type: string
-              port:
-                type: number
-                format: double
-              hostname:
-                type: string
-            type: object
-        required:
-        - postgres
-        type: object
-      - properties:
-          redshift:
-            properties:
-              sslRootCert:
-                type:
-                - string
-                - 'null'
-              password:
-                type: string
-              username:
-                type: string
-              database:
-                type: string
-              port:
-                type: number
-                format: double
-              host:
-                type: string
-            type: object
-        required:
-        - redshift
-        type: object
-      - properties:
-          snowflake:
-            properties:
-              role:
-                type:
-                - string
-                - 'null'
-              passphrase:
-                type: string
-              privateKey:
-                type: string
-              username:
-                type: string
-              schema:
-                type:
-                - string
-                - 'null'
-              database:
-                type: string
-              warehouse:
-                type: string
-              accountName:
-                type: string
-            type: object
-        required:
-        - snowflake
-        type: object
-      - properties:
-          trino:
-            properties:
-              sessionProperties:
-                items:
-                  properties:
-                    value:
-                      type: string
-                    key:
-                      type: string
-                  required:
-                  - value
-                  - key
-                  type: object
-                type:
-                - array
-                - 'null'
-              password:
-                type: string
-              username:
-                type: string
-              schema:
-                type: string
-              catalog:
-                type: string
-              port:
-                type: number
-                format: double
-              hostname:
-                type: string
-            type: object
-        required:
-        - trino
-        type: object
-    EnumValues_typeofListDataConnectionsSortByEnum_:
-      type: string
-      enum:
-      - CREATED_AT
-      - NAME
-    TsoaErrorResponsePayload:
-      properties:
-        details:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        reason:
-          type: string
-      required:
-      - reason
-      type: object
-    DataConnectionApiType:
-      $ref: '#/components/schemas/EnumValues_typeofDataConnectionApiType_'
-    DataConnectionApiResource:
-      properties:
-        id:
-          $ref: '#/components/schemas/DataConnectionId'
-        name:
-          $ref: '#/components/schemas/Name'
-        type:
-          $ref: '#/components/schemas/DataConnectionApiType'
-        description:
-          type: string
-      required:
-      - id
-      - name
-      - type
-      type: object
-      additionalProperties: false
-    DayOfWeekApiEnum:
-      $ref: '#/components/schemas/EnumValues_typeofDayOfWeekApiEnum_'
-    EnumValues_typeofDayOfWeekApiEnum_:
-      type: string
-      enum:
-      - SUNDAY
-      - MONDAY
-      - TUESDAY
-      - WEDNESDAY
-      - THURSDAY
-      - FRIDAY
-      - SATURDAY
-    ScheduleCadenceApiEnum:
-      $ref: '#/components/schemas/EnumValues_typeofScheduleCadenceApiEnum_'
-      description: Types of cadence of a schedule for a Hex project.
-    SchemaObjectUpdate:
-      description: 'Schema object update request - specifies a status change for a database, schema, or table.
-
-        Currently, only status updates are supported.'
-      properties:
-        type:
-          type: string
-          enum:
-          - DATABASE
-          - SCHEMA
-          - TABLE
-          description: The type of object to update
-        name:
-          type: string
-          description: The name of the object - simple for DATABASE, qualified for SCHEMA/TABLE
-        status:
-          type:
-          - string
-          - 'null'
-          description: The status name to apply, or null to remove the current status
-      required:
-      - type
-      - name
-      - status
-      type: object
-      additionalProperties: false
-    Omit_TsoaErrorResponsePayload.details_:
-      $ref: '#/components/schemas/Pick_TsoaErrorResponsePayload.Exclude_keyofTsoaErrorResponsePayload.details__'
-      description: Construct a type with the properties of T except for those in type K.
     SchemaEntityFilter:
       properties:
         exclude:
@@ -1399,8 +2048,68 @@ components:
           - matchType
           type: object
       type: object
-    SortDirectionEnum:
-      $ref: '#/components/schemas/EnumValues_typeofSortDirectionEnum_'
+    UpdateSchemaObjectErrorDetail:
+      description: Details about a failed update
+      properties:
+        name:
+          type: string
+          description: The name of the object
+        type:
+          type: string
+          enum:
+          - DATABASE
+          - SCHEMA
+          - TABLE
+          description: The type of object
+        reason:
+          type: string
+          enum:
+          - not_found
+          - invalid_status
+          - ambiguous_name
+          - database_not_supported
+          - invalid_name_format
+          description: The reason for the failure
+        value:
+          type: string
+          description: The invalid value (for invalid_status errors) or additional context
+      required:
+      - name
+      - type
+      - reason
+      type: object
+      additionalProperties: false
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
   securitySchemes:
     bearerAuth:
       type: http

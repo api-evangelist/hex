@@ -147,11 +147,9 @@ paths:
 
         This endpoint is subject to the following rate limits:
 
-        - `hex-api`: Default rate limit group for the Hex API
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
 
-        - Max requests per minute may vary (default: 30)
-
-        - Max requests per hour may vary (default: 1800)'
+        - Max 30 requests per minute'
       parameters:
       - in: query
         name: limit
@@ -201,21 +199,7 @@ paths:
                       - id
                       - filePath
                   pagination:
-                    type: object
-                    properties:
-                      before:
-                        type:
-                        - string
-                        - 'null'
-                        default: null
-                      after:
-                        type:
-                        - string
-                        - 'null'
-                        default: null
-                    required:
-                    - before
-                    - after
+                    $ref: '#/components/schemas/Pagination'
                 required:
                 - values
                 - pagination
@@ -253,6 +237,185 @@ paths:
       - Guides
 components:
   schemas:
+    GithubExternalSourceLocatorWithMetadataInput:
+      allOf:
+      - $ref: '#/components/schemas/GithubExternalSourceLocatorInput'
+      - properties:
+          branch:
+            type: string
+            description: 'The git branch for the uploaded version of the guide file
+
+              e.g. `main`'
+          commitHash:
+            type: string
+            description: The git commit hash for the uploaded version of the guide file
+        required:
+        - branch
+        - commitHash
+        type: object
+    UpsertGuideDraftRequestBody:
+      properties:
+        forceWrite:
+          type: boolean
+          description: 'If true, will overwrite an existing guide that is synced from a different source if there is a guide of the same name
+
+            e.g. guide1.md is authored in Hex, request.files includes guide1.md -> this will overwrite the guide that was authored in Hex
+
+
+            default: false'
+        files:
+          items:
+            properties:
+              externalSource:
+                $ref: '#/components/schemas/ExternalContextSourceInput'
+                description: The external source identifier for the guide file. This is used to track the where the guide file was authored from and where we expect updates to come from.
+              contents:
+                type: string
+                description: The contents of the guide file. Maximum length is 100000 characters.
+                maxLength: 100000
+              filePath:
+                type: string
+                description: 'The file path of the guide file.
+
+                  example: "guide.md"'
+            additionalProperties: {}
+            required:
+            - contents
+            - filePath
+            type: object
+          type: array
+          description: A mapping from filePath -> contents
+      required:
+      - files
+      type: object
+      additionalProperties: false
+    GithubExternalSourceLocatorInput:
+      properties:
+        repo:
+          type: string
+          description: The name of the github repository.
+        owner:
+          type: string
+          description: The owner of the github repository.
+        base:
+          type: string
+          description: The base URL of the github instance. This is usually `https://github.com` (default) unless uploaded from a self-hosted github instance.
+        source:
+          type: string
+          enum:
+          - github
+      required:
+      - repo
+      - owner
+      - source
+      type: object
+    Pagination:
+      type: object
+      properties:
+        before:
+          type:
+          - string
+          - 'null'
+          default: null
+        after:
+          type:
+          - string
+          - 'null'
+          default: null
+      required:
+      - before
+      - after
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+    GuideFileApiResource:
+      properties:
+        id:
+          $ref: '#/components/schemas/OrgGuideFileId'
+          description: The unique ID of the guide file.
+        filePath:
+          type: string
+          description: 'The file path of the guide file.
+
+            example: "guide.md"'
+      required:
+      - id
+      - filePath
+      type: object
+      additionalProperties: false
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
     UnknownExternalSourceInput:
       $ref: '#/components/schemas/UnknownExternalSourceLocatorInput'
     error.FORBIDDEN:
@@ -286,21 +449,56 @@ components:
         code: FORBIDDEN
         message: Insufficient access
         issues: []
-    ExternalSourceInput:
+    PublishGuidesRequestBody:
+      properties:
+        orgGuideFileIds:
+          items:
+            $ref: '#/components/schemas/OrgGuideFileId'
+          type: array
+          description: The IDs of the guides to publish if publishAllGuides is false.
+        publishAllDraftGuides:
+          type: boolean
+          description: Publish all draft guides (ignores the orgGuideFileIds field if true)
+      type: object
+      additionalProperties: false
+    OrgGuideFileId:
+      type: string
+      format: uuid
+      description: Unique ID for a guide file. This can be found by going into the menu of a guide file in the guide files side bar.
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    ExternalContextSourceInput:
       anyOf:
       - $ref: '#/components/schemas/UnknownExternalSourceInput'
       - $ref: '#/components/schemas/GithubExternalSourceInput'
       description: 'A unique identifier for a file that is sourced from an external source.
 
         This is used to track the where the guide file was authored from and where we expect updates to come from.'
-    TraceId:
-      type: string
-      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
-    OrgGuideFileId:
-      type: string
-      format: uuid
-      description: Unique ID for a guide file. This can be found by going into the menu of a guide file in the guide files side bar.
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    UpsertGuideDraftResponsePayload:
+      properties:
+        files:
+          items:
+            $ref: '#/components/schemas/GuideFileApiResource'
+          type: array
+        warnings:
+          items:
+            properties:
+              message:
+                type: string
+              filePath:
+                type: string
+            required:
+            - message
+            - filePath
+            type: object
+          type: array
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+      required:
+      - files
+      - warnings
+      - traceId
+      type: object
+      additionalProperties: false
     PublishGuidesResponsePayload:
       properties:
         message:
@@ -348,120 +546,6 @@ components:
         code: INTERNAL_SERVER_ERROR
         message: Internal server error
         issues: []
-    GuideFileApiResource:
-      properties:
-        id:
-          $ref: '#/components/schemas/OrgGuideFileId'
-          description: The unique ID of the guide file.
-        filePath:
-          type: string
-          description: 'The file path of the guide file.
-
-            example: "guide.md"'
-      required:
-      - id
-      - filePath
-      type: object
-      additionalProperties: false
-    error.UNAUTHORIZED:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Authorization not provided
-        code:
-          type: string
-          description: The error code
-          example: UNAUTHORIZED
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Authorization not provided error (401)
-      description: The error information
-      example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
-        issues: []
-    PublishGuidesRequestBody:
-      properties:
-        orgGuideFileIds:
-          items:
-            $ref: '#/components/schemas/OrgGuideFileId'
-          type: array
-          description: The IDs of the guides to publish if publishAllGuides is false.
-        publishAllDraftGuides:
-          type: boolean
-          description: Publish all draft guides (ignores the orgGuideFileIds field if true)
-      type: object
-      additionalProperties: false
-    GithubExternalSourceLocatorInput:
-      properties:
-        repo:
-          type: string
-          description: The name of the github repository.
-        owner:
-          type: string
-          description: The owner of the github repository.
-        base:
-          type: string
-          description: The base URL of the github instance. This is usually `https://github.com` (default) unless uploaded from a self-hosted github instance.
-        source:
-          type: string
-          enum:
-          - github
-      required:
-      - repo
-      - owner
-      - source
-      type: object
-    UpsertGuideDraftRequestBody:
-      properties:
-        forceWrite:
-          type: boolean
-          description: 'If true, will overwrite an existing guide that is synced from a different source if there is a guide of the same name
-
-            e.g. guide1.md is authored in Hex, request.files includes guide1.md -> this will overwrite the guide that was authored in Hex
-
-
-            default: false'
-        files:
-          items:
-            properties:
-              externalSource:
-                $ref: '#/components/schemas/ExternalSourceInput'
-                description: The external source identifier for the guide file. This is used to track the where the guide file was authored from and where we expect updates to come from.
-              contents:
-                type: string
-                description: The contents of the guide file. Maximum length is 100000 characters.
-                maxLength: 100000
-              filePath:
-                type: string
-                description: 'The file path of the guide file.
-
-                  example: "guide.md"'
-            additionalProperties: {}
-            required:
-            - contents
-            - filePath
-            type: object
-          type: array
-          description: A mapping from filePath -> contents
-      required:
-      - files
-      type: object
-      additionalProperties: false
     UnknownExternalSourceLocatorInput:
       properties:
         id:
@@ -505,48 +589,6 @@ components:
         code: BAD_REQUEST
         message: Invalid input data
         issues: []
-    error.NOT_FOUND:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Not found
-        code:
-          type: string
-          description: The error code
-          example: NOT_FOUND
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Not found error (404)
-      description: The error information
-      example:
-        code: NOT_FOUND
-        message: Not found
-        issues: []
-    TsoaErrorResponsePayload:
-      properties:
-        details:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        reason:
-          type: string
-      required:
-      - reason
-      type: object
     GithubExternalSourceInput:
       allOf:
       - $ref: '#/components/schemas/GithubExternalSourceLocatorWithMetadataInput'
@@ -558,48 +600,6 @@ components:
               e.g. `guides/guide.md`'
         required:
         - path
-        type: object
-    UpsertGuideDraftResponsePayload:
-      properties:
-        files:
-          items:
-            $ref: '#/components/schemas/GuideFileApiResource'
-          type: array
-        warnings:
-          items:
-            properties:
-              message:
-                type: string
-              filePath:
-                type: string
-            required:
-            - message
-            - filePath
-            type: object
-          type: array
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-      required:
-      - files
-      - warnings
-      - traceId
-      type: object
-      additionalProperties: false
-    GithubExternalSourceLocatorWithMetadataInput:
-      allOf:
-      - $ref: '#/components/schemas/GithubExternalSourceLocatorInput'
-      - properties:
-          branch:
-            type: string
-            description: 'The git branch for the uploaded version of the guide file
-
-              e.g. `main`'
-          commitHash:
-            type: string
-            description: The git commit hash for the uploaded version of the guide file
-        required:
-        - branch
-        - commitHash
         type: object
   securitySchemes:
     bearerAuth:

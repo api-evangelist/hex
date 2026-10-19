@@ -1,0 +1,898 @@
+openapi: 3.2.0
+info:
+  title: Hex Suggestions API
+  version: 1.0.0
+  description: API specification for the Hex External API
+  license:
+    name: UNLICENSED
+  contact: {}
+servers:
+- url: https://app.hex.tech/api
+security:
+- bearerAuth: []
+tags:
+- name: Suggestions
+paths:
+  /v1/suggestions/{suggestionId}:
+    get:
+      operationId: GetSuggestion
+      summary: GetSuggestion
+      description: 'Get a single context suggestion by id, including its evidence sources and the proposed changes from its most recent review run.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
+
+        - Max 30 requests per minute'
+      parameters:
+      - in: path
+        name: suggestionId
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  summary:
+                    type: string
+                  status:
+                    type: string
+                    enum:
+                    - OPEN
+                    - COMPLETED
+                    - DISMISSED
+                    - IN_PROGRESS
+                    - RESOLVED
+                  createdDate:
+                    type: string
+                  lastSourceAddedDate:
+                    type:
+                    - string
+                    - 'null'
+                  reviewAgentStatus:
+                    allOf:
+                    - $ref: '#/components/schemas/ReviewAgentStatus'
+                  sources:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        warning:
+                          type:
+                          - object
+                          - 'null'
+                          properties:
+                            warningType:
+                              type: string
+                            summary:
+                              type: string
+                          required:
+                          - warningType
+                          - summary
+                        agentChatThread:
+                          type:
+                          - object
+                          - 'null'
+                          properties:
+                            id:
+                              type: string
+                            title:
+                              type:
+                              - string
+                              - 'null'
+                            user:
+                              type:
+                              - object
+                              - 'null'
+                              properties:
+                                id:
+                                  type: string
+                                name:
+                                  type:
+                                  - string
+                                  - 'null'
+                              required:
+                              - id
+                              - name
+                            intent:
+                              type:
+                              - string
+                              - 'null'
+                          required:
+                          - id
+                          - title
+                          - user
+                          - intent
+                      required:
+                      - warning
+                      - agentChatThread
+                  proposedChanges:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        status:
+                          type: string
+                          enum:
+                          - NEEDS_REVIEW
+                          - COMPLETED
+                          - DISMISSED
+                          - STALE
+                        updateType:
+                          type: string
+                          enum:
+                          - FILE_UPDATE
+                          - DATA_WAREHOUSE_UPDATE
+                        payload:
+                          type: object
+                          properties:
+                            updateType:
+                              type: string
+                              enum:
+                              - CREATE_ORG_GUIDE_FILE
+                              - EDIT_ORG_GUIDE_FILE
+                              - EDIT_WORKSPACE_RULES
+                              - UPDATE_DESCRIPTION
+                              - UPDATE_STATUS
+                            filePath:
+                              type: string
+                            diff:
+                              type: string
+                            dataConnectionName:
+                              type:
+                              - string
+                              - 'null'
+                            databaseName:
+                              type:
+                              - string
+                              - 'null'
+                            schemaName:
+                              type:
+                              - string
+                              - 'null'
+                            tableName:
+                              type:
+                              - string
+                              - 'null'
+                            columnName:
+                              type:
+                              - string
+                              - 'null'
+                            descriptionUpdate:
+                              type:
+                              - object
+                              - 'null'
+                              properties:
+                                currentDescriptions:
+                                  type: object
+                                  properties:
+                                    hexDescription:
+                                      type:
+                                      - string
+                                      - 'null'
+                                    warehouseComment:
+                                      type:
+                                      - string
+                                      - 'null'
+                                    dbtDescription:
+                                      type:
+                                      - string
+                                      - 'null'
+                                  required:
+                                  - hexDescription
+                                  - warehouseComment
+                                  - dbtDescription
+                                newDescription:
+                                  type:
+                                  - string
+                                  - 'null'
+                              required:
+                              - currentDescriptions
+                              - newDescription
+                            statusUpdate:
+                              type:
+                              - object
+                              - 'null'
+                              properties:
+                                currentStatusName:
+                                  type:
+                                  - string
+                                  - 'null'
+                                newStatusName:
+                                  type:
+                                  - string
+                                  - 'null'
+                              required:
+                              - currentStatusName
+                              - newStatusName
+                          required:
+                          - updateType
+                      required:
+                      - id
+                      - status
+                      - updateType
+                      - payload
+                required:
+                - id
+                - title
+                - summary
+                - status
+                - createdDate
+                - lastSourceAddedDate
+                - reviewAgentStatus
+                - sources
+                - proposedChanges
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Suggestions
+    post:
+      operationId: UpdateSuggestion
+      summary: UpdateSuggestion
+      description: 'Update the status of a context suggestion.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
+
+        - Max 30 requests per minute'
+      parameters:
+      - in: path
+        name: suggestionId
+        schema:
+          type: string
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                  - OPEN
+                  - COMPLETED
+                  - DISMISSED
+                  - IN_PROGRESS
+                  - RESOLVED
+                rejectionReason:
+                  type:
+                  - string
+                  - 'null'
+                  description: The reason for the rejection if status is `DISMISSED`.
+              required:
+              - status
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  suggestion:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      title:
+                        type: string
+                      summary:
+                        type: string
+                      status:
+                        type: string
+                        enum:
+                        - OPEN
+                        - COMPLETED
+                        - DISMISSED
+                        - IN_PROGRESS
+                        - RESOLVED
+                      createdDate:
+                        type: string
+                      lastSourceAddedDate:
+                        type:
+                        - string
+                        - 'null'
+                      reviewAgentStatus:
+                        allOf:
+                        - $ref: '#/components/schemas/ReviewAgentStatus'
+                    required:
+                    - id
+                    - title
+                    - summary
+                    - status
+                    - createdDate
+                    - lastSourceAddedDate
+                    - reviewAgentStatus
+                required:
+                - suggestion
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Suggestions
+  /v1/suggestions:
+    get:
+      operationId: ListSuggestions
+      summary: ListSuggestions
+      description: 'List context suggestions for the workspace.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
+
+        - Max 30 requests per minute'
+      parameters:
+      - in: query
+        name: after
+        schema:
+          type:
+          - string
+          - 'null'
+          default: null
+      - in: query
+        name: before
+        schema:
+          type:
+          - string
+          - 'null'
+          default: null
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 100
+      - in: query
+        name: sortBy
+        schema:
+          type: string
+          enum:
+          - CREATED_DATE
+          - EVIDENCE_COUNT
+          - LAST_SOURCE_ADDED_DATE
+          default: CREATED_DATE
+      - in: query
+        name: sortDirection
+        schema:
+          type: string
+          enum:
+          - ASC
+          - DESC
+          default: DESC
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - OPEN
+          - COMPLETED
+          - DISMISSED
+          - IN_PROGRESS
+          - RESOLVED
+          default: OPEN
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  values:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        title:
+                          type: string
+                        summary:
+                          type: string
+                        status:
+                          type: string
+                          enum:
+                          - OPEN
+                          - COMPLETED
+                          - DISMISSED
+                          - IN_PROGRESS
+                          - RESOLVED
+                        createdDate:
+                          type: string
+                        lastSourceAddedDate:
+                          type:
+                          - string
+                          - 'null'
+                        reviewAgentStatus:
+                          allOf:
+                          - $ref: '#/components/schemas/ReviewAgentStatus'
+                      required:
+                      - id
+                      - title
+                      - summary
+                      - status
+                      - createdDate
+                      - lastSourceAddedDate
+                      - reviewAgentStatus
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                required:
+                - values
+                - pagination
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Suggestions
+  /v1/suggestions/{suggestionId}/changes/{changeId}:
+    post:
+      operationId: UpdateSuggestionChange
+      summary: UpdateSuggestionChange
+      description: 'Update the status of an individual proposed change within a context suggestion. The change is either a file update or a data-warehouse update, selected by `updateTarget`.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
+
+        - Max 30 requests per minute'
+      parameters:
+      - in: path
+        name: suggestionId
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: changeId
+        schema:
+          type: string
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                updateTarget:
+                  type: string
+                  enum:
+                  - FILE_UPDATE
+                  - DATA_WAREHOUSE_UPDATE
+                status:
+                  type: string
+                  enum:
+                  - NEEDS_REVIEW
+                  - COMPLETED
+                  - DISMISSED
+                  - STALE
+                rejectionReason:
+                  type:
+                  - string
+                  - 'null'
+                  description: The reason for the rejection if status is `DISMISSED`.
+              required:
+              - updateTarget
+              - status
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  suggestionUpdate:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      status:
+                        type: string
+                        enum:
+                        - NEEDS_REVIEW
+                        - COMPLETED
+                        - DISMISSED
+                        - STALE
+                      rejectionReason:
+                        type:
+                        - string
+                        - 'null'
+                    required:
+                    - id
+                    - status
+                    - rejectionReason
+                required:
+                - suggestionUpdate
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Suggestions
+  /v1/suggestions/{suggestionId}/review:
+    post:
+      operationId: TriggerSuggestionReview
+      summary: TriggerSuggestionReview
+      description: 'Trigger a background review agent run for the given context suggestion. If a review is already in flight for this suggestion, returns the current run.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
+
+        - Max 30 requests per minute'
+      parameters:
+      - in: path
+        name: suggestionId
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  suggestion:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      title:
+                        type: string
+                      summary:
+                        type: string
+                      status:
+                        type: string
+                        enum:
+                        - OPEN
+                        - COMPLETED
+                        - DISMISSED
+                        - IN_PROGRESS
+                        - RESOLVED
+                      createdDate:
+                        type: string
+                      lastSourceAddedDate:
+                        type:
+                        - string
+                        - 'null'
+                      reviewAgentStatus:
+                        allOf:
+                        - $ref: '#/components/schemas/ReviewAgentStatus'
+                    required:
+                    - id
+                    - title
+                    - summary
+                    - status
+                    - createdDate
+                    - lastSourceAddedDate
+                    - reviewAgentStatus
+                required:
+                - suggestion
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Suggestions
+components:
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        before:
+          type:
+          - string
+          - 'null'
+          default: null
+        after:
+          type:
+          - string
+          - 'null'
+          default: null
+      required:
+      - before
+      - after
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
+    error.INTERNAL_SERVER_ERROR:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Internal server error
+        code:
+          type: string
+          description: The error code
+          example: INTERNAL_SERVER_ERROR
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Internal server error error (500)
+      description: The error information
+      example:
+        code: INTERNAL_SERVER_ERROR
+        message: Internal server error
+        issues: []
+    ReviewAgentStatus:
+      type: string
+      enum:
+      - RUNNING
+      - COMPLETED
+      - NO_OP
+      - FAILED
+    error.FORBIDDEN:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Insufficient access
+        code:
+          type: string
+          description: The error code
+          example: FORBIDDEN
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Insufficient access error (403)
+      description: The error information
+      example:
+        code: FORBIDDEN
+        message: Insufficient access
+        issues: []
+    error.BAD_REQUEST:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Invalid input data
+        code:
+          type: string
+          description: The error code
+          example: BAD_REQUEST
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Invalid input data error (400)
+      description: The error information
+      example:
+        code: BAD_REQUEST
+        message: Invalid input data
+        issues: []
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

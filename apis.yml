@@ -305,6 +305,16 @@ apis:
     url: data-model/hex-data-model.yml
   - type: Conformance
     url: conformance/hex-conformance.yml
+- aid: hex:hex-suggestions-api
+  name: Hex Suggestions API
+  description: The Suggestions API from Hex — 4 operation(s) for suggestions.
+  humanURL: https://learn.hex.tech/docs/api-integrations/api/overview
+  baseURL: https://app.hex.tech/api/v1
+  tags:
+  - Suggestions
+  properties:
+  - type: OpenAPI
+    url: openapi/hex-suggestions-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

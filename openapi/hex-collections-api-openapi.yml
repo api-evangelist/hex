@@ -206,47 +206,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    UserId:
-      type: string
-      format: uuid
-      description: Unique ID for a user. This can be found from the users page (in Settings).
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    Name:
-      type: string
-      minLength: 1
-    CollectionAccess:
-      $ref: '#/components/schemas/EnumValues_typeofCollectionAccess_'
-    TsoaErrorResponsePayload:
-      properties:
-        details:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        reason:
-          type: string
-      required:
-      - reason
-      type: object
-    EnumValues_typeofCollectionAccess_:
-      type: string
-    ListCollectionsSortByEnum:
-      $ref: '#/components/schemas/EnumValues_typeofListCollectionsSortByEnum_'
-    EnumValues_typeofListCollectionsSortByEnum_:
-      type: string
-      enum:
-      - NAME
-    ApiPaginationCursor:
-      type: string
-      description: 'A cursor string used with `before` and `after` parameters to paginate through a list
-
-        of items on the API.'
-    PageSize:
-      type: integer
-      format: int32
-      default: '25'
-      description: Number of results to fetch per page for paginated requests
-      minimum: 1
-      maximum: 100
     ListCollectionsResponse:
       properties:
         values:
@@ -260,19 +219,6 @@ components:
       - pagination
       type: object
       additionalProperties: false
-    CollectionId:
-      type: string
-      format: uuid
-      description: Unique ID for a collection.
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    GroupId:
-      type: string
-      format: uuid
-      description: Unique ID for a group. This can be found from the groups page (in Settings).
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    TraceId:
-      type: string
-      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
     CollectionApiResourceSharing:
       properties:
         users:
@@ -332,6 +278,48 @@ components:
       - sharing
       type: object
       additionalProperties: false
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
+    UserId:
+      type: string
+      format: uuid
+      description: Unique ID for a user. This can be found from the users page (in Settings).
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    ListCollectionsSortByEnum:
+      $ref: '#/components/schemas/EnumValues_typeofListCollectionsSortByEnum_'
+    CollectionAccess:
+      $ref: '#/components/schemas/EnumValues_typeofCollectionAccess_'
+    PageSize:
+      type: integer
+      format: int32
+      default: '25'
+      description: Number of results to fetch per page for paginated requests
+      minimum: 1
+      maximum: 100
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+    EnumValues_typeofListCollectionsSortByEnum_:
+      type: string
+      enum:
+      - NAME
+    Name:
+      type: string
+      minLength: 1
+    GroupId:
+      type: string
+      format: uuid
+      description: Unique ID for a group. This can be found from the groups page (in Settings).
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
     PaginationApiResource:
       properties:
         after:
@@ -345,6 +333,18 @@ components:
       - before
       type: object
       additionalProperties: false
+    ApiPaginationCursor:
+      type: string
+      description: 'A cursor string used with `before` and `after` parameters to paginate through a list
+
+        of items on the API.'
+    EnumValues_typeofCollectionAccess_:
+      type: string
+    CollectionId:
+      type: string
+      format: uuid
+      description: Unique ID for a collection.
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
   securitySchemes:
     bearerAuth:
       type: http

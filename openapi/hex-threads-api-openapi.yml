@@ -20,12 +20,9 @@ paths:
       description: 'Start an agent thread with a prompt. The Hex agent will analyze data and respond to the prompt. The thread runs asynchronously — poll its status or visit the returned URL to view progress.
 
 
-        Availability of this endpoint varies by organization. Contact Hex support to request access.
-
-
         This endpoint is subject to the following rate limits:
 
-        - `hex-send-thread-message`: Rate limits for sending messages to threads
+        - `hex-run-kernel`: Rate limits for starting project runs, sending thread messages, or executing kernels
 
         - Max requests per minute may vary
 
@@ -204,6 +201,16 @@ paths:
           - MODELING
           - null
       - in: query
+        name: classification
+        schema:
+          type:
+          - string
+          - 'null'
+          enum:
+          - ANALYSIS
+          - APP_BUILDING
+          - null
+      - in: query
         name: numDays
         schema:
           type:
@@ -240,6 +247,12 @@ paths:
           - string
           - 'null'
           description: Comma-separated list of topic IDs to filter by
+      - in: query
+        name: resourceIds
+        schema:
+          type:
+          - string
+          - 'null'
       responses:
         '200':
           description: Successful response
@@ -329,6 +342,20 @@ paths:
                           - 'null'
                         model:
                           type: string
+                          description: 'Deprecated: use `auto` and `effectiveModel` instead. The model the user explicitly selected, or ''Auto'' when the thread runs on Auto'
+                          deprecated: true
+                        auto:
+                          type: boolean
+                          description: Whether the thread runs on Auto rather than an explicit model selection
+                        effectiveModel:
+                          type:
+                          - string
+                          - 'null'
+                          description: The model the thread actually runs on. For Auto threads this is the model Auto selected. Null for legacy threads with no recorded model
+                        effortLevel:
+                          type:
+                          - string
+                          - 'null'
                         userId:
                           type:
                           - string
@@ -336,11 +363,19 @@ paths:
                         type:
                           type: string
                           description: User-facing label for the type of agent thread
+                        classification:
+                          type:
+                          - string
+                          - 'null'
+                          description: User-facing label for how the thread's work was classified (e.g. Analysis, App building). Null if the thread has not been classified
                         source:
                           type: string
                           description: The source of where the thread was created
                         createdAt:
                           type: string
+                        updatedAt:
+                          type: string
+                          description: When the thread was last updated
                         sensitive:
                           type: boolean
                           description: Whether the thread has been marked as sensitive. When true, the thread's contents (such as title) are hidden from callers other than the thread author
@@ -353,28 +388,16 @@ paths:
                       required:
                       - userId
                       - type
+                      - classification
                       - source
                       - createdAt
+                      - updatedAt
                       - sensitive
                       - id
                       - orgId
                       - url
                   pagination:
-                    type: object
-                    properties:
-                      before:
-                        type:
-                        - string
-                        - 'null'
-                        default: null
-                      after:
-                        type:
-                        - string
-                        - 'null'
-                        default: null
-                    required:
-                    - before
-                    - after
+                    $ref: '#/components/schemas/Pagination'
                 required:
                 - threads
                 - pagination
@@ -514,6 +537,20 @@ paths:
                     - 'null'
                   model:
                     type: string
+                    description: 'Deprecated: use `auto` and `effectiveModel` instead. The model the user explicitly selected, or ''Auto'' when the thread runs on Auto'
+                    deprecated: true
+                  auto:
+                    type: boolean
+                    description: Whether the thread runs on Auto rather than an explicit model selection
+                  effectiveModel:
+                    type:
+                    - string
+                    - 'null'
+                    description: The model the thread actually runs on. For Auto threads this is the model Auto selected. Null for legacy threads with no recorded model
+                  effortLevel:
+                    type:
+                    - string
+                    - 'null'
                   userId:
                     type:
                     - string
@@ -521,11 +558,19 @@ paths:
                   type:
                     type: string
                     description: User-facing label for the type of agent thread
+                  classification:
+                    type:
+                    - string
+                    - 'null'
+                    description: User-facing label for how the thread's work was classified (e.g. Analysis, App building). Null if the thread has not been classified
                   source:
                     type: string
                     description: The source of where the thread was created
                   createdAt:
                     type: string
+                  updatedAt:
+                    type: string
+                    description: When the thread was last updated
                   sensitive:
                     type: boolean
                     description: Whether the thread has been marked as sensitive. When true, the thread's contents (such as title) are hidden from callers other than the thread author
@@ -551,6 +596,7 @@ paths:
                         - BAD_DATA
                         - AGENT_ERROR
                         - AGENT_OVERLOADED
+                        - AGENT_RATE_LIMITED
                         - GENERIC_ERROR
                         - POSSIBLE_PROMPT_INJECTION
                         - OVER_LIMIT
@@ -566,18 +612,39 @@ paths:
                         - EXPLORE_NO_DATA
                         - CHART_ROW_LIMIT_EXCEEDED
                         - BYOK_AUTHENTICATION
+                        - BYOK_KEY_MISSING
                         - AGENT_COMPRESSION_ERROR
                         - TOKEN_COUNTING_FAILURE
                         - REQUEST_CANCELLED
                         - INVALID_MESSAGE_HISTORY
                         - INVALID_REQUEST
                         - DATA_CONNECTION_NOT_AUTHORIZED
+                        - MODEL_NOT_AVAILABLE
+                        - PROVIDER_CONNECTION_INTERRUPTED
+                        - AGENT_AUTH
+                        - PROVIDER_QUOTA_EXCEEDED
+                        - DEADLINE_EXCEEDED
                         - JOIN_VALIDATION_TIMEOUT
                       message:
                         type: string
                     required:
                     - type
                     - message
+                  resources:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        resourceType:
+                          type: string
+                        name:
+                          type: string
+                      required:
+                      - id
+                      - resourceType
+                      - name
                   response:
                     type:
                     - array
@@ -648,14 +715,20 @@ paths:
                 - warnings
                 - feedback
                 - model
+                - auto
+                - effectiveModel
+                - effortLevel
                 - userId
                 - type
+                - classification
                 - source
                 - createdAt
+                - updatedAt
                 - sensitive
                 - threadId
                 - status
                 - url
+                - resources
                 - response
         '400':
           description: Invalid input data
@@ -693,7 +766,7 @@ paths:
     get:
       operationId: GetThreadMessages
       summary: GetThreadMessages
-      description: 'List the messages in an agent thread, rendered as a single flat list of text blocks. Within a page messages are chronological (oldest first); each text block is prefixed with the authoring role, and thinking and error blocks are tagged. Tool-call, tool-result, and mention blocks are omitted, and inline references are left as raw tags. By default the most recent page is returned (matching the MCP get_thread tool); pass the `before` cursor to fetch older messages and `after` to fetch newer ones. Supports cursor pagination with a maximum page size of 50.
+      description: 'List the messages in an agent thread, rendered as a single flat list of text blocks. Within a page messages are chronological (oldest first); each text block is prefixed with the authoring role, and thinking and error blocks are tagged. Each block includes the creation time of its originating message. Tool-call, tool-result, and mention blocks are omitted, and inline references are left as raw tags. By default the most recent page is returned (matching the MCP get_thread tool); pass the `before` cursor to fetch older messages and `after` to fetch newer ones. Set `full` to include JSON-encoded message records with thinking, tool calls, results, and mentions. Supports cursor pagination with a maximum page size of 50.
 
 
         This endpoint is subject to the following rate limits:
@@ -730,6 +803,13 @@ paths:
           minimum: 1
           maximum: 50
           default: 25
+      - in: query
+        name: full
+        description: Include JSON-encoded message records with thinking, tool calls, results, and mentions
+        schema:
+          type: boolean
+          default: false
+          description: Include JSON-encoded message records with thinking, tool calls, results, and mentions
       responses:
         '200':
           description: Successful response
@@ -749,27 +829,17 @@ paths:
                           - text
                         text:
                           type: string
+                        createdAt:
+                          type: string
+                          description: When the originating message was created
                       required:
                       - type
                       - text
+                      - createdAt
                       description: A rendered text block from the thread
                     description: The thread's messages rendered as a single flat, ordered list of content blocks
                   pagination:
-                    type: object
-                    properties:
-                      before:
-                        type:
-                        - string
-                        - 'null'
-                        default: null
-                      after:
-                        type:
-                        - string
-                        - 'null'
-                        default: null
-                    required:
-                    - before
-                    - after
+                    $ref: '#/components/schemas/Pagination'
                 required:
                 - content
                 - pagination
@@ -812,12 +882,9 @@ paths:
       description: 'Continue an existing agent thread with a follow-up prompt. This endpoint does not support queuing: the thread must be idle before a follow-up can be sent.
 
 
-        Availability of this endpoint varies by organization. Contact Hex support to request access.
-
-
         This endpoint is subject to the following rate limits:
 
-        - `hex-send-thread-message`: Rate limits for sending messages to threads
+        - `hex-run-kernel`: Rate limits for starting project runs, sending thread messages, or executing kernels
 
         - Max requests per minute may vary
 
@@ -912,6 +979,53 @@ paths:
       - Threads
 components:
   schemas:
+    Pagination:
+      type: object
+      properties:
+        before:
+          type:
+          - string
+          - 'null'
+          default: null
+        after:
+          type:
+          - string
+          - 'null'
+          default: null
+      required:
+      - before
+      - after
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
     error.INTERNAL_SERVER_ERROR:
       type: object
       properties:
@@ -973,37 +1087,6 @@ components:
       example:
         code: FORBIDDEN
         message: Insufficient access
-        issues: []
-    error.UNAUTHORIZED:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Authorization not provided
-        code:
-          type: string
-          description: The error code
-          example: UNAUTHORIZED
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Authorization not provided error (401)
-      description: The error information
-      example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
         issues: []
     error.BAD_REQUEST:
       type: object

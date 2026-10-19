@@ -14,57 +14,6 @@ tags:
 - name: Projects
 paths:
   /v1/projects:
-    post:
-      operationId: CreateProject
-      responses:
-        '201':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectApiResource'
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '403':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '500':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-      description: 'Create a new project.
-
-
-        Creates a new project in the workspace with the specified title.
-
-        Optionally provide a description and project language.'
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                description:
-                  type: string
-                title:
-                  type: string
-              required:
-              - title
-              type: object
-      tags:
-      - Projects
-      summary: Create project
-      x-summary-source: derived
     get:
       operationId: ListProjects
       responses:
@@ -102,6 +51,12 @@ paths:
           type: boolean
       - in: query
         name: includeTrashed
+        required: false
+        schema:
+          default: false
+          type: boolean
+      - in: query
+        name: includeUnlisted
         required: false
         schema:
           default: false
@@ -175,6 +130,55 @@ paths:
       - Projects
       summary: List projects
       x-summary-source: derived
+    post:
+      operationId: CreateProject
+      summary: CreateProject
+      description: 'Create a new project in the workspace with the specified title, and optionally a description.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The title of the new project.
+                description:
+                  type: string
+                  description: An optional description for the new project.
+              required:
+              - title
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+      tags:
+      - Projects
   /v1/projects/{projectId}/queriedTables:
     get:
       operationId: GetQueriedTables
@@ -331,887 +335,7 @@ paths:
       - Projects
       summary: Edit project sharing collections
       x-summary-source: derived
-  /v1/projects/{projectId}/sharing/workspaceAndPublic:
-    patch:
-      operationId: EditProjectSharingOrgAndPublic
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EditProjectSharingWorkspaceAndPublicResponse'
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '403':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '404':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '500':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-      description: 'Update workspace or public-web sharing for a project.
-
-        For projects, use `CAN_VIEW` to grant the UI permission labeled "Can explore".
-
-        Use `APP_ONLY` to grant the UI permission labeled "Can view app".'
-      parameters:
-      - in: path
-        name: projectId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ProjectId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                sharing:
-                  properties:
-                    publicWeb:
-                      $ref: '#/components/schemas/PublicWebAccessLevel'
-                    workspace:
-                      $ref: '#/components/schemas/AccessLevelEnum'
-                  type: object
-              required:
-              - sharing
-              type: object
-      tags:
-      - Projects
-      summary: Edit project sharing org and public
-      x-summary-source: derived
-  /v1/projects/{projectId}/sharing/groups:
-    patch:
-      operationId: EditProjectSharingGroups
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EditProjectSharingGroupsResponse'
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '403':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '404':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '500':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-      description: 'Add groups to a project or update/remove their project sharing access.
-
-        For projects, use `CAN_VIEW` to grant the UI permission labeled "Can explore".
-
-        Use `APP_ONLY` to grant the UI permission labeled "Can view app".'
-      parameters:
-      - in: path
-        name: projectId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ProjectId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                sharing:
-                  properties:
-                    upsert:
-                      properties:
-                        groups:
-                          items:
-                            properties:
-                              access:
-                                $ref: '#/components/schemas/AccessLevelEnum'
-                              group:
-                                properties:
-                                  id:
-                                    $ref: '#/components/schemas/GroupId'
-                                required:
-                                - id
-                                type: object
-                            required:
-                            - access
-                            - group
-                            type: object
-                          type: array
-                          maxItems: 25
-                      required:
-                      - groups
-                      type: object
-                  required:
-                  - upsert
-                  type: object
-              required:
-              - sharing
-              type: object
-      tags:
-      - Projects
-      summary: Edit project sharing groups
-      x-summary-source: derived
-  /v1/projects/{projectId}/sharing/users:
-    patch:
-      operationId: EditProjectSharingUsers
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EditProjectSharingUsersResponse'
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '403':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '404':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '500':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-      description: 'Add users to a project or update/remove their project sharing access.
-
-        For projects, use `CAN_VIEW` to grant the UI permission labeled "Can explore".
-
-        Use `APP_ONLY` to grant the UI permission labeled "Can view app".'
-      parameters:
-      - in: path
-        name: projectId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ProjectId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                sharing:
-                  properties:
-                    upsert:
-                      properties:
-                        users:
-                          items:
-                            properties:
-                              access:
-                                $ref: '#/components/schemas/AccessLevelEnum'
-                              user:
-                                properties:
-                                  id:
-                                    $ref: '#/components/schemas/UserId'
-                                required:
-                                - id
-                                type: object
-                            required:
-                            - access
-                            - user
-                            type: object
-                          type: array
-                          maxItems: 25
-                      required:
-                      - users
-                      type: object
-                  required:
-                  - upsert
-                  type: object
-              required:
-              - sharing
-              type: object
-      tags:
-      - Projects
-      summary: Edit project sharing users
-      x-summary-source: derived
-  /v1/projects/{projectId}:
-    patch:
-      operationId: UpdateProject
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectApiResource'
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '403':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '404':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '500':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-      description: Use this endpoint to add or remove a status (including endorsements) from a project
-      parameters:
-      - in: path
-        name: projectId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ProjectId'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                status:
-                  type:
-                  - string
-                  - 'null'
-              type: object
-      tags:
-      - Projects
-      summary: Update project
-      x-summary-source: derived
-    get:
-      operationId: GetProject
-      summary: GetProject
-      description: 'Get metadata about a single project.
-
-
-        This endpoint is subject to the following rate limits:
-
-        - `hex-api`: Default rate limit group for the Hex API
-
-        - Max requests per minute may vary (default: 30)
-
-        - Max requests per hour may vary (default: 1800)'
-      parameters:
-      - in: path
-        name: projectId
-        description: The project to fetch.
-        schema:
-          type: string
-          description: The project to fetch.
-        required: true
-      - in: query
-        name: includeSharing
-        description: Whether to include sharing metadata in the response.
-        schema:
-          type: boolean
-          default: false
-          description: Whether to include sharing metadata in the response.
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  title:
-                    type: string
-                  description:
-                    type:
-                    - string
-                    - 'null'
-                  type:
-                    type: string
-                    enum:
-                    - PROJECT
-                    - COMPONENT
-                  creator:
-                    type: object
-                    properties:
-                      email:
-                        type: string
-                    required:
-                    - email
-                  owner:
-                    type: object
-                    properties:
-                      email:
-                        type: string
-                    required:
-                    - email
-                  status:
-                    type:
-                    - object
-                    - 'null'
-                    properties:
-                      name:
-                        type: string
-                    required:
-                    - name
-                  categories:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                        description:
-                          type:
-                          - string
-                          - 'null'
-                      required:
-                      - name
-                      - description
-                  reviews:
-                    type: object
-                    properties:
-                      required:
-                        type: boolean
-                    required:
-                    - required
-                  analytics:
-                    type: object
-                    properties:
-                      appViews:
-                        type: object
-                        properties:
-                          allTime:
-                            type: integer
-                          lastSevenDays:
-                            type: integer
-                          lastFourteenDays:
-                            type: integer
-                          lastThirtyDays:
-                            type: integer
-                        required:
-                        - allTime
-                        - lastSevenDays
-                        - lastFourteenDays
-                        - lastThirtyDays
-                      lastViewedAt:
-                        type:
-                        - string
-                        - 'null'
-                      publishedResultsUpdatedAt:
-                        type:
-                        - string
-                        - 'null'
-                    required:
-                    - appViews
-                    - lastViewedAt
-                    - publishedResultsUpdatedAt
-                  lastEditedAt:
-                    type: string
-                  lastPublishedAt:
-                    type:
-                    - string
-                    - 'null'
-                  createdAt:
-                    type: string
-                  archivedAt:
-                    type:
-                    - string
-                    - 'null'
-                  trashedAt:
-                    type:
-                    - string
-                    - 'null'
-                  schedules:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        cadence:
-                          type: string
-                          enum:
-                          - HOURLY
-                          - DAILY
-                          - WEEKLY
-                          - MONTHLY
-                          - CUSTOM
-                        enabled:
-                          type: boolean
-                        hourly:
-                          type:
-                          - object
-                          - 'null'
-                          properties:
-                            minute:
-                              type: integer
-                            timezone:
-                              type: string
-                          required:
-                          - minute
-                          - timezone
-                        daily:
-                          type:
-                          - object
-                          - 'null'
-                          properties:
-                            hour:
-                              type: integer
-                            minute:
-                              type: integer
-                            timezone:
-                              type: string
-                          required:
-                          - hour
-                          - minute
-                          - timezone
-                        weekly:
-                          type:
-                          - object
-                          - 'null'
-                          properties:
-                            dayOfWeek:
-                              type: string
-                              enum:
-                              - SUNDAY
-                              - MONDAY
-                              - TUESDAY
-                              - WEDNESDAY
-                              - THURSDAY
-                              - FRIDAY
-                              - SATURDAY
-                            hour:
-                              type: integer
-                            minute:
-                              type: integer
-                            timezone:
-                              type: string
-                          required:
-                          - dayOfWeek
-                          - hour
-                          - minute
-                          - timezone
-                        monthly:
-                          type:
-                          - object
-                          - 'null'
-                          properties:
-                            day:
-                              type: integer
-                            hour:
-                              type: integer
-                            minute:
-                              type: integer
-                            timezone:
-                              type: string
-                          required:
-                          - day
-                          - hour
-                          - minute
-                          - timezone
-                        custom:
-                          type:
-                          - object
-                          - 'null'
-                          properties:
-                            cron:
-                              type: string
-                            timezone:
-                              type: string
-                          required:
-                          - cron
-                          - timezone
-                      required:
-                      - cadence
-                      - enabled
-                      - hourly
-                      - daily
-                      - weekly
-                      - monthly
-                      - custom
-                  sharing:
-                    type: object
-                    properties:
-                      users:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            user:
-                              type: object
-                              properties:
-                                email:
-                                  type: string
-                              required:
-                              - email
-                            access:
-                              type: string
-                              enum:
-                              - NONE
-                              - APP_ONLY
-                              - CAN_VIEW
-                              - CAN_EDIT
-                              - FULL_ACCESS
-                          required:
-                          - user
-                          - access
-                      collections:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            collection:
-                              type: object
-                              properties:
-                                name:
-                                  type: string
-                              required:
-                              - name
-                            access:
-                              type: string
-                              enum:
-                              - NONE
-                              - APP_ONLY
-                              - CAN_VIEW
-                              - CAN_EDIT
-                              - FULL_ACCESS
-                          required:
-                          - collection
-                          - access
-                      groups:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            group:
-                              type: object
-                              properties:
-                                name:
-                                  type: string
-                              required:
-                              - name
-                            access:
-                              type: string
-                              enum:
-                              - NONE
-                              - APP_ONLY
-                              - CAN_VIEW
-                              - CAN_EDIT
-                              - FULL_ACCESS
-                          required:
-                          - group
-                          - access
-                      workspace:
-                        type: object
-                        properties:
-                          access:
-                            type: string
-                            enum:
-                            - NONE
-                            - APP_ONLY
-                            - CAN_VIEW
-                            - CAN_EDIT
-                            - FULL_ACCESS
-                        required:
-                        - access
-                      publicWeb:
-                        type: object
-                        properties:
-                          access:
-                            type: string
-                            enum:
-                            - NONE
-                            - APP_ONLY
-                            - CAN_VIEW
-                            - CAN_EDIT
-                            - FULL_ACCESS
-                        required:
-                        - access
-                      support:
-                        type: object
-                        properties:
-                          access:
-                            type: string
-                            enum:
-                            - NONE
-                            - APP_ONLY
-                            - CAN_VIEW
-                            - CAN_EDIT
-                            - FULL_ACCESS
-                        required:
-                        - access
-                    required:
-                    - users
-                    - collections
-                    - groups
-                    - workspace
-                    - publicWeb
-                    - support
-                required:
-                - id
-                - title
-                - description
-                - type
-                - creator
-                - owner
-                - status
-                - categories
-                - reviews
-                - analytics
-                - lastEditedAt
-                - lastPublishedAt
-                - createdAt
-                - archivedAt
-                - trashedAt
-                - schedules
-        '400':
-          description: Invalid input data
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.BAD_REQUEST'
-        '401':
-          description: Authorization not provided
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.UNAUTHORIZED'
-        '403':
-          description: Insufficient access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.FORBIDDEN'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.NOT_FOUND'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
-      tags:
-      - Projects
-  /v1/projects/{projectId}/runs:
-    post:
-      operationId: RunProject
-      responses:
-        '201':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectRunResponsePayload'
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '403':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '422':
-          description: ''
-          content:
-            application/json:
-              schema:
-                anyOf:
-                - $ref: '#/components/schemas/TsoaErrorResponsePayload'
-                - $ref: '#/components/schemas/InvalidParamPayload'
-        '503':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-      description: 'Trigger a run of the latest published version of a project.
-
-
-        This API endpoint is subject to a maximum of 20 requests per minute and 60 requests per hour.'
-      parameters:
-      - in: path
-        name: projectId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ProjectId'
-      - in: header
-        name: flag-config-override
-        required: false
-        schema:
-          type: string
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RunProjectRequestBody'
-      tags:
-      - Projects
-      summary: Run project
-      x-summary-source: derived
-    get:
-      operationId: GetProjectRuns
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectRunsResponsePayload'
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '403':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '422':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-      description: 'Get the status of runs of a project.
-
-        By default, all run types are returned (API-triggered, scheduled, and publish/refresh runs).
-
-        Use the `runTriggerFilter` parameter to filter to a specific type.'
-      parameters:
-      - in: path
-        name: projectId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ProjectId'
-      - in: query
-        name: limit
-        required: false
-        schema:
-          $ref: '#/components/schemas/PageSize'
-      - in: query
-        name: offset
-        required: false
-        schema:
-          $ref: '#/components/schemas/Offset'
-      - in: query
-        name: statusFilter
-        required: false
-        schema:
-          $ref: '#/components/schemas/ProjectRunStatus'
-      - description: 'Filter by how the run was triggered
-
-          Valid values: `API`, `SCHEDULED`, `APP_REFRESH`'
-        in: query
-        name: runTriggerFilter
-        required: false
-        schema:
-          $ref: '#/components/schemas/RunTypeFilter'
-      tags:
-      - Projects
-      summary: Get project runs
-      x-summary-source: derived
   /v1/projects/{projectId}/runs/{runId}:
-    get:
-      operationId: GetRunStatus
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectStatusResponsePayload'
-        '400':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '403':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-        '422':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TsoaErrorResponsePayload'
-      description: Get the status of a project run.
-      parameters:
-      - in: path
-        name: projectId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ProjectId'
-      - in: path
-        name: runId
-        required: true
-        schema:
-          $ref: '#/components/schemas/InputRunId'
-      - in: header
-        name: enable-expanded-stats
-        required: false
-        schema:
-          type: string
-      tags:
-      - Projects
-      summary: Get run status
-      x-summary-source: derived
     delete:
       operationId: CancelRun
       responses:
@@ -1251,14 +375,518 @@ paths:
       - Projects
       summary: Cancel run
       x-summary-source: derived
+    get:
+      operationId: GetRunStatus
+      summary: GetRunStatus
+      description: 'Get the status of a project run.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
+      parameters:
+      - in: path
+        name: projectId
+        description: The project the run belongs to.
+        schema:
+          type: string
+          description: The project the run belongs to.
+        required: true
+      - in: path
+        name: runId
+        description: The run to retrieve.
+        schema:
+          type: string
+          description: The run to retrieve.
+        required: true
+      - in: header
+        name: enable-expanded-stats
+        description: Include state events and the run's flag configuration override. Set to `true` to enable.
+        schema:
+          type: string
+          description: Include state events and the run's flag configuration override. Set to `true` to enable.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectRun'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '422':
+          description: Unprocessable content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNPROCESSABLE_CONTENT'
+      tags:
+      - Projects
+  /v1/projects/compute-profile/batch:
+    post:
+      operationId: BatchUpdateComputeProfile
+      summary: BatchUpdateComputeProfile
+      description: 'Update the compute profile (kernel image and/or kernel size) on one or more projects in a single request. At least one of kernelImage or kernelSize must be provided; the change applies to both the logic and published compute profiles. The caller must have edit permission on every project in the batch — a single failure rejects the whole batch (no partial updates). Cross-org project IDs are silently dropped. Batch size is capped at 250 IDs per request; larger batches should be paged.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projectIds:
+                  type: array
+                  items:
+                    type: string
+                  minItems: 1
+                  maxItems: 250
+                  description: Projects to update.
+                kernelImage:
+                  type: string
+                  description: ID of the kernel image to set on each project (e.g. "python312").
+                kernelSize:
+                  type: string
+                  enum:
+                  - xsmall
+                  - small
+                  - medium
+                  - large
+                  - xlarge
+                  - 2xlarge
+                  - 4xlarge
+                  - l4
+                  - a10g
+                  description: Kernel size preset to set on each project (e.g. "medium"). Must be a size the workspace is entitled to.
+              required:
+              - projectIds
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projects:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BatchUpdateComputeProfileProject'
+                    description: Post-update state for each project. Order is not guaranteed. Callers reconcile against the request by projectId; any requested project missing from this list was silently dropped (not found or in a different org).
+                required:
+                - projects
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Projects
+  /v1/projects/{projectId}/sharing/groups:
+    patch:
+      operationId: EditProjectSharingGroups
+      summary: EditProjectSharingGroups
+      description: 'Add groups to a project or update/remove their project sharing access. Use CAN_VIEW for the UI permission labeled "Can explore" and APP_ONLY for "Can view app". Use NONE to remove a group''s access.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
+      parameters:
+      - in: path
+        name: projectId
+        description: The project to update sharing for.
+        schema:
+          type: string
+          description: The project to update sharing for.
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sharing:
+                  type: object
+                  properties:
+                    upsert:
+                      type: object
+                      properties:
+                        groups:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              group:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                required:
+                                - id
+                              access:
+                                type: string
+                                enum:
+                                - NONE
+                                - APP_ONLY
+                                - CAN_VIEW
+                                - CAN_EDIT
+                                - FULL_ACCESS
+                            required:
+                            - group
+                            - access
+                          maxItems: 25
+                      required:
+                      - groups
+                  required:
+                  - upsert
+              required:
+              - sharing
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  project:
+                    $ref: '#/components/schemas/Project'
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        groupIds:
+                          type: array
+                          items:
+                            type: string
+                        reason:
+                          type: string
+                      required:
+                      - groupIds
+                      - reason
+                required:
+                - project
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Projects
+  /v1/projects/{projectId}/sharing/users:
+    patch:
+      operationId: EditProjectSharingUsers
+      summary: EditProjectSharingUsers
+      description: 'Add users to a project or update/remove their project sharing access. Use CAN_VIEW for the UI permission labeled "Can explore" and APP_ONLY for "Can view app". Use NONE to remove a user''s access.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api-30rpm`: Rate limit group for the Hex API at 30 requests per minute
+
+        - Max 30 requests per minute'
+      parameters:
+      - in: path
+        name: projectId
+        description: The project to update sharing for.
+        schema:
+          type: string
+          description: The project to update sharing for.
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sharing:
+                  type: object
+                  properties:
+                    upsert:
+                      type: object
+                      properties:
+                        users:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              user:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                required:
+                                - id
+                              access:
+                                type: string
+                                enum:
+                                - NONE
+                                - APP_ONLY
+                                - CAN_VIEW
+                                - CAN_EDIT
+                                - FULL_ACCESS
+                            required:
+                            - user
+                            - access
+                          maxItems: 25
+                      required:
+                      - users
+                  required:
+                  - upsert
+                includeUnlisted:
+                  type: boolean
+                  default: false
+                  description: Set to true to update an unlisted project. When omitted or false, unlisted projects return 404.
+              required:
+              - sharing
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  project:
+                    $ref: '#/components/schemas/Project'
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        userIds:
+                          type: array
+                          items:
+                            type: string
+                        reason:
+                          type: string
+                      required:
+                      - userIds
+                      - reason
+                required:
+                - project
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Projects
+  /v1/projects/{projectId}/sharing/workspaceAndPublic:
+    patch:
+      operationId: EditProjectSharingOrgAndPublic
+      summary: EditProjectSharingOrgAndPublic
+      description: 'Update workspace or public-web sharing for a project. For projects, use CAN_VIEW to grant the UI permission labeled "Can explore" and APP_ONLY for "Can view app". Use NONE to remove access. Omitted fields are left unchanged.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
+      parameters:
+      - in: path
+        name: projectId
+        description: The project to update sharing for.
+        schema:
+          type: string
+          description: The project to update sharing for.
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sharing:
+                  type: object
+                  properties:
+                    workspace:
+                      type: string
+                      enum:
+                      - NONE
+                      - APP_ONLY
+                      - CAN_VIEW
+                      - CAN_EDIT
+                      - FULL_ACCESS
+                      description: Omit to leave workspace sharing unchanged.
+                    publicWeb:
+                      type: string
+                      enum:
+                      - NONE
+                      - APP_ONLY
+                      - CAN_VIEW
+                      - CAN_EDIT
+                      - FULL_ACCESS
+                      description: Omit to leave public-web sharing unchanged.
+              required:
+              - sharing
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  project:
+                    $ref: '#/components/schemas/Project'
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - workspace
+                          - publicWeb
+                        reason:
+                          type: string
+                      required:
+                      - type
+                      - reason
+                required:
+                - project
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Projects
   /v1/projects/export:
     post:
       operationId: ExportProject
       summary: ExportProject
       description: 'Exports a Hex project in the *.hex.yaml format.
-
-
-        Availability of this endpoint varies by organization. Contact Hex support to request access.
 
 
         This endpoint is subject to the following rate limits:
@@ -1340,21 +968,9 @@ paths:
       summary: GetChartImageFromRun
       description: 'Get the rendered PNG image of a chart cell from a completed run by staticCellId.
 
-        The `staticId` parameter should be the cell''s staticId (which remains stable across project versions), as opposed to its cellId (which is scoped to a specific version).
-
-
-        Returns a JSON object containing the base64-encoded PNG image of the chart cell as rendered at the time of the specified run, along with project/run/cell IDs and MIME type.
-
         The cell must have been executed and must not be in an error state.
 
         Only chart-type cells are supported.
-
-
-        The optional `width` and `height` parameters set the output image size in pixels.
-
-        Both must be provided to apply, and must be between 100 and 2000.
-
-        The optional `includeTitle` parameter includes the chart title in the image when true.
 
 
         This endpoint is subject to the following rate limits:
@@ -1379,27 +995,33 @@ paths:
         required: true
       - in: path
         name: staticId
-        description: The staticId of the chart cell.
+        description: The staticId of the chart cell (which remains stable across project versions), as opposed to its cellId (which is scoped to a specific version).
         schema:
           type: string
-          description: The staticId of the chart cell.
+          description: The staticId of the chart cell (which remains stable across project versions), as opposed to its cellId (which is scoped to a specific version).
         required: true
       - in: query
         name: width
+        description: Output image width in pixels, between 100 and 2000. Both width and height must be provided to apply.
         schema:
           type: integer
           minimum: 100
           maximum: 2000
+          description: Output image width in pixels, between 100 and 2000. Both width and height must be provided to apply.
       - in: query
         name: height
+        description: Output image height in pixels, between 100 and 2000. Both width and height must be provided to apply.
         schema:
           type: integer
           minimum: 100
           maximum: 2000
+          description: Output image height in pixels, between 100 and 2000. Both width and height must be provided to apply.
       - in: query
         name: includeTitle
+        description: Include the chart title in the image when true.
         schema:
           type: boolean
+          description: Include the chart title in the image when true.
       responses:
         '200':
           description: Successful response
@@ -1416,7 +1038,7 @@ paths:
                     type: string
                   imageBase64:
                     type: string
-                    description: Base64-encoded PNG image data.
+                    description: Base64-encoded PNG image of the chart cell as rendered at the time of the specified run.
                   mimeType:
                     type: string
                 required:
@@ -1457,13 +1079,336 @@ paths:
                 $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
       tags:
       - Projects
+  /v1/projects/{projectId}:
+    get:
+      operationId: GetProject
+      summary: GetProject
+      description: 'Get metadata about a single project.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
+      parameters:
+      - in: path
+        name: projectId
+        description: The project to fetch.
+        schema:
+          type: string
+          description: The project to fetch.
+        required: true
+      - in: query
+        name: includeSharing
+        description: Whether to include sharing metadata in the response.
+        schema:
+          type: boolean
+          default: false
+          description: Whether to include sharing metadata in the response.
+      - in: query
+        name: includeUnlisted
+        description: Whether to return unlisted projects. Defaults to false.
+        schema:
+          type: boolean
+          default: false
+          description: Whether to return unlisted projects. Defaults to false.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '401':
+          description: Authorization not provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNAUTHORIZED'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR'
+      tags:
+      - Projects
+    patch:
+      operationId: UpdateProject
+      summary: UpdateProject
+      description: 'Add or remove a status, including endorsements, from a project.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
+      parameters:
+      - in: path
+        name: projectId
+        description: The project to update.
+        schema:
+          type: string
+          description: The project to update.
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type:
+                  - string
+                  - 'null'
+                  description: The status name to apply, or null to remove the current status.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.NOT_FOUND'
+      tags:
+      - Projects
+  /v1/projects/{projectId}/runs:
+    get:
+      operationId: GetProjectRuns
+      summary: GetProjectRuns
+      description: 'Get the status of runs of a project. By default, all run types are returned (API-triggered, scheduled, and publish/refresh runs). Use the `runTriggerFilter` parameter to filter to a specific type.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-api`: Default rate limit group for the Hex API
+
+        - Max requests per minute may vary (default: 30)
+
+        - Max requests per hour may vary (default: 1800)'
+      parameters:
+      - in: path
+        name: projectId
+        description: The project whose runs should be listed.
+        schema:
+          type: string
+          description: The project whose runs should be listed.
+        required: true
+      - in: query
+        name: limit
+        description: Number of runs to return per page.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 25
+          description: Number of runs to return per page.
+      - in: query
+        name: offset
+        description: Number of runs to skip.
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          description: Number of runs to skip.
+      - in: query
+        name: statusFilter
+        schema:
+          type: string
+          enum:
+          - PENDING
+          - RUNNING
+          - ERRORED
+          - COMPLETED
+          - KILLED
+          - UNABLE_TO_ALLOCATE_KERNEL
+      - in: query
+        name: runTriggerFilter
+        schema:
+          type: string
+          enum:
+          - SCHEDULED
+          - API
+          - APP_REFRESH
+          - ALL
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  runs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProjectRun'
+                  nextPage:
+                    type:
+                    - string
+                    - 'null'
+                  previousPage:
+                    type:
+                    - string
+                    - 'null'
+                  traceId:
+                    type: string
+                required:
+                - runs
+                - nextPage
+                - previousPage
+                - traceId
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '422':
+          description: Unprocessable content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNPROCESSABLE_CONTENT'
+      tags:
+      - Projects
+    post:
+      operationId: RunProject
+      summary: RunProject
+      description: 'Trigger a run of the latest published version of a project.
+
+
+        This endpoint is subject to the following rate limits:
+
+        - `hex-run-kernel`: Rate limits for starting project runs, sending thread messages, or executing kernels
+
+        - Max requests per minute may vary
+
+        - Max requests per hour may vary'
+      parameters:
+      - in: path
+        name: projectId
+        description: The project whose latest published version should run.
+        schema:
+          type: string
+          description: The project whose latest published version should run.
+        required: true
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunProjectRequestBody'
+      responses:
+        '201':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projectId:
+                    type: string
+                  runId:
+                    type: string
+                  runUrl:
+                    type: string
+                  runStatusUrl:
+                    type: string
+                  traceId:
+                    type: string
+                  projectVersion:
+                    type: integer
+                  notifications:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProjectRunNotificationRecipient'
+                required:
+                - projectId
+                - runId
+                - runUrl
+                - runStatusUrl
+                - traceId
+                - projectVersion
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.BAD_REQUEST'
+        '403':
+          description: Insufficient access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.FORBIDDEN'
+        '422':
+          description: Unprocessable content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.UNPROCESSABLE_CONTENT'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error.SERVICE_UNAVAILABLE'
+      tags:
+      - Projects
 components:
   schemas:
-    DataConnectionId:
-      type: string
-      format: uuid
-      description: Unique ID for a data connection.
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    ScheduleCadenceApiEnum:
+      $ref: '#/components/schemas/EnumValues_typeofScheduleCadenceApiEnum_'
+      description: Types of cadence of a schedule for a Hex project.
     EnumValues_typeofAccessLevelEnum_:
       type: string
       enum:
@@ -1472,119 +1417,162 @@ components:
       - CAN_VIEW
       - CAN_EDIT
       - FULL_ACCESS
-    InvalidParam:
-      properties:
-        dataType:
-          type: string
-          description: The expected data type of the parameter (number, string, etc.), which the input value should have matched
-        inputCellType:
-          type: string
-          description: The cell input type of the parameter (text, slider, etc.)
-        paramValue:
-          type: string
-          description: The JSON-encoded, invalid value for the parameter
-        paramName:
-          type: string
-          description: The name of the parameter for which an invalid value was provided
-      required:
-      - dataType
-      - inputCellType
-      - paramValue
-      - paramName
+    error.UNAUTHORIZED:
       type: object
-      description: Information about an input parameter pass to the API call that could not be parsed.
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
     EnumValues_typeofSortByEnum_:
       type: string
       enum:
       - CREATED_AT
       - LAST_EDITED_AT
       - LAST_PUBLISHED_AT
-    EditProjectSharingUsersResponse:
-      properties:
-        project:
-          $ref: '#/components/schemas/ProjectApiResource'
-        errors:
-          items:
-            $ref: '#/components/schemas/ShareProjectWithUserError'
-          type: array
-      required:
-      - project
+    EnumValues_typeofScheduleCadenceApiEnum_:
+      type: string
+      enum:
+      - HOURLY
+      - DAILY
+      - WEEKLY
+      - MONTHLY
+      - CUSTOM
+    ProjectSharing:
       type: object
-      additionalProperties: false
-    SharingResource:
       properties:
         users:
+          type: array
           items:
+            type: object
             properties:
-              access:
-                $ref: '#/components/schemas/AccessLevelEnum'
               user:
+                type: object
                 properties:
                   email:
                     type: string
                 required:
                 - email
-                type: object
+              access:
+                type: string
+                enum:
+                - NONE
+                - APP_ONLY
+                - CAN_VIEW
+                - CAN_EDIT
+                - FULL_ACCESS
             required:
-            - access
             - user
-            type: object
-          type: array
+            - access
         collections:
+          type: array
           items:
+            type: object
             properties:
-              access:
-                $ref: '#/components/schemas/AccessLevelEnum'
               collection:
+                type: object
                 properties:
                   name:
                     type: string
                 required:
                 - name
-                type: object
-            required:
-            - access
-            - collection
-            type: object
-          type: array
-        groups:
-          items:
-            properties:
               access:
-                $ref: '#/components/schemas/AccessLevelEnum'
+                type: string
+                enum:
+                - NONE
+                - APP_ONLY
+                - CAN_VIEW
+                - CAN_EDIT
+                - FULL_ACCESS
+            required:
+            - collection
+            - access
+        groups:
+          type: array
+          items:
+            type: object
+            properties:
               group:
+                type: object
                 properties:
                   name:
                     type: string
                 required:
                 - name
-                type: object
+              access:
+                type: string
+                enum:
+                - NONE
+                - APP_ONLY
+                - CAN_VIEW
+                - CAN_EDIT
+                - FULL_ACCESS
             required:
-            - access
             - group
-            type: object
-          type: array
+            - access
         workspace:
+          type: object
           properties:
             access:
-              $ref: '#/components/schemas/AccessLevelEnum'
+              type: string
+              enum:
+              - NONE
+              - APP_ONLY
+              - CAN_VIEW
+              - CAN_EDIT
+              - FULL_ACCESS
           required:
           - access
-          type: object
         publicWeb:
+          type: object
           properties:
             access:
-              $ref: '#/components/schemas/AccessLevelEnum'
+              type: string
+              enum:
+              - NONE
+              - APP_ONLY
+              - CAN_VIEW
+              - CAN_EDIT
+              - FULL_ACCESS
           required:
           - access
-          type: object
         support:
+          type: object
           properties:
             access:
-              $ref: '#/components/schemas/AccessLevelEnum'
+              type: string
+              enum:
+              - NONE
+              - APP_ONLY
+              - CAN_VIEW
+              - CAN_EDIT
+              - FULL_ACCESS
           required:
           - access
-          type: object
       required:
       - users
       - collections
@@ -1592,36 +1580,363 @@ components:
       - workspace
       - publicWeb
       - support
-      type: object
-      additionalProperties: false
-    RunUrl:
-      type: string
-      description: URL to view the current progress of the project run in the Hex UI
-    ProjectTypeApiEnum:
-      $ref: '#/components/schemas/EnumValues_typeofProjectTypeApiEnum_'
-      description: The type of the ProjectApiResource being returned.
-    EditProjectSharingGroupsResponse:
+    EditProjectSharingCollectionsResponse:
       properties:
         project:
           $ref: '#/components/schemas/ProjectApiResource'
         errors:
           items:
-            $ref: '#/components/schemas/ShareProjectWithGroupError'
+            $ref: '#/components/schemas/ShareProjectWithCollectionError'
           type: array
       required:
       - project
       type: object
       additionalProperties: false
-    EnumValues_typeofSortDirectionEnum_:
+    PaginationApiResource:
+      properties:
+        after:
+          allOf:
+          - $ref: '#/components/schemas/ApiPaginationCursor'
+        before:
+          allOf:
+          - $ref: '#/components/schemas/ApiPaginationCursor'
+      required:
+      - after
+      - before
+      type: object
+      additionalProperties: false
+    error.NOT_FOUND:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Not found
+        code:
+          type: string
+          description: The error code
+          example: NOT_FOUND
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Not found error (404)
+      description: The error information
+      example:
+        code: NOT_FOUND
+        message: Not found
+        issues: []
+    DataConnectionId:
+      type: string
+      format: uuid
+      description: Unique ID for a data connection.
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          type: string
+          enum:
+          - PROJECT
+          - COMPONENT
+        creator:
+          type: object
+          properties:
+            email:
+              type: string
+          required:
+          - email
+        owner:
+          type: object
+          properties:
+            email:
+              type: string
+          required:
+          - email
+        status:
+          type:
+          - object
+          - 'null'
+          properties:
+            name:
+              type: string
+          required:
+          - name
+        categories:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              description:
+                type:
+                - string
+                - 'null'
+            required:
+            - name
+            - description
+        reviews:
+          type: object
+          properties:
+            required:
+              type: boolean
+          required:
+          - required
+        analytics:
+          type: object
+          properties:
+            appViews:
+              type: object
+              properties:
+                allTime:
+                  type: integer
+                lastSevenDays:
+                  type: integer
+                lastFourteenDays:
+                  type: integer
+                lastThirtyDays:
+                  type: integer
+              required:
+              - allTime
+              - lastSevenDays
+              - lastFourteenDays
+              - lastThirtyDays
+            lastViewedAt:
+              type:
+              - string
+              - 'null'
+            publishedResultsUpdatedAt:
+              type:
+              - string
+              - 'null'
+          required:
+          - appViews
+          - lastViewedAt
+          - publishedResultsUpdatedAt
+        lastEditedAt:
+          type: string
+        lastPublishedAt:
+          type:
+          - string
+          - 'null'
+        createdAt:
+          type: string
+        archivedAt:
+          type:
+          - string
+          - 'null'
+        trashedAt:
+          type:
+          - string
+          - 'null'
+        schedules:
+          type: array
+          items:
+            type: object
+            properties:
+              cadence:
+                type: string
+                enum:
+                - HOURLY
+                - DAILY
+                - WEEKLY
+                - MONTHLY
+                - CUSTOM
+              enabled:
+                type: boolean
+              hourly:
+                type:
+                - object
+                - 'null'
+                properties:
+                  minute:
+                    type: integer
+                  timezone:
+                    type: string
+                required:
+                - minute
+                - timezone
+              daily:
+                type:
+                - object
+                - 'null'
+                properties:
+                  hour:
+                    type: integer
+                  minute:
+                    type: integer
+                  timezone:
+                    type: string
+                required:
+                - hour
+                - minute
+                - timezone
+              weekly:
+                type:
+                - object
+                - 'null'
+                properties:
+                  dayOfWeek:
+                    type: string
+                    enum:
+                    - SUNDAY
+                    - MONDAY
+                    - TUESDAY
+                    - WEDNESDAY
+                    - THURSDAY
+                    - FRIDAY
+                    - SATURDAY
+                  hour:
+                    type: integer
+                  minute:
+                    type: integer
+                  timezone:
+                    type: string
+                required:
+                - dayOfWeek
+                - hour
+                - minute
+                - timezone
+              monthly:
+                type:
+                - object
+                - 'null'
+                properties:
+                  day:
+                    type: integer
+                  hour:
+                    type: integer
+                  minute:
+                    type: integer
+                  timezone:
+                    type: string
+                required:
+                - day
+                - hour
+                - minute
+                - timezone
+              custom:
+                type:
+                - object
+                - 'null'
+                properties:
+                  cron:
+                    type: string
+                  timezone:
+                    type: string
+                required:
+                - cron
+                - timezone
+            required:
+            - cadence
+            - enabled
+            - hourly
+            - daily
+            - weekly
+            - monthly
+            - custom
+        sharing:
+          $ref: '#/components/schemas/ProjectSharing'
+      required:
+      - id
+      - title
+      - description
+      - type
+      - creator
+      - owner
+      - status
+      - categories
+      - reviews
+      - analytics
+      - lastEditedAt
+      - lastPublishedAt
+      - createdAt
+      - archivedAt
+      - trashedAt
+      - schedules
+    EnumValues_typeofProjectTypeApiEnum_:
       type: string
       enum:
-      - DESC
-      - ASC
-    ApiPaginationCursor:
+      - PROJECT
+      - COMPONENT
+    InputRunId:
       type: string
-      description: 'A cursor string used with `before` and `after` parameters to paginate through a list
-
-        of items on the API.'
+      format: uuid
+      description: Unique ID for a run of a Hex project. This ID is part of the response returned by the RunProject endpoint. The GetProjectRuns endpoint can also be used to find the specific runs for a project.
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    RunProjectRequestBody:
+      type: object
+      properties:
+        inputParams:
+          type: object
+          additionalProperties: {}
+          description: Published app input values keyed by variable name.
+        dryRun:
+          type: boolean
+          default: false
+          description: Validate the request without starting a run.
+        updateCache:
+          type: boolean
+          description: '`updateCache` is deprecated. Please use the new `updatePublishedResults` and `useCachedSqlResults` parameters instead. When true, published results are updated and cached SQL results are not used. When false, published results are not updated and cached SQL results may be used.'
+        notifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectRunNotification'
+        updatePublishedResults:
+          type: boolean
+          default: false
+          description: Update the published app with the run results.
+        useCachedSqlResults:
+          type: boolean
+          default: true
+          description: Allow SQL cells to reuse cached results.
+        viewId:
+          type: string
+          description: Use the inputs from this saved view.
+    TsoaErrorResponsePayload:
+      properties:
+        details:
+          type: string
+        traceId:
+          $ref: '#/components/schemas/TraceId'
+        reason:
+          type: string
+      required:
+      - reason
+      type: object
+    SortDirectionEnum:
+      $ref: '#/components/schemas/EnumValues_typeofSortDirectionEnum_'
+    NotificationRecipient:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        isPrivate:
+          type: boolean
+      required:
+      - id
+      - name
     ScheduleApiResource:
       properties:
         cadence:
@@ -1737,6 +2052,178 @@ components:
       - custom
       type: object
       additionalProperties: false
+    EnumValues_typeofDayOfWeekApiEnum_:
+      type: string
+      enum:
+      - SUNDAY
+      - MONDAY
+      - TUESDAY
+      - WEDNESDAY
+      - THURSDAY
+      - FRIDAY
+      - SATURDAY
+    PageSize:
+      type: integer
+      format: int32
+      default: '25'
+      description: Number of results to fetch per page for paginated requests
+      minimum: 1
+      maximum: 100
+    TraceId:
+      type: string
+      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
+    ProjectRun:
+      type: object
+      properties:
+        projectId:
+          type: string
+        projectVersion:
+          type: string
+          description: The project version that was run. Numeric versions are ordered starting at "1"; notebook runs use "draft".
+        runId:
+          type: string
+        runUrl:
+          type: string
+        status:
+          type: string
+          enum:
+          - PENDING
+          - RUNNING
+          - ERRORED
+          - COMPLETED
+          - KILLED
+          - UNABLE_TO_ALLOCATE_KERNEL
+        runTrigger:
+          type: string
+          enum:
+          - API
+          - SCHEDULED
+          - APP_REFRESH
+        startTime:
+          type:
+          - string
+          - 'null'
+        endTime:
+          type:
+          - string
+          - 'null'
+        elapsedTime:
+          type:
+          - number
+          - 'null'
+          description: Elapsed run time in milliseconds.
+        flagConfigOverride:
+          type: string
+        traceId:
+          type: string
+        notifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectRunNotificationRecipient'
+        stateEvents:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectRunStateEvent'
+      required:
+      - projectId
+      - projectVersion
+      - runId
+      - runUrl
+      - status
+      - runTrigger
+      - startTime
+      - endTime
+      - elapsedTime
+      - traceId
+    ApiPaginationCursor:
+      type: string
+      description: 'A cursor string used with `before` and `after` parameters to paginate through a list
+
+        of items on the API.'
+    AccessLevelEnum:
+      $ref: '#/components/schemas/EnumValues_typeofAccessLevelEnum_'
+      description: 'Access level granted by sharing endpoints.
+
+        For projects, `CAN_VIEW` is the API value that corresponds to the UI permission labeled "Can explore".
+
+        `APP_ONLY` is the API value that corresponds to the UI permission labeled "Can view app".'
+    ProjectRunStateEvent:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: string
+        timestamp:
+          type: string
+      required:
+      - type
+      - value
+      - timestamp
+    ProjectRunNotification:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - SUCCESS
+          - FAILURE
+          - ALL
+        includeSuccessScreenshot:
+          type: boolean
+        screenshotFormat:
+          type: string
+          enum:
+          - png
+          - pdf
+        slackChannelIds:
+          type: array
+          items:
+            type: string
+        userIds:
+          type: array
+          items:
+            type: string
+        groupIds:
+          type: array
+          items:
+            type: string
+        subject:
+          type: string
+        body:
+          type: string
+      required:
+      - type
+      - includeSuccessScreenshot
+    ProjectsListApiResource:
+      properties:
+        values:
+          items:
+            $ref: '#/components/schemas/ProjectApiResource'
+          type: array
+        pagination:
+          $ref: '#/components/schemas/PaginationApiResource'
+      required:
+      - values
+      - pagination
+      type: object
+      additionalProperties: false
+    ShareProjectWithCollectionError:
+      properties:
+        collectionIds:
+          items:
+            $ref: '#/components/schemas/CollectionId'
+          type: array
+        reason:
+          type: string
+      required:
+      - collectionIds
+      - reason
+      type: object
+      additionalProperties: false
+    ProjectTypeApiEnum:
+      $ref: '#/components/schemas/EnumValues_typeofProjectTypeApiEnum_'
+      description: The type of the ProjectApiResource being returned.
     error.FORBIDDEN:
       type: object
       properties:
@@ -1768,66 +2255,6 @@ components:
         code: FORBIDDEN
         message: Insufficient access
         issues: []
-    CollectionId:
-      type: string
-      format: uuid
-      description: Unique ID for a collection.
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    Timestamp:
-      type: string
-      format: timestamp
-      description: An ISO 8601 timestamp with timezone like 1970-01-01T00:00:00Z.
-    PageSize:
-      type: integer
-      format: int32
-      default: '25'
-      description: Number of results to fetch per page for paginated requests
-      minimum: 1
-      maximum: 100
-    ShareProjectWithUserError:
-      properties:
-        userIds:
-          items:
-            $ref: '#/components/schemas/UserId'
-          type: array
-        reason:
-          type: string
-      required:
-      - userIds
-      - reason
-      type: object
-      additionalProperties: false
-    ScreenshotFormatType:
-      type: string
-      enum:
-      - png
-      - pdf
-      description: The file format of the generated screenshot.
-    ProjectRunStatus:
-      description: Current status of a project run
-      enum:
-      - PENDING
-      - RUNNING
-      - ERRORED
-      - COMPLETED
-      - KILLED
-      - UNABLE_TO_ALLOCATE_KERNEL
-      type: string
-    TraceId:
-      type: string
-      description: A unique identifier for this API request. The Hex Support team may request this value when debugging an issue.
-    EditProjectSharingCollectionsResponse:
-      properties:
-        project:
-          $ref: '#/components/schemas/ProjectApiResource'
-        errors:
-          items:
-            $ref: '#/components/schemas/ShareProjectWithCollectionError'
-          type: array
-      required:
-      - project
-      type: object
-      additionalProperties: false
     ProjectApiResource:
       properties:
         id:
@@ -1955,58 +2382,167 @@ components:
       - schedules
       type: object
       additionalProperties: false
-    EnumValues_typeofRunTypeFilter_:
-      type: string
-      enum:
-      - API
-      - SCHEDULED
-      - APP_REFRESH
-      - ALL
-    PaginationApiResource:
-      properties:
-        after:
-          allOf:
-          - $ref: '#/components/schemas/ApiPaginationCursor'
-        before:
-          allOf:
-          - $ref: '#/components/schemas/ApiPaginationCursor'
-      required:
-      - after
-      - before
-      type: object
-      additionalProperties: false
-    ShareProjectWithGroupError:
-      properties:
-        groupIds:
-          items:
-            $ref: '#/components/schemas/GroupId'
-          type: array
-        reason:
-          type: string
-      required:
-      - groupIds
-      - reason
-      type: object
-      additionalProperties: false
     TimezoneDesignator:
       type: string
       description: An ISO 8601 timezone designator like +08:00.
-    ProjectsListApiResource:
+    ProjectQueriedTablesApiResource:
       properties:
         values:
           items:
-            $ref: '#/components/schemas/ProjectApiResource'
+            $ref: '#/components/schemas/ProjectQueriedTableResource'
           type: array
         pagination:
           $ref: '#/components/schemas/PaginationApiResource'
+        traceId:
+          type: string
       required:
       - values
       - pagination
+      - traceId
       type: object
       additionalProperties: false
-    NotFoundParam:
+    CollectionId:
       type: string
-      description: Name of an input parameter passed to the API call that was not found in the project.
+      format: uuid
+      description: Unique ID for a collection.
+      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    error.SERVICE_UNAVAILABLE:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Service unavailable
+        code:
+          type: string
+          description: The error code
+          example: SERVICE_UNAVAILABLE
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Service unavailable error (503)
+      description: The error information
+      example:
+        code: SERVICE_UNAVAILABLE
+        message: Service unavailable
+        issues: []
+    ProjectQueriedTableResource:
+      properties:
+        dataConnectionId:
+          $ref: '#/components/schemas/DataConnectionId'
+        dataConnectionName:
+          type: string
+        tableName:
+          type: string
+      required:
+      - dataConnectionId
+      - dataConnectionName
+      - tableName
+      type: object
+      additionalProperties: false
+    DayOfWeekApiEnum:
+      $ref: '#/components/schemas/EnumValues_typeofDayOfWeekApiEnum_'
+    SharingResource:
+      properties:
+        users:
+          items:
+            properties:
+              access:
+                $ref: '#/components/schemas/AccessLevelEnum'
+              user:
+                properties:
+                  email:
+                    type: string
+                required:
+                - email
+                type: object
+            required:
+            - access
+            - user
+            type: object
+          type: array
+        collections:
+          items:
+            properties:
+              access:
+                $ref: '#/components/schemas/AccessLevelEnum'
+              collection:
+                properties:
+                  name:
+                    type: string
+                required:
+                - name
+                type: object
+            required:
+            - access
+            - collection
+            type: object
+          type: array
+        groups:
+          items:
+            properties:
+              access:
+                $ref: '#/components/schemas/AccessLevelEnum'
+              group:
+                properties:
+                  name:
+                    type: string
+                required:
+                - name
+                type: object
+            required:
+            - access
+            - group
+            type: object
+          type: array
+        workspace:
+          properties:
+            access:
+              $ref: '#/components/schemas/AccessLevelEnum'
+          required:
+          - access
+          type: object
+        publicWeb:
+          properties:
+            access:
+              $ref: '#/components/schemas/AccessLevelEnum'
+          required:
+          - access
+          type: object
+        support:
+          properties:
+            access:
+              $ref: '#/components/schemas/AccessLevelEnum'
+          required:
+          - access
+          type: object
+      required:
+      - users
+      - collections
+      - groups
+      - workspace
+      - publicWeb
+      - support
+      type: object
+      additionalProperties: false
+    SortByEnum:
+      $ref: '#/components/schemas/EnumValues_typeofSortByEnum_'
+    EnumValues_typeofSortDirectionEnum_:
+      type: string
+      enum:
+      - DESC
+      - ASC
     error.INTERNAL_SERVER_ERROR:
       type: object
       properties:
@@ -2038,98 +2574,17 @@ components:
         code: INTERNAL_SERVER_ERROR
         message: Internal server error
         issues: []
-    StateEvent:
-      description: Response format returned by the runProject endpoint
-      properties:
-        type:
-          type: string
-        value:
-          type: string
-        timestamp:
-          type: string
-      required:
-      - type
-      - value
-      - timestamp
-      type: object
-      additionalProperties: false
-    RunNotificationType:
-      description: The condition that determines whether or not the notification should be delivered based on these types.
-      enum:
-      - SUCCESS
-      - FAILURE
-      - ALL
-      type: string
-    NotificationRecipient:
-      properties:
-        id:
-          type: string
-          description: The Id of the recipient. For users and groups, these Ids are found in the settings panel in Hex, while the Id for Slack can be found within the Slack app or URL.
-          example: C0123456
-        name:
-          type: string
-          description: The human readable name for the user, group, or Slack channel.
-          example: data-team
-        isPrivate:
-          type: boolean
-          description: Whether or not the Slack channel is a private channel in the Slack workspace.
-          example: false
-      required:
-      - id
-      - name
-      type: object
-      additionalProperties: false
-    ProjectStatusRunTrigger:
-      type: string
-      enum:
-      - API
-      - SCHEDULED
-      - APP_REFRESH
-      description: How a run of a project was triggered (`API`, `SCHEDULED`, or `APP_REFRESH`)
-    AccessLevelEnum:
-      $ref: '#/components/schemas/EnumValues_typeofAccessLevelEnum_'
-      description: 'Access level granted by sharing endpoints.
-
-        For projects, `CAN_VIEW` is the API value that corresponds to the UI permission labeled "Can explore".
-
-        `APP_ONLY` is the API value that corresponds to the UI permission labeled "Can view app".'
-    InvalidParamPayload:
-      properties:
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        invalid:
-          items:
-            $ref: '#/components/schemas/InvalidParam'
-          type: array
-          description: Array of specified input parameters that were invalid or could not be parsed
-        notFound:
-          items:
-            $ref: '#/components/schemas/NotFoundParam'
-          type: array
-          description: Array of specified input parameter names that were not found in the project
-      required:
-      - traceId
-      - invalid
-      - notFound
-      type: object
-    SortByEnum:
-      $ref: '#/components/schemas/EnumValues_typeofSortByEnum_'
-    GroupId:
-      type: string
-      format: uuid
-      description: Unique ID for a group. This can be found from the groups page (in Settings).
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    error.UNAUTHORIZED:
+    error.UNPROCESSABLE_CONTENT:
       type: object
       properties:
         message:
           type: string
           description: The error message
-          example: Authorization not provided
+          example: Unprocessable content
         code:
           type: string
           description: The error code
-          example: UNAUTHORIZED
+          example: UNPROCESSABLE_CONTENT
         issues:
           type: array
           items:
@@ -2144,179 +2599,44 @@ components:
       required:
       - message
       - code
-      title: Authorization not provided error (401)
+      title: Unprocessable content error (422)
       description: The error information
       example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
+        code: UNPROCESSABLE_CONTENT
+        message: Unprocessable content
         issues: []
-    NextPageUrl:
+    Timestamp:
       type: string
-      description: URL to fetch the next page of results for a paginated API request
-    EnumValues_typeofScheduleCadenceApiEnum_:
-      type: string
-      enum:
-      - HOURLY
-      - DAILY
-      - WEEKLY
-      - MONTHLY
-      - CUSTOM
-    ProjectQueriedTablesApiResource:
-      properties:
-        values:
-          items:
-            $ref: '#/components/schemas/ProjectQueriedTableResource'
-          type: array
-        pagination:
-          $ref: '#/components/schemas/PaginationApiResource'
-        traceId:
-          type: string
-      required:
-      - values
-      - pagination
-      - traceId
-      type: object
-      additionalProperties: false
-    ProjectRunsResponsePayload:
-      properties:
-        runs:
-          items:
-            $ref: '#/components/schemas/ProjectStatusResponsePayload'
-          type: array
-          description: Array of run status payloads in the same format returned by the `GetRunStatus` endpoint
-        nextPage:
-          allOf:
-          - $ref: '#/components/schemas/NextPageUrl'
-        previousPage:
-          allOf:
-          - $ref: '#/components/schemas/NextPageUrl'
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-      required:
-      - runs
-      - nextPage
-      - previousPage
-      - traceId
-      type: object
-      additionalProperties: false
-    ProjectRunNotification:
-      description: The configuration details for notifications, which are sent after a run has completed.
-      properties:
-        type:
-          $ref: '#/components/schemas/RunNotificationType'
-        includeSuccessScreenshot:
-          type: boolean
-          description: If true, a screenshot of the project will be included in the notification when the project succeeds.
-        screenshotFormat:
-          $ref: '#/components/schemas/ScreenshotFormatType'
-          description: 'The format of the screenshot to be included in the notification.
-
-            Defaults to png if not specified and includeSuccessScreenshot is true.'
-        slackChannelIds:
-          items:
-            type: string
-          type: array
-          description: 'The Slack channels to send the notification to.
-
-            The Hex Slackbot must be added to any private channels included.
-
-            The Slack Channel Id can be found in the channel''s settings from within the Slack app.'
-        userIds:
-          items:
-            type: string
-          type: array
-          description: The Hex user Ids to send the notification to. These Ids can be found and copied from the Setting's User panel in Hex.
-        groupIds:
-          items:
-            type: string
-          type: array
-          description: The Hex group Ids to send the notification to. These Ids can be found and copied from the Setting's Group panel in Hex.
-        subject:
-          type: string
-          description: An optional message to use as the subject of the notification.
-        body:
-          type: string
-          description: An optional message to include in the body of the notification.
-      required:
-      - type
-      - includeSuccessScreenshot
-      type: object
-      additionalProperties: false
-    ProjectRunResponsePayload:
-      description: Response format returned by the runProject endpoint
-      properties:
-        projectId:
-          $ref: '#/components/schemas/ProjectId'
-        runId:
-          $ref: '#/components/schemas/ResponseRunId'
-        runUrl:
-          $ref: '#/components/schemas/RunUrl'
-        runStatusUrl:
-          $ref: '#/components/schemas/RunStatusUrl'
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        projectVersion:
-          $ref: '#/components/schemas/ProjectVersion'
-        notifications:
-          items:
-            $ref: '#/components/schemas/ProjectRunNotificationRecipient'
-          type: array
-      required:
-      - projectId
-      - runId
-      - runUrl
-      - runStatusUrl
-      - traceId
-      - projectVersion
-      type: object
-      additionalProperties: false
-    Offset:
-      type: integer
-      format: int32
-      default: '0'
-      description: Offset for paginated requests
-      minimum: 0
-    InputRunId:
-      type: string
-      format: uuid
-      description: Unique ID for a run of a Hex project. This ID is part of the response returned by the RunProject endpoint. The GetProjectRuns endpoint can also be used to find the specific runs for a project.
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    ShareProjectWithCollectionError:
-      properties:
-        collectionIds:
-          items:
-            $ref: '#/components/schemas/CollectionId'
-          type: array
-        reason:
-          type: string
-      required:
-      - collectionIds
-      - reason
-      type: object
-      additionalProperties: false
+      format: timestamp
+      description: An ISO 8601 timestamp with timezone like 1970-01-01T00:00:00Z.
     ProjectRunNotificationRecipient:
-      description: 'The recipient of a project run notification, which will include the type of recipient and additional configuration details.
-
-        This is used to determine who to send the notification to, and what triggers would qualify sending the notification.'
+      type: object
       properties:
         type:
-          $ref: '#/components/schemas/RunNotificationType'
+          type: string
+          enum:
+          - SUCCESS
+          - FAILURE
+          - ALL
         subject:
           type: string
         body:
           type: string
         recipientType:
-          $ref: '#/components/schemas/NotificationRecipientType'
+          type: string
+          enum:
+          - USER
+          - GROUP
+          - SLACK_CHANNEL
         includeSuccessScreenshot:
           type: boolean
-          description: If true, a screenshot of the project will be included in the notification when the project succeeds.
         screenshotFormat:
-          items:
-            $ref: '#/components/schemas/ScreenshotFormatType'
           type: array
-          description: 'The format of the screenshot to be included in the notification.
-
-            Defaults to png only if not specified and includeSuccessScreenshot is true.'
+          items:
+            type: string
+            enum:
+            - png
+            - pdf
         recipient:
           $ref: '#/components/schemas/NotificationRecipient'
       required:
@@ -2324,67 +2644,6 @@ components:
       - recipientType
       - includeSuccessScreenshot
       - recipient
-      type: object
-      additionalProperties: false
-    ProjectStatusResponsePayload:
-      description: Response format returned by the getRunStatus endpoint
-      properties:
-        projectId:
-          $ref: '#/components/schemas/ProjectId'
-        projectVersion:
-          $ref: '#/components/schemas/ProjectVersion'
-        runId:
-          $ref: '#/components/schemas/ResponseRunId'
-        runUrl:
-          $ref: '#/components/schemas/RunUrl'
-        status:
-          $ref: '#/components/schemas/ProjectRunStatus'
-        runTrigger:
-          $ref: '#/components/schemas/ProjectStatusRunTrigger'
-          description: 'How the run was triggered: `API`, `SCHEDULED`, or `APP_REFRESH`'
-        startTime:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: UTC timestamp of when the project run started
-        endTime:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: UTC timestamp of when the project run finished
-        elapsedTime:
-          type:
-          - number
-          - 'null'
-          format: double
-          description: Total elapsed time for the project run in milliseconds
-        flagConfigOverride:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        notifications:
-          items:
-            $ref: '#/components/schemas/ProjectRunNotificationRecipient'
-          type: array
-        stateEvents:
-          items:
-            $ref: '#/components/schemas/StateEvent'
-          type: array
-      required:
-      - projectId
-      - projectVersion
-      - runId
-      - runUrl
-      - status
-      - runTrigger
-      - startTime
-      - endTime
-      - elapsedTime
-      - traceId
-      type: object
-      additionalProperties: false
     error.BAD_REQUEST:
       type: object
       properties:
@@ -2416,217 +2675,28 @@ components:
         code: BAD_REQUEST
         message: Invalid input data
         issues: []
-    ResponseRunId:
-      type: string
-      format: uuid
-      description: Unique ID for a run of a Hex project
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    error.NOT_FOUND:
+    BatchUpdateComputeProfileProject:
       type: object
       properties:
-        message:
+        projectId:
           type: string
-          description: The error message
-          example: Not found
-        code:
-          type: string
-          description: The error code
-          example: NOT_FOUND
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
+        kernelImage:
+          type:
+          - string
+          - 'null'
+        kernelSize:
+          type:
+          - string
+          - 'null'
       required:
-      - message
-      - code
-      title: Not found error (404)
-      description: The error information
-      example:
-        code: NOT_FOUND
-        message: Not found
-        issues: []
-    RunProjectRequestBody:
-      description: Request body format for triggering a project run
-      properties:
-        inputParams:
-          properties: {}
-          additionalProperties: {}
-          type: object
-          description: 'Optionally specify input parameters for this project run.
-
-            These should be structured as a dictionary of key/value pairs, where the key name matches the name of the variable in the Hex project.
-
-
-            Only parameters that are added to the published app can be set via this request parameter. Any additional inputs will be ignored.
-
-            It is invalid to pass in both a viewId and inputParams.
-
-
-            If no input parameters are provided, the project will be run with the default input values.
-
-            Note that if input parameters are provided, this run will not be able to update the cached values for the project, and the updateCache setting (below) will be ignored.'
-          example:
-            text_input_1: Hello World
-            numeric_input_1: 123
-        dryRun:
-          type: boolean
-          description: When true, this endpoint will perform a dry run that does not run the project. This can be useful for validating the structure of an API call, and inspecting a dummy response, without running a project.
-          default: 'false'
-        updateCache:
-          type: boolean
-          deprecated: true
-        notifications:
-          items:
-            $ref: '#/components/schemas/ProjectRunNotification'
-          type: array
-          description: 'Optionally specify a list of notification details that will be delivered once a project run completes.
-
-            Notifications can be configured for delivery to Slack channels, Hex users, or Hex groups.'
-          example:
-          - type: ALL
-            includeSuccessScreenshot: 'true'
-            slackChannelIds:
-            - C0000000
-            userIds:
-            - uuid-user-1
-            - uuid-user-2
-          - type: FAILURE
-            includeSuccessScreenshot: 'false'
-            userIds:
-            - uuid-user-1
-            groupIds:
-            - uuid-group-1
-        updatePublishedResults:
-          type: boolean
-          description: 'When true, the cached state of the published app will be updated with the latest
-
-            run results. You must have at least "Can Edit" permissions on the project to do so.
-
-            Note: this cannot be set to true if custom input parameters are provided.'
-          default: 'false'
-        useCachedSqlResults:
-          type: boolean
-          description: 'When false, the project will run without using any cached SQL results, and will
-
-            update those cached SQL results.'
-          default: 'true'
-        viewId:
-          type: string
-          description: 'Optionally specify a SavedView viewId to use for the project run. If specified, the saved view''s inputs will be used for the project run.
-
-            It is invalid to pass in both a viewId and inputParams.
-
-            If not specified, the default inputs will be used.'
-      type: object
-      additionalProperties: false
-    PublicWebAccessLevel:
-      $ref: '#/components/schemas/EnumValues_typeofAccessLevelEnum_'
-    NotificationRecipientType:
-      description: The delivery type of a notification recipient.
-      enum:
-      - USER
-      - GROUP
-      - SLACK_CHANNEL
-      type: string
-    EnumValues_typeofProjectTypeApiEnum_:
-      type: string
-      enum:
-      - PROJECT
-      - COMPONENT
+      - projectId
+      - kernelImage
+      - kernelSize
     ProjectId:
       type: string
       format: uuid
       description: Unique ID for a Hex project. This can be found in the Variables side bar of the Logic View of a project, or by visiting the Project, and copying the UUID after `hex` in the URL.
       pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    RunTypeFilter:
-      $ref: '#/components/schemas/EnumValues_typeofRunTypeFilter_'
-    TsoaErrorResponsePayload:
-      properties:
-        details:
-          type: string
-        traceId:
-          $ref: '#/components/schemas/TraceId'
-        reason:
-          type: string
-      required:
-      - reason
-      type: object
-    UserId:
-      type: string
-      format: uuid
-      description: Unique ID for a user. This can be found from the users page (in Settings).
-      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
-    ShareProjectWithWorkspaceError:
-      properties:
-        type:
-          type: string
-          enum:
-          - workspace
-          - publicWeb
-        reason:
-          type: string
-      required:
-      - type
-      - reason
-      type: object
-      additionalProperties: false
-    ProjectVersion:
-      type: integer
-      format: int32
-      description: The version of the Hex project that was run. Project versions are ordered, starting at 1 and incrementing on each saved version. Project versions can be found in the History & Versions side bar of the Logic View.
-    RunStatusUrl:
-      type: string
-      description: URL to query the status of the project run via the Hex API
-    DayOfWeekApiEnum:
-      $ref: '#/components/schemas/EnumValues_typeofDayOfWeekApiEnum_'
-    EditProjectSharingWorkspaceAndPublicResponse:
-      properties:
-        project:
-          $ref: '#/components/schemas/ProjectApiResource'
-        errors:
-          items:
-            $ref: '#/components/schemas/ShareProjectWithWorkspaceError'
-          type: array
-      required:
-      - project
-      type: object
-      additionalProperties: false
-    ScheduleCadenceApiEnum:
-      $ref: '#/components/schemas/EnumValues_typeofScheduleCadenceApiEnum_'
-      description: Types of cadence of a schedule for a Hex project.
-    EnumValues_typeofDayOfWeekApiEnum_:
-      type: string
-      enum:
-      - SUNDAY
-      - MONDAY
-      - TUESDAY
-      - WEDNESDAY
-      - THURSDAY
-      - FRIDAY
-      - SATURDAY
-    ProjectQueriedTableResource:
-      properties:
-        dataConnectionId:
-          $ref: '#/components/schemas/DataConnectionId'
-        dataConnectionName:
-          type: string
-        tableName:
-          type: string
-      required:
-      - dataConnectionId
-      - dataConnectionName
-      - tableName
-      type: object
-      additionalProperties: false
-    SortDirectionEnum:
-      $ref: '#/components/schemas/EnumValues_typeofSortDirectionEnum_'
   securitySchemes:
     bearerAuth:
       type: http

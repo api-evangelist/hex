@@ -70,21 +70,7 @@ paths:
                       - id
                       - name
                   pagination:
-                    type: object
-                    properties:
-                      before:
-                        type:
-                        - string
-                        - 'null'
-                        default: null
-                      after:
-                        type:
-                        - string
-                        - 'null'
-                        default: null
-                    required:
-                    - before
-                    - after
+                    $ref: '#/components/schemas/Pagination'
                 required:
                 - topics
                 - pagination
@@ -122,6 +108,53 @@ paths:
       - Context
 components:
   schemas:
+    Pagination:
+      type: object
+      properties:
+        before:
+          type:
+          - string
+          - 'null'
+          default: null
+        after:
+          type:
+          - string
+          - 'null'
+          default: null
+      required:
+      - before
+      - after
+    error.UNAUTHORIZED:
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+          example: Authorization not provided
+        code:
+          type: string
+          description: The error code
+          example: UNAUTHORIZED
+        issues:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message
+          description: An array of issues that were responsible for the error
+          example: []
+      required:
+      - message
+      - code
+      title: Authorization not provided error (401)
+      description: The error information
+      example:
+        code: UNAUTHORIZED
+        message: Authorization not provided
+        issues: []
     error.INTERNAL_SERVER_ERROR:
       type: object
       properties:
@@ -183,37 +216,6 @@ components:
       example:
         code: FORBIDDEN
         message: Insufficient access
-        issues: []
-    error.UNAUTHORIZED:
-      type: object
-      properties:
-        message:
-          type: string
-          description: The error message
-          example: Authorization not provided
-        code:
-          type: string
-          description: The error code
-          example: UNAUTHORIZED
-        issues:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-            required:
-            - message
-          description: An array of issues that were responsible for the error
-          example: []
-      required:
-      - message
-      - code
-      title: Authorization not provided error (401)
-      description: The error information
-      example:
-        code: UNAUTHORIZED
-        message: Authorization not provided
         issues: []
     error.BAD_REQUEST:
       type: object
