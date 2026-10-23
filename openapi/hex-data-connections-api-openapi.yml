@@ -2114,3 +2114,9 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
+x-provenance:
+  method: harvested
+  publisher: Hex
+  source: https://static.hex.site/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
