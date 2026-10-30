@@ -64,6 +64,149 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Hex is a company surfaced as a portfolio company of a16z and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Hex is an AI-powered analytics platform that combines agentic notebooks, interactive data apps, and conversational self-serve analytics so teams can go from ad-hoc exploration to published, governed data apps. The Hex External API (bearer-token authenticated, base https://app.hex.tech/api/v1) lets you programmatically run and schedule projects, manage projects, collections, groups, cells, and data connections, ingest semantic models, drive AI agent Threads (create, continue, read messages), export projects, and administer workspace users. Hex also ships a first-party CLI, a hosted remote MCP server, Airflow and Dagster integrations, and published Claude Agent Skills. Surfaced as an a16z portfolio company and enriched with its real public developer surface.
 
-Backed by: a16z
+**Areas:** Company · Analytics · Data Science · Notebooks · Business Intelligence · Data Apps · Artificial Intelligence · Agents · Semantic Layer · Developer Tools
+
+## Hex on APIs.io
+
+Everything profiled for Hex is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/hex/](https://apis.io/providers/hex/)** — or go straight to one of the APIs or properties below.
+
+### APIs (11)
+
+- [Hex Cells API](https://apis.io/apis/hex/hex-cells-api/) — The Cells API from Hex — 4 operation(s) for cells.
+- [Hex Collections API](https://apis.io/apis/hex/hex-collections-api/) — The Collections API from Hex — 2 operation(s) for collections.
+- [Hex Context API](https://apis.io/apis/hex/hex-context-api/) — The Context API from Hex — 1 operation(s) for context.
+- [Hex Data Connections API](https://apis.io/apis/hex/hex-data-connections-api/) — The Data Connections API from Hex — 3 operation(s) for data connections.
+- [Hex Embedding API](https://apis.io/apis/hex/hex-embedding-api/) — The Embedding API from Hex — 1 operation(s) for embedding.
+- [Hex Groups API](https://apis.io/apis/hex/hex-groups-api/) — The Groups API from Hex — 2 operation(s) for groups.
+- [Hex Guides API](https://apis.io/apis/hex/hex-guides-api/) — The Guides API from Hex — 4 operation(s) for guides.
+- [Hex Projects API](https://apis.io/apis/hex/hex-projects-api/) — The Projects API from Hex — 11 operation(s) for projects.
+- [Hex Semantic (projects|models) API](https://apis.io/apis/hex/hex-semantic-projects-models-api/) — The Semantic (projects|models) API from Hex — 2 operation(s) for semantic (projects|models).
+- [Hex Threads API](https://apis.io/apis/hex/hex-threads-api/) — The Threads API from Hex — 4 operation(s) for threads.
+- [Hex Users API](https://apis.io/apis/hex/hex-users-api/) — The Users API from Hex — 3 operation(s) for users.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [hex](https://apis.io/servers/hex/hex/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Hex Agentic Access](https://apis.io/agentic-access/hex/hex-agentic-access/)
+
+#### Collections (11)
+
+Postman and Open Collection request collections.
+
+- [Hex Cells API](https://apis.io/collections/hex/open-hex-cells-api/)
+- [Hex Cells Collections API](https://apis.io/collections/hex/open-hex-collections-api/)
+- [Hex Cells Context API](https://apis.io/collections/hex/open-hex-context-api/)
+- [Hex Cells Data Connections API](https://apis.io/collections/hex/open-hex-data-connections-api/)
+- [Hex Cells Embedding API](https://apis.io/collections/hex/open-hex-embedding-api/)
+- [Hex Cells Groups API](https://apis.io/collections/hex/open-hex-groups-api/)
+- [Hex Cells Guides API](https://apis.io/collections/hex/open-hex-guides-api/)
+- [Hex Cells Projects API](https://apis.io/collections/hex/open-hex-projects-api/)
+- [Hex Cells Semantic (projects|models) API](https://apis.io/collections/hex/open-hex-semantic-projects-models-api/)
+- [Hex Cells Threads API](https://apis.io/collections/hex/open-hex-threads-api/)
+- [Hex Cells Users API](https://apis.io/collections/hex/open-hex-users-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Hex Openapi Overlay](https://apis.io/overlays/hex/hex-openapi-overlay/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Hex Authentication](https://apis.io/security/hex/hex-authentication/)
+- [Hex Domain Security](https://apis.io/security/hex/hex-domain-security/)
+- [Hex Trust Center](https://apis.io/security/hex/hex-trust-center/)
+- [Hex Vulnerability Disclosure](https://apis.io/security/hex/hex-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Hex Plans Pricing](https://apis.io/plans/hex/hex-plans-pricing/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.hex.tech/)
+- [Documentation](https://learn.hex.tech/docs)
+- [Getting started](https://learn.hex.tech/docs/getting-started)
+- [API reference](https://learn.hex.tech/docs/api-integrations/api/reference)
+- [Pricing](https://hex.tech/pricing/)
+- [Sign up](https://app.hex.tech/signup)
+- [Changelog](https://learn.hex.tech/changelog)
+- [Blog](https://hex.tech/blog/)
+- [Terms of service](https://learn.hex.tech/docs/legal/terms-and-conditions)
+- [Privacy policy](https://learn.hex.tech/docs/trust/privacy-policy)
+- [GitHub](https://github.com/hex-inc)
+- [Status](https://status.hex.tech/)
+
+## API Evangelist rating
+
+**Kin Score 61.3** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 50.9 |
+| Contract governance | 4.5 |
+| Operational transparency | 44.7 |
+| Developer ergonomics | 68.5 |
+| Access clarity | 78.9 |
+
+**Agent readiness 55.9** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | yes |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | paginated |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 32.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/hex/](https://apis.io/providers/hex/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Hex: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/hex/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
